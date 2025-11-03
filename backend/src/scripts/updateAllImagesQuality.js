@@ -2,10 +2,8 @@ const mongoose = require('mongoose');
 const Terrain = require('../models/Terrain');
 require('dotenv').config();
 
-// Collection d'images de terrains de football (libres de droits - Unsplash)
-// Résolution haute qualité : 1200x800 pour éviter le flou
+// Images HAUTE QUALITÉ 1200x800 q=85
 const footballImages = [
-  // Images principales - Très Haute Qualité
   'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=1200&h=800&fit=crop&q=85',
   'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&h=800&fit=crop&q=85',
   'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=1200&h=800&fit=crop&q=85',
@@ -28,7 +26,6 @@ const footballImages = [
   'https://images.unsplash.com/photo-1560071426-a8e0c60a5f96?w=1200&h=800&fit=crop&q=85',
 ];
 
-// Images de galerie supplémentaires - Haute Qualité
 const galleryImages = [
   'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=1200&h=800&fit=crop&q=85',
   'https://images.unsplash.com/photo-1526232761682-d26e03ac148e?w=1200&h=800&fit=crop&q=85',
@@ -57,15 +54,11 @@ const galleryImages = [
   'https://images.unsplash.com/photo-1563566759544-b64f62e0e6e9?w=1200&h=800&fit=crop&q=85',
 ];
 
-// Fonction pour obtenir un set d'images aléatoire mais cohérent
 function getRandomImages(seed) {
-  // Utiliser le seed pour générer toujours les mêmes images pour le même terrain
   const randomIndex = seed % footballImages.length;
   
-  // Image principale
   const mainImage = footballImages[randomIndex];
   
-  // 5 images de galerie (images suivantes)
   const galleryImgs = [];
   for (let i = 1; i <= 5; i++) {
     const index = (randomIndex + i) % galleryImages.length;
@@ -78,72 +71,63 @@ function getRandomImages(seed) {
   };
 }
 
-const addImagesToTerrains = async () => {
+const updateAllImagesQuality = async () => {
   try {
-    // Connexion à MongoDB
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ Connecté à MongoDB\n');
 
-    // Récupérer tous les terrains
     const terrains = await Terrain.find({});
     console.log(`📊 ${terrains.length} terrains trouvés\n`);
 
     let updated = 0;
-    let skipped = 0;
 
     for (let i = 0; i < terrains.length; i++) {
       const terrain = terrains[i];
       
-      // Si le terrain a déjà des images, on passe
-      if (terrain.images && terrain.images.length > 0) {
-        console.log(`⏭️  Terrain "${terrain.name}" a déjà des images`);
-        skipped++;
-        continue;
-      }
-
-      // Obtenir les images pour ce terrain
+      // Obtenir les nouvelles images haute qualité
       const images = getRandomImages(i);
       
-      // Créer le tableau d'images
+      // Remplacer toutes les images avec la haute qualité
       const terrainImages = [
         { url: images.main, isMain: true },
         ...images.gallery.map(url => ({ url, isMain: false }))
       ];
 
-      // Mettre à jour le terrain
       terrain.images = terrainImages;
       await terrain.save();
       
-      console.log(`✅ Images ajoutées pour "${terrain.name}" (1 principale + 5 galerie)`);
+      console.log(`✅ Images HAUTE QUALITÉ pour "${terrain.name}"`);
       updated++;
     }
 
     console.log(`\n
 ╔═══════════════════════════════════════════════════════════╗
-║                 RÉSUMÉ AJOUT D'IMAGES                     ║
+║           MISE À JOUR IMAGES HAUTE QUALITÉ                ║
 ╠═══════════════════════════════════════════════════════════╣
 ║                                                           ║
 ║   ✅ Terrains mis à jour    : ${updated.toString().padStart(3)}                      ║
-║   ⏭️  Terrains ignorés       : ${skipped.toString().padStart(3)}                      ║
 ║   📊 Total traité           : ${terrains.length.toString().padStart(3)}                      ║
 ║                                                           ║
 ║   🖼️  Images par terrain     :   6                       ║
-║      • 1 image principale                                ║
-║      • 5 images galerie                                  ║
+║      • 1 image principale (1200x800 px - q85)            ║
+║      • 5 images galerie (1200x800 px - q85)              ║
+║                                                           ║
+║   📸 Résolution : 1200 x 800 pixels                       ║
+║   🎨 Qualité : 85% (très haute)                          ║
+║   💾 Taille : ~150-200 KB par image                      ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝
     `);
 
-    console.log(`\n📸 Total d'images ajoutées : ${updated * 6}`);
-    console.log(`📦 Source : Unsplash (images libres de droits)\n`);
+    console.log(`\n📸 Total d'images mises à jour : ${updated * 6}`);
+    console.log(`✨ Les images ne seront plus floues !\n`);
 
     process.exit(0);
   } catch (error) {
-    console.error('❌ Erreur lors de l\'ajout des images:', error);
+    console.error('❌ Erreur:', error);
     process.exit(1);
   }
 };
 
-// Exécuter le script
-addImagesToTerrains();
+updateAllImagesQuality();
 

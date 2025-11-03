@@ -164,6 +164,9 @@ const TerrainDetails = () => {
               alt={terrain.images[selectedImage]?.alt || terrain.name}
               className="w-full h-full object-cover cursor-pointer"
               onClick={() => setShowLightbox(true)}
+              loading="eager"
+              decoding="async"
+              style={{ imageRendering: 'high-quality' }}
             />
 
             {/* Flèches Navigation */}
@@ -279,6 +282,9 @@ const TerrainDetails = () => {
                     src={img.url} 
                     alt={img.alt || `Image ${idx + 1}`} 
                     className="w-full h-full object-cover" 
+                    loading="lazy"
+                    decoding="async"
+                    style={{ imageRendering: 'high-quality' }}
                   />
                 </button>
               ))}
@@ -299,6 +305,9 @@ const TerrainDetails = () => {
               src={terrain.images[selectedImage].url}
               alt={terrain.images[selectedImage].alt || terrain.name}
               className="max-w-full max-h-[90vh] object-contain rounded-lg"
+              loading="eager"
+              decoding="async"
+              style={{ imageRendering: 'high-quality' }}
             />
 
             {/* Bouton Fermer */}

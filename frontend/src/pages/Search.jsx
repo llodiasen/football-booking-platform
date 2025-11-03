@@ -468,7 +468,14 @@ const Search = () => {
                         <Link to={`/terrains/${terrain._id}`}>
                           <div className="h-48 bg-gray-200 relative overflow-hidden">
                             {terrain.images?.[0]?.url ? (
-                              <img src={terrain.images[0].url} alt={terrain.name} className="w-full h-full object-cover" />
+                              <img 
+                                src={terrain.images[0].url} 
+                                alt={terrain.name} 
+                                className="w-full h-full object-cover" 
+                                loading="lazy"
+                                decoding="async"
+                                style={{ imageRendering: 'high-quality' }}
+                              />
                             ) : (
                               <div className="flex items-center justify-center h-full text-gray-400">
                                 <MapPin size={48} />
