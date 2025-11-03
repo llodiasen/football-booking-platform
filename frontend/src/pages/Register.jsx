@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import { Mail, Lock, User, Phone } from 'lucide-react';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
@@ -12,13 +13,13 @@ const Register = () => {
     email: '',
     phone: '',
     password: '',
-    role: 'client'
+    role: 'client',
+    businessName: ''
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   
   const { register } = useAuth();
+  const { success: showSuccess, error: showError } = useToast();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -27,16 +28,31 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
     setLoading(true);
 
     try {
-      const result = await register(formData);
-      setSuccess(result.message || 'Inscription réussie!');
+      // Préparer les données selon le rôle
+      const dataToSend = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+        role: formData.role
+      };
+
+      // Ajouter ownerProfile si c'est un propriétaire
+      if (formData.role === 'owner' && formData.businessName) {
+        dataToSend.ownerProfile = {
+          businessName: formData.businessName
+        };
+      }
+
+      const result = await register(dataToSend);
+      showSuccess(result.message || 'Inscription réussie! 🎉');
       setTimeout(() => navigate('/dashboard'), 2000);
     } catch (err) {
-      setError(err.message);
+      showError(err.message || 'Erreur lors de l\'inscription');
     } finally {
       setLoading(false);
     }
@@ -51,18 +67,6 @@ const Register = () => {
         </div>
 
         <div className="bg-white shadow-lg rounded-lg p-8">
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-              {error}
-            </div>
-          )}
-          
-          {success && (
-            <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
-              {success}
-            </div>
-          )}
-
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <Input
@@ -132,6 +136,20 @@ const Register = () => {
                 <option value="team">Capitaine d'équipe</option>
               </select>
             </div>
+
+            {/* Champ conditionnel pour les propriétaires */}
+            {formData.role === 'owner' && (
+              <Input
+                label="Nom de l'entreprise"
+                type="text"
+                name="businessName"
+                icon={User}
+                value={formData.businessName}
+                onChange={handleChange}
+                placeholder="Ex: Galaxy Arena, Le Temple du Foot..."
+                required
+              />
+            )}
 
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Inscription...' : 'S\'inscrire'}

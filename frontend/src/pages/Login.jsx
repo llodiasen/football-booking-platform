@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import { Mail, Lock } from 'lucide-react';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
@@ -9,21 +10,21 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   
   const { login } = useAuth();
+  const { success, error: showError } = useToast();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
 
     try {
       await login(email, password);
+      success('Connexion réussie ! Bienvenue 👋');
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message);
+      showError(err.message || 'Erreur de connexion');
     } finally {
       setLoading(false);
     }
@@ -38,12 +39,6 @@ const Login = () => {
         </div>
 
         <div className="bg-white shadow-lg rounded-lg p-8">
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-              {error}
-            </div>
-          )}
-
           <form onSubmit={handleSubmit} className="space-y-6">
             <Input
               label="Email"

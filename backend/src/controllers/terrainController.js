@@ -20,7 +20,7 @@ exports.getTerrains = async (req, res) => {
       radius = 10000, // 10km par défaut
       sort = '-createdAt',
       page = 1,
-      limit = 12
+      limit = 100 // Afficher jusqu'à 100 terrains
     } = req.query;
 
     let query = { isActive: true, isApproved: true };
@@ -82,6 +82,9 @@ exports.getTerrains = async (req, res) => {
       case 'newest':
         sortOption = { createdAt: -1 };
         break;
+      case 'distance':
+        sortOption = null; // $near trie automatiquement par distance
+        break;
       default:
         sortOption = { createdAt: -1 };
     }
@@ -92,9 +95,16 @@ exports.getTerrains = async (req, res) => {
     const skip = (pageNum - 1) * limitNum;
 
     // Exécuter la requête
-    const terrains = await Terrain.find(query)
-      .populate('owner', 'firstName lastName phone email')
-      .sort(sortOption)
+    // IMPORTANT : Si on utilise $near, on ne peut PAS appliquer de sort() supplémentaire
+    let terrainsQuery = Terrain.find(query)
+      .populate('owner', 'firstName lastName phone email');
+    
+    // Appliquer le tri seulement si ce n'est pas une recherche géolocalisée
+    if (sortOption && !(latitude && longitude)) {
+      terrainsQuery = terrainsQuery.sort(sortOption);
+    }
+    
+    const terrains = await terrainsQuery
       .skip(skip)
       .limit(limitNum)
       .lean();
@@ -115,6 +125,30 @@ exports.getTerrains = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Erreur lors de la récupération des terrains',
+      error: error.message
+    });
+  }
+};
+
+// @route   GET /api/terrains/my-terrains
+// @desc    Get owner's terrains
+// @access  Private (Owner, Admin)
+exports.getOwnerTerrains = async (req, res) => {
+  try {
+    const terrains = await Terrain.find({ owner: req.user.id })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.json({
+      success: true,
+      count: terrains.length,
+      data: terrains
+    });
+  } catch (error) {
+    console.error('Erreur getOwnerTerrains:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Erreur lors de la récupération de vos terrains',
       error: error.message
     });
   }

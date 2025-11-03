@@ -1,9 +1,16 @@
 import { useAuth } from '../context/AuthContext';
+import { Navigate } from 'react-router-dom';
 import { LayoutDashboard, MapPin, Calendar, DollarSign } from 'lucide-react';
 import Card from '../components/ui/Card';
+import OwnerDashboard from './owner/OwnerDashboard';
 
 const Dashboard = () => {
   const { user } = useAuth();
+
+  // Rediriger vers le dashboard propriétaire si c'est un owner
+  if (user?.role === 'owner') {
+    return <OwnerDashboard />;
+  }
 
   return (
     <div className="container-custom py-12">

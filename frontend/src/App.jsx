@@ -4,6 +4,8 @@ import { useAuth } from './context/AuthContext';
 // Layout
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import Toast from './components/ui/Toast';
+import CookieBanner from './components/ui/CookieBanner';
 
 // Pages
 import Home from './pages/Home';
@@ -48,6 +50,8 @@ const PrivateRoute = ({ children, roles }) => {
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
+      <Toast />
+      <CookieBanner />
       <Navbar />
       <main className="flex-grow">
         <Routes>

@@ -74,6 +74,11 @@ const reservationSchema = new mongoose.Schema({
     maxlength: 500,
     default: ''
   },
+  ownerContactRevealed: {
+    type: Boolean,
+    default: false
+  },
+  ownerContactRevealedAt: Date,
   cancelledAt: Date,
   cancelledBy: {
     type: mongoose.Schema.Types.ObjectId,

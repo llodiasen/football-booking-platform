@@ -46,6 +46,7 @@ export const authAPI = {
 export const terrainAPI = {
   getAll: (params) => api.get('/terrains', { params }),
   getOne: (id) => api.get(`/terrains/${id}`),
+  getOwnerTerrains: () => api.get('/terrains/my-terrains'),
   create: (data) => api.post('/terrains', data),
   update: (id, data) => api.put(`/terrains/${id}`, data),
   delete: (id) => api.delete(`/terrains/${id}`),
@@ -60,7 +61,8 @@ export const reservationAPI = {
   create: (data) => api.post('/reservations', data),
   update: (id, data) => api.put(`/reservations/${id}`, data),
   cancel: (id, reason) => api.put(`/reservations/${id}/cancel`, { cancellationReason: reason }),
-  confirm: (id) => api.put(`/reservations/${id}/confirm`)
+  confirm: (id) => api.put(`/reservations/${id}/confirm`),
+  revealContact: (id) => api.post(`/reservations/${id}/reveal-contact`)
 };
 
 // Payments API

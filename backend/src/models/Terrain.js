@@ -72,6 +72,65 @@ const terrainSchema = new mongoose.Schema({
     required: [true, 'Prix requis'],
     min: [0, 'Prix doit être positif']
   },
+  pricing: {
+    useAdvancedPricing: {
+      type: Boolean,
+      default: false
+    },
+    weekdayPrice: {
+      type: Number,
+      min: 0
+    },
+    weekendPrice: {
+      type: Number,
+      min: 0
+    },
+    timeSlots: [{
+      name: String,  // Ex: "Happy Hour", "Peak Hours"
+      days: [{
+        type: String,
+        enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+      }],
+      startTime: String,  // Format: "HH:mm"
+      endTime: String,    // Format: "HH:mm"
+      price: {
+        type: Number,
+        min: 0
+      },
+      active: {
+        type: Boolean,
+        default: true
+      }
+    }]
+  },
+  bookingRules: {
+    advancePayment: {
+      required: {
+        type: Boolean,
+        default: false
+      },
+      amount: {
+        type: Number,
+        min: 0,
+        default: 0
+      },
+      type: {
+        type: String,
+        enum: ['fixed', 'percentage'], // 'fixed' = montant fixe, 'percentage' = pourcentage
+        default: 'percentage'
+      }
+    },
+    instructions: {
+      type: String,
+      maxlength: [1000, 'Instructions maximum 1000 caractères'],
+      default: 'Merci d\'arriver 15 minutes avant l\'heure de réservation pour récupérer les clés et accéder aux vestiaires.'
+    },
+    cancellationPolicy: {
+      type: String,
+      maxlength: [500, 'Politique d\'annulation maximum 500 caractères'],
+      default: 'Annulation gratuite jusqu\'à 24h avant la réservation.'
+    }
+  },
   openingHours: {
     monday: {
       open: String,
@@ -124,6 +183,52 @@ const terrainSchema = new mongoose.Schema({
     isActive: {
       type: Boolean,
       default: false
+    }
+  }],
+  discounts: [{
+    type: {
+      type: String,
+      enum: ['duration', 'promo_code', 'time_slot', 'first_booking'],
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    description: String,
+    value: {
+      type: Number,
+      required: true,
+      min: 0
+    },
+    valueType: {
+      type: String,
+      enum: ['percentage', 'fixed'],
+      default: 'percentage'
+    },
+    conditions: {
+      minDuration: Number,  // Pour type 'duration'
+      promoCode: String,    // Pour type 'promo_code'
+      timeSlot: {           // Pour type 'time_slot'
+        startTime: String,
+        endTime: String,
+        days: [String]
+      },
+      maxUses: Number,      // Nombre max d'utilisations
+      usedCount: {
+        type: Number,
+        default: 0
+      }
+    },
+    validFrom: Date,
+    validUntil: Date,
+    active: {
+      type: Boolean,
+      default: true
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
     }
   }],
   rating: {

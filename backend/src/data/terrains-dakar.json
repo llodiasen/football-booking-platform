@@ -1,0 +1,1319 @@
+[
+  {
+    "nom": "Complexe Be Sport",
+    "ville": "Dakar",
+    "quartier": "Dakar",
+    "adresse": "Dakar",
+    "telephone": "77 572 77 77",
+    "email": "",
+    "description": "Par rapport aux autres terrains de Dakar, cv un peu je dirais.",
+    "type": "Football",
+    "surface": "Gazon synthétique",
+    "capacite": 22,
+    "equipements": ["Vestiaires", "Éclairage nocturne", "Parking"],
+    "prixHeure": 20000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "02:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "02:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "02:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "02:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "02:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "02:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "02:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Terrain ASC Liberté 6",
+    "ville": "Dakar",
+    "quartier": "Liberté 6",
+    "adresse": "PGGP+FW6, Dakar",
+    "telephone": "77 120 08 30",
+    "email": "",
+    "description": "A mini private football field with nice grass and hangout-ish spots.",
+    "type": "Football",
+    "surface": "Gazon naturel",
+    "capacite": 14,
+    "equipements": ["Espace détente"],
+    "prixHeure": 15000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4133, 14.7265]
+    }
+  },
+  {
+    "nom": "Land Scat Urbam",
+    "ville": "Dakar",
+    "quartier": "Dakar",
+    "adresse": "Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football urbain",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Terrain de foot Centre Aéré BCEAO",
+    "ville": "Dakar",
+    "quartier": "Dakar",
+    "adresse": "QG6Q+5JP, Dakar",
+    "telephone": "77 155 30 33",
+    "email": "",
+    "description": "Un stade trop cool.",
+    "type": "Football",
+    "surface": "Gazon naturel",
+    "capacite": 22,
+    "equipements": ["Vestiaires"],
+    "prixHeure": 18000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4123, 14.7112]
+    }
+  },
+  {
+    "nom": "Terrain de Foot Liberté 5 ASC Yego",
+    "ville": "Dakar",
+    "quartier": "Liberté 5",
+    "adresse": "PGFR+VH3, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football de l'ASC Yego",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4182, 14.7246]
+    }
+  },
+  {
+    "nom": "Terrain Football Castors",
+    "ville": "Dakar",
+    "quartier": "Castors",
+    "adresse": "36 Rue DK0053GDK, Dakar",
+    "telephone": "77 194 58 76",
+    "email": "",
+    "description": "Bon terrain avec un gazon correct et des projecteurs impeccables la nuit.",
+    "type": "Football",
+    "surface": "Gazon synthétique",
+    "capacite": 14,
+    "equipements": ["Éclairage nocturne", "Vestiaires"],
+    "prixHeure": 16000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Terrain Niary Tally",
+    "ville": "Dakar",
+    "quartier": "Niary Tally",
+    "adresse": "Dakar",
+    "telephone": "77 609 17 52",
+    "email": "",
+    "description": "Terrain de football Niary Tally",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 10000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Terrain ASC Ceely",
+    "ville": "Dakar",
+    "quartier": "Mboupy POB",
+    "adresse": "d30 Mboupy POB, Dakar",
+    "telephone": "77 907 31 92",
+    "email": "",
+    "description": "Terrain de l'ASC Ceely",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 10000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Terrain de Football U25 ASC Yengouleen",
+    "ville": "Dakar",
+    "quartier": "Parcelles Assainies",
+    "adresse": "Parcelles assainies unité 08 numéro 108, 25, Rte des Niayes",
+    "telephone": "",
+    "email": "",
+    "description": "Mashalla un lieu historique.",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "23:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Terrain Sud Foire",
+    "ville": "Dakar",
+    "quartier": "Sud Foire",
+    "adresse": "PGPM+4X6, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football Sud Foire",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 15000,
+    "horaires": {
+      "lundi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "mardi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "mercredi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "jeudi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "vendredi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "samedi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "dimanche": { "ouverture": "06:00", "fermeture": "22:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4160, 14.7361]
+    }
+  },
+  {
+    "nom": "Terrain Doudou",
+    "ville": "Dakar",
+    "quartier": "Parcelles Assainies",
+    "adresse": "Parcelles assainies unité 08 numéro 108, 14, Rte des Niayes",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain Doudou",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 10000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Terrain de foot Sacré Cœur V3",
+    "ville": "Dakar",
+    "quartier": "Sacré-Cœur 3",
+    "adresse": "PGCH+HWF, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football à Sacré-Cœur 3",
+    "type": "Football",
+    "surface": "Gazon synthétique",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 18000,
+    "horaires": {
+      "lundi": { "ouverture": "14:00", "fermeture": "22:00" },
+      "mardi": { "ouverture": "14:00", "fermeture": "22:00" },
+      "mercredi": { "ouverture": "14:00", "fermeture": "22:00" },
+      "jeudi": { "ouverture": "14:00", "fermeture": "22:00" },
+      "vendredi": { "ouverture": "14:00", "fermeture": "22:00" },
+      "samedi": { "ouverture": "14:00", "fermeture": "22:00" },
+      "dimanche": { "ouverture": "14:00", "fermeture": "22:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4203, 14.7210]
+    }
+  },
+  {
+    "nom": "Terrain de football de la Base Aérienne",
+    "ville": "Dakar",
+    "quartier": "Base Aérienne",
+    "adresse": "PGM6+69, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Le terrain est beau et il y a même des gradins.",
+    "type": "Football",
+    "surface": "Gazon naturel",
+    "capacite": 22,
+    "equipements": ["Gradins", "Vestiaires"],
+    "prixHeure": 20000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "18:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "18:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "18:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "18:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "18:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "18:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "18:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4189, 14.7333]
+    }
+  },
+  {
+    "nom": "Terrain ACAPES",
+    "ville": "Dakar",
+    "quartier": "Dakar",
+    "adresse": "QH43+H83, Dakar",
+    "telephone": "77 163 83 93",
+    "email": "",
+    "description": "Once was dangerous, now is quiet and safe.",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.3659, 14.7564]
+    }
+  },
+  {
+    "nom": "Dioulikaye Ouakam",
+    "ville": "Dakar",
+    "quartier": "Ouakam",
+    "adresse": "Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football à Ouakam",
+    "type": "Football",
+    "surface": "Sable",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 8000,
+    "horaires": {
+      "lundi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "06:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4857, 14.7228]
+    }
+  },
+  {
+    "nom": "Terrain de Foot ASC Nord Foire",
+    "ville": "Dakar",
+    "quartier": "Nord Foire",
+    "adresse": "74 Rue YF 228, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de l'ASC Nord Foire",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4300, 14.7450]
+    }
+  },
+  {
+    "nom": "VDN Foot",
+    "ville": "Dakar",
+    "quartier": "VDN",
+    "adresse": "PGMG+C94, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Amazing pitch 👏🏿.",
+    "type": "Football",
+    "surface": "Gazon synthétique",
+    "capacite": 14,
+    "equipements": ["Éclairage nocturne"],
+    "prixHeure": 18000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "23:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4266, 14.7333]
+    }
+  },
+  {
+    "nom": "Terrain Nord Foire",
+    "ville": "Dakar",
+    "quartier": "Nord Foire",
+    "adresse": "QG3M+WW6, Dakar",
+    "telephone": "77 526 96 15",
+    "email": "",
+    "description": "Terrain de football Nord Foire",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4329, 14.7548]
+    }
+  },
+  {
+    "nom": "Terrain Nguélaw",
+    "ville": "Dakar",
+    "quartier": "Nguélaw",
+    "adresse": "Dakar",
+    "telephone": "77 344 05 14",
+    "email": "",
+    "description": "Un terrain sablé pour le moment.",
+    "type": "Football",
+    "surface": "Sable",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 8000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Stade Deggo",
+    "ville": "Dakar",
+    "quartier": "Dakar",
+    "adresse": "PHJ8+WCP, Dakar",
+    "telephone": "77 347 53 59",
+    "email": "",
+    "description": "Acceptable football ground.",
+    "type": "Football",
+    "surface": "Gazon naturel",
+    "capacite": 22,
+    "equipements": ["Gradins"],
+    "prixHeure": 20000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4784, 14.7320]
+    }
+  },
+  {
+    "nom": "Soprim Football Field",
+    "ville": "Dakar",
+    "quartier": "Dakar",
+    "adresse": "PHX7+X4P, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football Soprim",
+    "type": "Football",
+    "surface": "Gazon synthétique",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 15000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4872, 14.7498]
+    }
+  },
+  {
+    "nom": "Terrain Yoonou Ndam",
+    "ville": "Dakar",
+    "quartier": "Dakar",
+    "adresse": "Jardin A.S.C Yoonou Ndam",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de l'ASC Yoonou Ndam",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 10000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Terrain Liberté 4",
+    "ville": "Dakar",
+    "quartier": "Liberté 4",
+    "adresse": "Dakar",
+    "telephone": "77 667 91 96",
+    "email": "",
+    "description": "Rare espace de sport et jeux à Dakar.",
+    "type": "Football",
+    "surface": "Gazon synthétique",
+    "capacite": 14,
+    "equipements": ["Espace jeux"],
+    "prixHeure": 15000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Terrain de football École Police Dakar",
+    "ville": "Dakar",
+    "quartier": "École de Police",
+    "adresse": "PG2M+XQW, Dakar",
+    "telephone": "78 455 75 75",
+    "email": "",
+    "description": "Très bon terrain de foot avec un gazon bien fait.",
+    "type": "Football",
+    "surface": "Gazon naturel",
+    "capacite": 22,
+    "equipements": ["Vestiaires", "Gradins"],
+    "prixHeure": 25000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "18:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "18:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "18:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "18:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "18:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "18:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "18:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4354, 14.7024]
+    }
+  },
+  {
+    "nom": "Terrain de football Captage",
+    "ville": "Dakar",
+    "quartier": "Captage",
+    "adresse": "PHH5+Q27, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football Captage",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4716, 14.7290]
+    }
+  },
+  {
+    "nom": "Terrain de foot Unité 18",
+    "ville": "Dakar",
+    "quartier": "Parcelles Assainies",
+    "adresse": "QH45+468, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football Unité 18",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 10000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.3662, 14.7557]
+    }
+  },
+  {
+    "nom": "Terrain de foot Sacat Urbam",
+    "ville": "Dakar",
+    "quartier": "Sacat Urbam",
+    "adresse": "PGPQ+XV4, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football Sacat Urbam",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "mardi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "mercredi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "jeudi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "vendredi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "samedi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "dimanche": { "ouverture": "06:00", "fermeture": "22:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4103, 14.7371]
+    }
+  },
+  {
+    "nom": "Terrain Foot HLM Patte d'Oie",
+    "ville": "Dakar",
+    "quartier": "HLM Patte d'Oie",
+    "adresse": "PHR5+GCV, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football HLM Patte d'Oie",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "mardi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "mercredi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "jeudi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "vendredi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "samedi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "dimanche": { "ouverture": "06:00", "fermeture": "22:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4416, 14.7411]
+    }
+  },
+  {
+    "nom": "DSC (Dakar Sacré Cœur)",
+    "ville": "Dakar",
+    "quartier": "Sacré-Cœur",
+    "adresse": "Dakar",
+    "telephone": "33 825 64 04",
+    "email": "",
+    "description": "Their club plays in the national championship.",
+    "type": "Football",
+    "surface": "Gazon naturel",
+    "capacite": 22,
+    "equipements": ["Vestiaires", "Gradins", "Éclairage nocturne"],
+    "prixHeure": 30000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "00:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "00:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "00:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "00:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "00:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "00:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "00:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Municipal Land Ouakam",
+    "ville": "Dakar",
+    "quartier": "Ouakam",
+    "adresse": "PGH5+FW4, Dakar",
+    "telephone": "70 807 34 73",
+    "email": "",
+    "description": "Terrain municipal d'Ouakam",
+    "type": "Football",
+    "surface": "Sable",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 8000,
+    "horaires": {
+      "lundi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "06:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4826, 14.7290]
+    }
+  },
+  {
+    "nom": "Terrain Naria",
+    "ville": "Dakar",
+    "quartier": "Dakar",
+    "adresse": "PGC7+8JR, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain Naria",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "mardi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "mercredi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "jeudi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "vendredi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "samedi": { "ouverture": "06:00", "fermeture": "22:00" },
+      "dimanche": { "ouverture": "06:00", "fermeture": "22:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4311, 14.7207]
+    }
+  },
+  {
+    "nom": "Terrain de foot Soowu Jant",
+    "ville": "Dakar",
+    "quartier": "Nord Foire",
+    "adresse": "21 Rue YF 336, Dakar",
+    "telephone": "77 021 82 82",
+    "email": "",
+    "description": "Terrain de football Soowu Jant",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4300, 14.7450]
+    }
+  },
+  {
+    "nom": "Temple Football",
+    "ville": "Dakar",
+    "quartier": "Dakar",
+    "adresse": "Rue FA 04, Dakar",
+    "telephone": "77 323 87 87",
+    "email": "",
+    "description": "Nice place to play football with friends.",
+    "type": "Football",
+    "surface": "Gazon synthétique",
+    "capacite": 14,
+    "equipements": ["Éclairage nocturne", "Vestiaires"],
+    "prixHeure": 18000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "23:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "23:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Terrain ASFA",
+    "ville": "Dakar",
+    "quartier": "Nord",
+    "adresse": "PGJM+G53 Nord, face Camp Leclerc, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain ASFA face Camp Leclerc",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4424, 14.7310]
+    }
+  },
+  {
+    "nom": "Terrain de Foot Ball (Diankalar)",
+    "ville": "Dakar",
+    "quartier": "Diankalar",
+    "adresse": "PG5W+G2C, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football Diankalar",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": ["Éclairage nocturne"],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "00:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "00:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "00:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "00:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "00:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "00:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "00:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4546, 14.7090]
+    }
+  },
+  {
+    "nom": "Terrain Talibou Dabo",
+    "ville": "Dakar",
+    "quartier": "Grand Dakar",
+    "adresse": "PHM4+P43, Grand, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain Talibou Dabo",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 10000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4944, 14.7342]
+    }
+  },
+  {
+    "nom": "Terrain Football Camberene",
+    "ville": "Dakar",
+    "quartier": "Camberene",
+    "adresse": "QH98+FFC, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football Camberene",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 10000,
+    "horaires": {
+      "lundi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "06:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "06:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.3786, 14.7687]
+    }
+  },
+  {
+    "nom": "Terrain Football Hamo 2",
+    "ville": "Dakar",
+    "quartier": "Hamo 2",
+    "adresse": "QH4F+CPV, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football Hamo 2",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 10000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.3764, 14.7564]
+    }
+  },
+  {
+    "nom": "Terrain JA",
+    "ville": "Dakar",
+    "quartier": "Dakar",
+    "adresse": "PG7P+G6X, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain JA",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "17:00", "fermeture": "22:00" },
+      "mardi": { "ouverture": "17:00", "fermeture": "22:00" },
+      "mercredi": { "ouverture": "17:00", "fermeture": "22:00" },
+      "jeudi": { "ouverture": "17:00", "fermeture": "22:00" },
+      "vendredi": { "ouverture": "17:00", "fermeture": "22:00" },
+      "samedi": { "ouverture": "17:00", "fermeture": "22:00" },
+      "dimanche": { "ouverture": "17:00", "fermeture": "22:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4392, 14.7139]
+    }
+  },
+  {
+    "nom": "Terrain ODB",
+    "ville": "Dakar",
+    "quartier": "Dakar",
+    "adresse": "Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain ODB",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Terrain de foot Sacré Cœur 3 extension",
+    "ville": "Dakar",
+    "quartier": "Sacré-Cœur 3",
+    "adresse": "PGFG+P59, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football à Sacré-Cœur 3 extension",
+    "type": "Football",
+    "surface": "Gazon synthétique",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 16000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4248, 14.7240]
+    }
+  },
+  {
+    "nom": "TERRAIN PEPS Point E",
+    "ville": "Dakar",
+    "quartier": "Point E",
+    "adresse": "Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain PEPS à Point E",
+    "type": "Football",
+    "surface": "Gazon synthétique",
+    "capacite": 14,
+    "equipements": ["Vestiaires"],
+    "prixHeure": 18000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Terrain Football travaux",
+    "ville": "Dakar",
+    "quartier": "Nord Foire",
+    "adresse": "21 Rue YF 558, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football des travaux",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 12000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "19:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "19:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "19:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "19:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "19:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "19:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "19:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4300, 14.7450]
+    }
+  },
+  {
+    "nom": "Terrain Polyvalent Sicap Baobab",
+    "ville": "Dakar",
+    "quartier": "Sicap Baobab",
+    "adresse": "PG4P+QWC, Dakar",
+    "telephone": "77 676 95 05",
+    "email": "",
+    "description": "Good for children.",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": ["Espace jeux enfants"],
+    "prixHeure": 10000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "20:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "20:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4279, 14.7070]
+    }
+  },
+  {
+    "nom": "Land Soccer Solarcom",
+    "ville": "Dakar",
+    "quartier": "Dakar",
+    "adresse": "PHQG+W72, Dakar",
+    "telephone": "77 536 60 39",
+    "email": "",
+    "description": "Terrain de football Solarcom",
+    "type": "Football",
+    "surface": "Gazon synthétique",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 15000,
+    "horaires": {
+      "lundi": { "ouverture": "08:00", "fermeture": "22:00" },
+      "mardi": { "ouverture": "08:00", "fermeture": "22:00" },
+      "mercredi": { "ouverture": "08:00", "fermeture": "22:00" },
+      "jeudi": { "ouverture": "08:00", "fermeture": "22:00" },
+      "vendredi": { "ouverture": "08:00", "fermeture": "22:00" },
+      "samedi": { "ouverture": "08:00", "fermeture": "22:00" },
+      "dimanche": { "ouverture": "08:00", "fermeture": "22:00" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4768, 14.7395]
+    }
+  },
+  {
+    "nom": "SowFoot",
+    "ville": "Dakar",
+    "quartier": "Central Park",
+    "adresse": "Central Park Avenue Malick Sy X, Autoroute, Dakar",
+    "telephone": "77 226 08 47",
+    "email": "",
+    "description": "Excellent service 💙.",
+    "type": "Football",
+    "surface": "Gazon synthétique",
+    "capacite": 14,
+    "equipements": ["Vestiaires", "Éclairage nocturne", "Parking"],
+    "prixHeure": 22000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  },
+  {
+    "nom": "Terrain Thiossane de Pikine",
+    "ville": "Pikine",
+    "quartier": "Thiossane",
+    "adresse": "Ouest, Dakar",
+    "telephone": "",
+    "email": "",
+    "description": "Terrain de football Thiossane à Pikine",
+    "type": "Football",
+    "surface": "Stabilisé",
+    "capacite": 14,
+    "equipements": [],
+    "prixHeure": 10000,
+    "horaires": {
+      "lundi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mardi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "mercredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "jeudi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "vendredi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "samedi": { "ouverture": "00:00", "fermeture": "23:59" },
+      "dimanche": { "ouverture": "00:00", "fermeture": "23:59" }
+    },
+    "images": [],
+    "geolocalisation": {
+      "type": "Point",
+      "coordinates": [-17.4441, 14.6937]
+    }
+  }
+]
+

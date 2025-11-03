@@ -1,0 +1,107 @@
+========================================
+  RÉFÉRENCE IMAGES - 221FOOT
+  Noms Simplifiés pour les 28 Terrains
+========================================
+
+CONVENTION : ville-nom-court.jpg
+EMPLACEMENT : frontend/public/images/
+
+========================================
+  DAKAR (14 terrains)
+========================================
+
+1.  dakar-galaxy.jpg              → Galaxy Arena
+2.  dakar-temple.jpg              → Le Temple du Foot
+3.  dakar-besport.jpg             → Complexe BeSport
+4.  dakar-magicland.jpg           → Magic Land
+5.  dakar-demba-diop.jpg          → Stade Demba-Diop
+6.  dakar-senghor.jpg             → Stade Léopold-Sédar-Senghor
+8.  dakar-hlm.jpg                 → Stade Municipal HLM
+9.  dakar-obelisque.jpg           → Terrain Obélisque
+10. dakar-niarry-tally.jpg        → Terrain Niarry Tally
+11. dakar-iqra.jpg                → Terrain IQRA
+19. dakar-vdn.jpg                 → VDN Foot
+20. dakar-urban.jpg               → Urban Foot Dakar
+27. dakar-sacre-coeur.jpg         → AS Dakar Sacré-Cœur
+28. dakar-cfpt.jpg                → CFPT Sénégal-Japon
+
+========================================
+  AUTRES VILLES (14 terrains)
+========================================
+
+7.  diamniadio-wade.jpg           → Stade Abdoulaye-Wade
+12. saly-psg.jpg                  → PSG Academy Sénégal
+13. saly-badboys.jpg              → BadBoys Complex
+14. thies-lat-dior.jpg            → Stade Lat-Dior
+15. mbour-caroline.jpg            → Stade Caroline-Faye
+16. ziguinchor-aline.jpg          → Stade Aline-Sitoé-Diatta
+17. kaolack-alboury.jpg           → Stade Alboury-Ndiaye
+18. saint-louis-djigo.jpg         → Stade Alassane-Djigo
+21. rufisque-centre.jpg           → Terrain Rufisque Centre
+22. pikine-icotaf.jpg             → Terrain Pikine Icotaf
+23. guediawaye-terrain.jpg        → Terrain Guédiawaye
+24. sebikotane-terrain.jpg        → Terrain Sebikotane
+25. saly-complexe.jpg             → Le Complexe Saly
+26. stade-louga.jpg               → Stade Maître Babacar Sèye ✅ FAIT
+
+========================================
+  RÉSUMÉ PAR VILLE
+========================================
+
+Dakar         : 14 terrains
+Saly          : 3 terrains
+Diamniadio    : 1 terrain
+Thiès         : 1 terrain
+Mbour         : 1 terrain
+Ziguinchor    : 1 terrain
+Kaolack       : 1 terrain
+Saint-Louis   : 1 terrain
+Rufisque      : 1 terrain
+Pikine        : 1 terrain
+Guédiawaye    : 1 terrain
+Sebikotane    : 1 terrain
+Louga         : 1 terrain ✅
+
+TOTAL         : 28 terrains
+
+========================================
+  STATUT
+========================================
+
+✅ Configuré  : 1 terrain (Louga)
+⏳ En attente : 27 terrains
+
+========================================
+  FORMATS ACCEPTÉS
+========================================
+
+✅ JPG  (recommandé)
+✅ JPEG
+✅ WEBP (meilleure compression)
+✅ PNG
+
+Taille optimale : 1200x800px ou 1920x1080px
+Poids max       : 500KB
+
+========================================
+  EXEMPLE DE RENOMMAGE
+========================================
+
+Image originale :
+"Stade Demba Diop - Photo 2024.JPG"
+
+Renommer en :
+"dakar-demba-diop.jpg"
+
+Sauvegarder dans :
+C:\Users\wopal\Desktop\football-booking-platform\frontend\public\images\dakar-demba-diop.jpg
+
+========================================
+
+📌 POUR VOTRE IMAGE ACTUELLE (Stade Louga) :
+
+Renommer en : stade-louga.jpg
+Sauvegarder : frontend/public/images/stade-louga.jpg
+
+========================================
+

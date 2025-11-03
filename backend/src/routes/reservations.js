@@ -6,7 +6,8 @@ const {
   createReservation,
   updateReservation,
   cancelReservation,
-  confirmReservation
+  confirmReservation,
+  revealOwnerContact
 } = require('../controllers/reservationController');
 const { protect, authorize } = require('../middleware/auth');
 const { validateReservation, handleValidationErrors } = require('../middleware/validation');
@@ -20,6 +21,7 @@ router.post('/', validateReservation, handleValidationErrors, createReservation)
 router.put('/:id', authorize('owner', 'admin'), updateReservation);
 router.put('/:id/cancel', cancelReservation);
 router.put('/:id/confirm', authorize('owner', 'admin'), confirmReservation);
+router.post('/:id/reveal-contact', revealOwnerContact);
 
 module.exports = router;
 

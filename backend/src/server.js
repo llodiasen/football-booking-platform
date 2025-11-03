@@ -23,10 +23,10 @@ connectDB();
 // Security middleware
 app.use(helmet());
 
-// Rate limiting
+// Rate limiting - Plus permissif en développement
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  max: process.env.NODE_ENV === 'production' ? 100 : 1000, // 1000 en dev, 100 en prod
   message: 'Trop de requêtes depuis cette IP, veuillez réessayer plus tard.'
 });
 app.use('/api/', limiter);

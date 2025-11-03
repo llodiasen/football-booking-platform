@@ -1,0 +1,794 @@
+[
+  {
+    "name": "Galaxy Arena",
+    "description": "Complexe privé moderne avec terrains synthétiques de qualité, éclairage nocturne et vestiaires. Idéal pour matchs entre amis ou tournois d'entreprise.",
+    "address": {
+      "street": "Boulevard Habib Bourguiba, Ouakam",
+      "city": "Dakar",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.4677, 14.7167]
+      }
+    },
+    "type": "synthetique",
+    "size": "7x7",
+    "pricePerHour": 32500,
+    "amenities": ["vestiaires", "douches", "parking", "eclairage", "cafeteria"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "23:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "23:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "23:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "23:00", "closed": false },
+      "friday": { "open": "08:00", "close": "23:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "23:00", "closed": false },
+      "sunday": { "open": "08:00", "close": "23:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Le Temple du Foot",
+    "description": "Terrains 5v5 et 6v6 indoor et outdoor au cœur des Almadies. Surface synthétique de qualité avec éclairage professionnel.",
+    "address": {
+      "street": "Rue FA-04, Almadies",
+      "city": "Dakar",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.4900, 14.7289]
+      }
+    },
+    "type": "synthetique",
+    "size": "5x5",
+    "pricePerHour": 35000,
+    "amenities": ["vestiaires", "douches", "eclairage", "parking"],
+    "openingHours": {
+      "monday": { "open": "07:00", "close": "23:00", "closed": false },
+      "tuesday": { "open": "07:00", "close": "23:00", "closed": false },
+      "wednesday": { "open": "07:00", "close": "23:00", "closed": false },
+      "thursday": { "open": "07:00", "close": "23:00", "closed": false },
+      "friday": { "open": "07:00", "close": "23:00", "closed": false },
+      "saturday": { "open": "07:00", "close": "23:00", "closed": false },
+      "sunday": { "open": "07:00", "close": "23:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Complexe BeSport",
+    "description": "Terrains synthétiques de qualité avec école de football. La Cage et grand terrain disponibles pour location. Équipements modernes et vestiaires spacieux.",
+    "address": {
+      "street": "Dakar",
+      "city": "Dakar",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.4530, 14.7100]
+      }
+    },
+    "type": "synthetique",
+    "size": "11x11",
+    "pricePerHour": 40000,
+    "amenities": ["vestiaires", "douches", "parking", "eclairage", "cafeteria"],
+    "openingHours": {
+      "monday": { "open": "06:00", "close": "22:00", "closed": false },
+      "tuesday": { "open": "06:00", "close": "22:00", "closed": false },
+      "wednesday": { "open": "06:00", "close": "22:00", "closed": false },
+      "thursday": { "open": "06:00", "close": "22:00", "closed": false },
+      "friday": { "open": "06:00", "close": "22:00", "closed": false },
+      "saturday": { "open": "06:00", "close": "22:00", "closed": false },
+      "sunday": { "open": "06:00", "close": "22:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Magic Land",
+    "description": "Complexe de loisirs avec plusieurs terrains synthétiques, éclairage nocturne et ambiance conviviale. Parfait pour matchs en soirée.",
+    "address": {
+      "street": "Boulevard Martin Luther King",
+      "city": "Dakar",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.4600, 14.7200]
+      }
+    },
+    "type": "synthetique",
+    "size": "7x7",
+    "pricePerHour": 32500,
+    "amenities": ["vestiaires", "parking", "eclairage", "cafeteria"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "00:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "00:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "00:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "00:00", "closed": false },
+      "friday": { "open": "08:00", "close": "00:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "00:00", "closed": false },
+      "sunday": { "open": "08:00", "close": "00:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Stade Demba-Diop",
+    "description": "Grand stade professionnel situé au cœur de Dakar, accueillant matchs professionnels et événements sportifs majeurs. Location pour événements sur devis.",
+    "address": {
+      "street": "Sicap-Liberté",
+      "city": "Dakar",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.4485, 14.6937]
+      }
+    },
+    "type": "naturel",
+    "size": "11x11",
+    "pricePerHour": 240000,
+    "amenities": ["vestiaires", "douches", "parking", "eclairage", "tribune"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "18:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "18:00", "closed": false },
+      "friday": { "open": "08:00", "close": "18:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "18:00", "closed": false },
+      "sunday": { "open": "09:00", "close": "17:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Stade Léopold-Sédar-Senghor",
+    "description": "Ancien stade national historique de Dakar, grandes capacités pour événements majeurs. Location sur devis pour grandes manifestations sportives.",
+    "address": {
+      "street": "Route de l'Aéroport",
+      "city": "Dakar",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.4744, 14.7392]
+      }
+    },
+    "type": "naturel",
+    "size": "11x11",
+    "pricePerHour": 475000,
+    "amenities": ["vestiaires", "douches", "parking", "eclairage", "tribune"],
+    "openingHours": {
+      "monday": { "open": "09:00", "close": "17:00", "closed": false },
+      "tuesday": { "open": "09:00", "close": "17:00", "closed": false },
+      "wednesday": { "open": "09:00", "close": "17:00", "closed": false },
+      "thursday": { "open": "09:00", "close": "17:00", "closed": false },
+      "friday": { "open": "09:00", "close": "17:00", "closed": false },
+      "saturday": { "open": "09:00", "close": "17:00", "closed": false },
+      "sunday": { "open": "09:00", "close": "17:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Stade Abdoulaye-Wade",
+    "description": "Stade olympique moderne de Diamniadio, infrastructure de classe mondiale pour événements internationaux. Location sur demande officielle.",
+    "address": {
+      "street": "Diamniadio",
+      "city": "Diamniadio",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.1894, 14.7206]
+      }
+    },
+    "type": "naturel",
+    "size": "11x11",
+    "pricePerHour": 750000,
+    "amenities": ["vestiaires", "douches", "parking", "eclairage", "tribune", "cafeteria", "wifi"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "18:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "18:00", "closed": false },
+      "friday": { "open": "08:00", "close": "18:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "18:00", "closed": false },
+      "sunday": { "open": "08:00", "close": "18:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Stade Municipal HLM",
+    "description": "Terrains municipaux fréquentés au cœur du quartier HLM. Annexe synthétique et terrain principal disponibles pour location.",
+    "address": {
+      "street": "HLM",
+      "city": "Dakar",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.4450, 14.7050]
+      }
+    },
+    "type": "synthetique",
+    "size": "7x7",
+    "pricePerHour": 25000,
+    "amenities": ["vestiaires", "parking", "eclairage"],
+    "openingHours": {
+      "monday": { "open": "07:00", "close": "22:00", "closed": false },
+      "tuesday": { "open": "07:00", "close": "22:00", "closed": false },
+      "wednesday": { "open": "07:00", "close": "22:00", "closed": false },
+      "thursday": { "open": "07:00", "close": "22:00", "closed": false },
+      "friday": { "open": "07:00", "close": "22:00", "closed": false },
+      "saturday": { "open": "07:00", "close": "22:00", "closed": false },
+      "sunday": { "open": "07:00", "close": "22:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Terrain Obélisque",
+    "description": "Mini-pitch urbain populaire au centre de Dakar, près de la Place de la Nation. Parfait pour matchs rapides en journée.",
+    "address": {
+      "street": "Place de la Nation",
+      "city": "Dakar",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.4447, 14.6792]
+      }
+    },
+    "type": "synthetique",
+    "size": "5x5",
+    "pricePerHour": 20000,
+    "amenities": ["eclairage", "parking"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "22:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "22:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "22:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "22:00", "closed": false },
+      "friday": { "open": "08:00", "close": "22:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "22:00", "closed": false },
+      "sunday": { "open": "08:00", "close": "22:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Terrain Niarry Tally",
+    "description": "Mini-pitch dans le quartier de Niarry Tally. Terrain synthétique bien entretenu, ambiance conviviale.",
+    "address": {
+      "street": "Niarry Tally",
+      "city": "Dakar",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.4350, 14.7150]
+      }
+    },
+    "type": "synthetique",
+    "size": "5x5",
+    "pricePerHour": 20000,
+    "amenities": ["vestiaires", "eclairage"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "22:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "22:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "22:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "22:00", "closed": false },
+      "friday": { "open": "08:00", "close": "22:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "22:00", "closed": false },
+      "sunday": { "open": "08:00", "close": "22:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Terrain IQRA",
+    "description": "Terrain situé à Liberté 6, zone SAMU. Surface synthétique de qualité, bien éclairé pour matchs en soirée.",
+    "address": {
+      "street": "Liberté 6, Zone SAMU",
+      "city": "Dakar",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.4420, 14.7080]
+      }
+    },
+    "type": "synthetique",
+    "size": "5x5",
+    "pricePerHour": 20000,
+    "amenities": ["vestiaires", "eclairage", "parking"],
+    "openingHours": {
+      "monday": { "open": "07:00", "close": "23:00", "closed": false },
+      "tuesday": { "open": "07:00", "close": "23:00", "closed": false },
+      "wednesday": { "open": "07:00", "close": "23:00", "closed": false },
+      "thursday": { "open": "07:00", "close": "23:00", "closed": false },
+      "friday": { "open": "07:00", "close": "23:00", "closed": false },
+      "saturday": { "open": "07:00", "close": "23:00", "closed": false },
+      "sunday": { "open": "07:00", "close": "23:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "PSG Academy Sénégal",
+    "description": "Académie de football haut de gamme à Saly avec terrains aux normes internationales. Stages, événements et location pour matchs. Installations premium.",
+    "address": {
+      "street": "Complexe Saly",
+      "city": "Saly",
+      "region": "Thiès",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-16.9955, 14.4528]
+      }
+    },
+    "type": "synthetique",
+    "size": "11x11",
+    "pricePerHour": 75000,
+    "amenities": ["vestiaires", "douches", "parking", "eclairage", "tribune", "cafeteria", "wifi"],
+    "openingHours": {
+      "monday": { "open": "06:00", "close": "20:00", "closed": false },
+      "tuesday": { "open": "06:00", "close": "20:00", "closed": false },
+      "wednesday": { "open": "06:00", "close": "20:00", "closed": false },
+      "thursday": { "open": "06:00", "close": "20:00", "closed": false },
+      "friday": { "open": "06:00", "close": "20:00", "closed": false },
+      "saturday": { "open": "06:00", "close": "20:00", "closed": false },
+      "sunday": { "open": "07:00", "close": "19:00", "closed": false }
+    },
+    "promotions": [{
+      "name": "Promotion Week-end",
+      "discount": 15,
+      "startDate": "2024-01-01",
+      "endDate": "2025-12-31",
+      "isActive": true
+    }],
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "BadBoys Complex",
+    "description": "Complexe privé à Saly avec terrains synthétiques de qualité. Ambiance décontractée, parfait pour touristes et locaux.",
+    "address": {
+      "street": "Saly",
+      "city": "Saly",
+      "region": "Thiès",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-16.9900, 14.4500]
+      }
+    },
+    "type": "synthetique",
+    "size": "7x7",
+    "pricePerHour": 30000,
+    "amenities": ["vestiaires", "parking", "eclairage"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "22:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "22:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "22:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "22:00", "closed": false },
+      "friday": { "open": "08:00", "close": "22:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "22:00", "closed": false },
+      "sunday": { "open": "08:00", "close": "22:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Stade Lat-Dior",
+    "description": "Stade principal de Thiès, accueille événements régionaux et matchs officiels. Location via mairie de Thiès.",
+    "address": {
+      "street": "Centre-ville",
+      "city": "Thiès",
+      "region": "Thiès",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-16.9333, 14.7833]
+      }
+    },
+    "type": "naturel",
+    "size": "11x11",
+    "pricePerHour": 90000,
+    "amenities": ["vestiaires", "douches", "parking", "eclairage", "tribune"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "18:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "18:00", "closed": false },
+      "friday": { "open": "08:00", "close": "18:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "18:00", "closed": false },
+      "sunday": { "open": "09:00", "close": "17:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Stade Caroline-Faye",
+    "description": "Stade municipal principal de Mbour. Idéal pour matchs locaux et manifestations sportives de la Petite-Côte.",
+    "address": {
+      "street": "Centre-ville",
+      "city": "Mbour",
+      "region": "Thiès",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-16.9611, 14.4167]
+      }
+    },
+    "type": "naturel",
+    "size": "11x11",
+    "pricePerHour": 72500,
+    "amenities": ["vestiaires", "douches", "parking", "eclairage", "tribune"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "18:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "18:00", "closed": false },
+      "friday": { "open": "08:00", "close": "18:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "18:00", "closed": false },
+      "sunday": { "open": "09:00", "close": "17:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Stade Aline-Sitoé-Diatta",
+    "description": "Stade principal de Ziguinchor en Casamance. Terrain bien entretenu pour compétitions régionales.",
+    "address": {
+      "street": "Centre-ville",
+      "city": "Ziguinchor",
+      "region": "Ziguinchor",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-16.2633, 12.5833]
+      }
+    },
+    "type": "naturel",
+    "size": "11x11",
+    "pricePerHour": 60000,
+    "amenities": ["vestiaires", "douches", "parking", "eclairage", "tribune"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "18:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "18:00", "closed": false },
+      "friday": { "open": "08:00", "close": "18:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "18:00", "closed": false },
+      "sunday": { "open": "09:00", "close": "17:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Stade Alboury-Ndiaye",
+    "description": "Stade municipal principal de Kaolack. Accueille compétitions régionales et manifestations sportives.",
+    "address": {
+      "street": "Centre-ville",
+      "city": "Kaolack",
+      "region": "Kaolack",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-16.0667, 14.1333]
+      }
+    },
+    "type": "naturel",
+    "size": "11x11",
+    "pricePerHour": 60000,
+    "amenities": ["vestiaires", "douches", "parking", "eclairage", "tribune"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "18:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "18:00", "closed": false },
+      "friday": { "open": "08:00", "close": "18:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "18:00", "closed": false },
+      "sunday": { "open": "09:00", "close": "17:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Stade Alassane-Djigo",
+    "description": "Stade principal de Saint-Louis, ville historique du nord du Sénégal. Événements sportifs locaux réguliers.",
+    "address": {
+      "street": "Centre-ville",
+      "city": "Saint-Louis",
+      "region": "Saint-Louis",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-16.5167, 16.0167]
+      }
+    },
+    "type": "naturel",
+    "size": "11x11",
+    "pricePerHour": 60000,
+    "amenities": ["vestiaires", "douches", "parking", "eclairage", "tribune"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "18:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "18:00", "closed": false },
+      "friday": { "open": "08:00", "close": "18:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "18:00", "closed": false },
+      "sunday": { "open": "09:00", "close": "17:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "VDN Foot",
+    "description": "Mini-pitch moderne sur la VDN (Voie de Dégagement Nord). Terrain synthétique avec éclairage nocturne.",
+    "address": {
+      "street": "VDN",
+      "city": "Dakar",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.4350, 14.7250]
+      }
+    },
+    "type": "synthetique",
+    "size": "5x5",
+    "pricePerHour": 22500,
+    "amenities": ["eclairage", "parking"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "23:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "23:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "23:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "23:00", "closed": false },
+      "friday": { "open": "08:00", "close": "23:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "23:00", "closed": false },
+      "sunday": { "open": "08:00", "close": "23:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Urban Foot Dakar",
+    "description": "Mini-pitch urbain au cœur de Dakar. Terrain synthétique moderne, idéal pour matchs entre amis.",
+    "address": {
+      "street": "Dakar",
+      "city": "Dakar",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.4500, 14.7100]
+      }
+    },
+    "type": "synthetique",
+    "size": "5x5",
+    "pricePerHour": 22500,
+    "amenities": ["vestiaires", "eclairage"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "22:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "22:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "22:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "22:00", "closed": false },
+      "friday": { "open": "08:00", "close": "22:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "22:00", "closed": false },
+      "sunday": { "open": "08:00", "close": "22:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Terrain Rufisque Centre",
+    "description": "Terrain synthétique à Rufisque, bien éclairé et accessible. Populaire auprès des équipes locales.",
+    "address": {
+      "street": "Centre-ville",
+      "city": "Rufisque",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.2667, 14.7167]
+      }
+    },
+    "type": "synthetique",
+    "size": "7x7",
+    "pricePerHour": 25000,
+    "amenities": ["vestiaires", "eclairage", "parking"],
+    "openingHours": {
+      "monday": { "open": "07:00", "close": "22:00", "closed": false },
+      "tuesday": { "open": "07:00", "close": "22:00", "closed": false },
+      "wednesday": { "open": "07:00", "close": "22:00", "closed": false },
+      "thursday": { "open": "07:00", "close": "22:00", "closed": false },
+      "friday": { "open": "07:00", "close": "22:00", "closed": false },
+      "saturday": { "open": "07:00", "close": "22:00", "closed": false },
+      "sunday": { "open": "07:00", "close": "22:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Terrain Pikine Icotaf",
+    "description": "Terrain communautaire à Pikine. Surface synthétique, très fréquenté par les jeunes du quartier.",
+    "address": {
+      "street": "Icotaf, Pikine",
+      "city": "Pikine",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.3939, 14.7458]
+      }
+    },
+    "type": "synthetique",
+    "size": "5x5",
+    "pricePerHour": 18000,
+    "amenities": ["eclairage"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "22:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "22:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "22:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "22:00", "closed": false },
+      "friday": { "open": "08:00", "close": "22:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "22:00", "closed": false },
+      "sunday": { "open": "08:00", "close": "22:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Terrain Guédiawaye",
+    "description": "Mini-pitch synthétique à Guédiawaye. Terrain populaire, réservation facile.",
+    "address": {
+      "street": "Guédiawaye",
+      "city": "Guédiawaye",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.3800, 14.7700]
+      }
+    },
+    "type": "synthetique",
+    "size": "5x5",
+    "pricePerHour": 18000,
+    "amenities": ["eclairage", "parking"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "22:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "22:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "22:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "22:00", "closed": false },
+      "friday": { "open": "08:00", "close": "22:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "22:00", "closed": false },
+      "sunday": { "open": "08:00", "close": "22:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Terrain Sebikotane",
+    "description": "Terrains privés à Sebikotane, périphérie de Dakar. Gazon synthétique de qualité.",
+    "address": {
+      "street": "Sebikotane",
+      "city": "Sebikotane",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.1333, 14.7500]
+      }
+    },
+    "type": "synthetique",
+    "size": "7x7",
+    "pricePerHour": 25000,
+    "amenities": ["vestiaires", "parking", "eclairage"],
+    "openingHours": {
+      "monday": { "open": "07:00", "close": "22:00", "closed": false },
+      "tuesday": { "open": "07:00", "close": "22:00", "closed": false },
+      "wednesday": { "open": "07:00", "close": "22:00", "closed": false },
+      "thursday": { "open": "07:00", "close": "22:00", "closed": false },
+      "friday": { "open": "07:00", "close": "22:00", "closed": false },
+      "saturday": { "open": "07:00", "close": "22:00", "closed": false },
+      "sunday": { "open": "07:00", "close": "22:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Le Complexe Saly",
+    "description": "Terrain 6v6 dans la zone touristique de Saly. Surface synthétique, parfait pour vacanciers et résidents.",
+    "address": {
+      "street": "Zone touristique",
+      "city": "Saly",
+      "region": "Thiès",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-16.9850, 14.4480]
+      }
+    },
+    "type": "synthetique",
+    "size": "7x7",
+    "pricePerHour": 28000,
+    "amenities": ["vestiaires", "parking", "eclairage"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "21:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "21:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "21:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "21:00", "closed": false },
+      "friday": { "open": "08:00", "close": "21:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "21:00", "closed": false },
+      "sunday": { "open": "08:00", "close": "21:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "Stade Maître Babacar Sèye",
+    "description": "Stade régional de Louga. Terrain naturel bien entretenu pour matchs officiels et événements.",
+    "address": {
+      "street": "Centre-ville",
+      "city": "Louga",
+      "region": "Louga",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-16.2167, 15.6167]
+      }
+    },
+    "type": "naturel",
+    "size": "11x11",
+    "pricePerHour": 47500,
+    "amenities": ["vestiaires", "douches", "parking", "eclairage"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "18:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "18:00", "closed": false },
+      "friday": { "open": "08:00", "close": "18:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "18:00", "closed": false },
+      "sunday": { "open": "09:00", "close": "17:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "AS Dakar Sacré-Cœur",
+    "description": "Centre de formation avec terrains d'entraînement de qualité. Terrain d'honneur et annexes disponibles sur demande.",
+    "address": {
+      "street": "Liberté, environs",
+      "city": "Dakar",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.4400, 14.7000]
+      }
+    },
+    "type": "naturel",
+    "size": "11x11",
+    "pricePerHour": 50000,
+    "amenities": ["vestiaires", "douches", "parking", "tribune"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "18:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "18:00", "closed": false },
+      "friday": { "open": "08:00", "close": "18:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "18:00", "closed": false },
+      "sunday": { "open": "09:00", "close": "17:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  },
+  {
+    "name": "CFPT Sénégal-Japon",
+    "description": "Centre de formation avec installations de qualité. Terrains disponibles ponctuellement pour location.",
+    "address": {
+      "street": "VDN",
+      "city": "Dakar",
+      "region": "Dakar",
+      "coordinates": {
+        "type": "Point",
+        "coordinates": [-17.4300, 14.7300]
+      }
+    },
+    "type": "synthetique",
+    "size": "11x11",
+    "pricePerHour": 40000,
+    "amenities": ["vestiaires", "douches", "parking", "eclairage"],
+    "openingHours": {
+      "monday": { "open": "08:00", "close": "18:00", "closed": false },
+      "tuesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "wednesday": { "open": "08:00", "close": "18:00", "closed": false },
+      "thursday": { "open": "08:00", "close": "18:00", "closed": false },
+      "friday": { "open": "08:00", "close": "18:00", "closed": false },
+      "saturday": { "open": "08:00", "close": "18:00", "closed": false },
+      "sunday": { "open": "09:00", "close": "17:00", "closed": false }
+    },
+    "isActive": true,
+    "isApproved": true
+  }
+]
+

@@ -408,3 +408,72 @@ exports.confirmReservation = async (req, res) => {
   }
 };
 
+// @route   POST /api/reservations/:id/reveal-contact
+// @desc    Reveal owner contact after payment
+// @access  Private (Client)
+exports.revealOwnerContact = async (req, res) => {
+  try {
+    const reservation = await Reservation.findById(req.params.id)
+      .populate({
+        path: 'terrain',
+        populate: {
+          path: 'owner',
+          select: 'firstName lastName phone email'
+        }
+      });
+
+    if (!reservation) {
+      return res.status(404).json({
+        success: false,
+        message: 'Réservation non trouvée'
+      });
+    }
+
+    // Vérifier que c'est bien le client de cette réservation
+    if (reservation.client.toString() !== req.user.id) {
+      return res.status(403).json({
+        success: false,
+        message: 'Non autorisé'
+      });
+    }
+
+    // Vérifier que la réservation est confirmée et payée
+    if (reservation.status !== 'confirmed' || reservation.paymentStatus !== 'paid') {
+      return res.status(400).json({
+        success: false,
+        message: 'Le contact du propriétaire est disponible uniquement après validation du paiement'
+      });
+    }
+
+    // Marquer comme révélé
+    if (!reservation.ownerContactRevealed) {
+      reservation.ownerContactRevealed = true;
+      reservation.ownerContactRevealedAt = new Date();
+      await reservation.save();
+    }
+
+    res.json({
+      success: true,
+      data: {
+        owner: {
+          firstName: reservation.terrain.owner.firstName,
+          lastName: reservation.terrain.owner.lastName,
+          phone: reservation.terrain.owner.phone,
+          email: reservation.terrain.owner.email
+        },
+        terrain: {
+          name: reservation.terrain.name,
+          address: reservation.terrain.address
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Erreur revealOwnerContact:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Erreur lors de la révélation du contact',
+      error: error.message
+    });
+  }
+};
+

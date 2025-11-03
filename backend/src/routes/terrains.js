@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   getTerrains,
   getTerrain,
+  getOwnerTerrains,
   createTerrain,
   updateTerrain,
   deleteTerrain,
@@ -12,12 +13,13 @@ const {
 const { protect, authorize } = require('../middleware/auth');
 const { validateTerrain, handleValidationErrors } = require('../middleware/validation');
 
+// Routes protégées - Propriétaires (AVANT les routes avec :id)
+router.get('/my-terrains', protect, authorize('owner', 'admin'), getOwnerTerrains);
+
 // Routes publiques
 router.get('/', getTerrains);
 router.get('/:id', getTerrain);
 router.get('/:id/availability', getAvailability);
-
-// Routes protégées
 router.post('/', protect, authorize('owner', 'admin'), validateTerrain, handleValidationErrors, createTerrain);
 router.put('/:id', protect, authorize('owner', 'admin'), updateTerrain);
 router.delete('/:id', protect, authorize('owner', 'admin'), deleteTerrain);

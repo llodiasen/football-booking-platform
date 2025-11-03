@@ -1,0 +1,66 @@
+==========================================
+  IDENTIFIANTS - PLATEFORME FOOTBALL
+==========================================
+
+COMPTE PRINCIPAL (Propriétaire) ⭐ UTILISEZ CELUI-CI
+──────────────────────────────
+📧 Email : amadou@test.com
+🔑 Mot de passe : Test123!
+👤 Rôle : Propriétaire de terrain
+👨 Nom : Amadou Diallo
+🏢 Entreprise : Galaxy Arena
+
+URL Connexion : http://localhost:5174/login
+
+==========================================
+
+COMPTE SYSTÈME (Test)
+──────────────────────────────
+📧 Email : proprietaire@footballsn.com
+🔑 Mot de passe : Propriétaire123!
+👤 Rôle : Propriétaire de terrain
+👨 Nom : FootballSN Gestion
+
+==========================================
+
+URLS IMPORTANTES
+──────────────────────────────
+🏠 Site : http://localhost:5174
+🔐 Login : http://localhost:5174/login
+📊 Dashboard : http://localhost:5174/dashboard
+🏟️ Terrains : http://localhost:5174/terrains
+
+🔧 API Backend : http://localhost:5000
+🗄️ MongoDB : mongodb+srv://...
+
+==========================================
+
+COMMANDES UTILES
+──────────────────────────────
+
+Démarrer Backend :
+cd C:\Users\wopal\Desktop\football-booking-platform\backend
+npm run dev
+
+Démarrer Frontend :
+cd C:\Users\wopal\Desktop\football-booking-platform\frontend
+npm run dev
+
+Lister utilisateurs :
+cd backend
+node src/scripts/listUsers.js
+
+Réinitialiser mot de passe :
+cd backend
+node src/scripts/resetPassword.js
+
+Import terrains :
+cd backend
+npm run seed
+
+==========================================
+
+⚠️ NE PARTAGEZ PAS CE FICHIER !
+
+==========================================
+

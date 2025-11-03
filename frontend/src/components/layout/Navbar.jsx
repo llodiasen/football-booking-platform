@@ -1,7 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Menu, X, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { Menu, X, User, Search } from 'lucide-react';
 import { useState } from 'react';
+import Logo from '../ui/Logo';
 
 const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -14,111 +15,219 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
-      <div className="container-custom">
-        <div className="flex justify-between items-center h-16 md:h-20">
-          {/* Logo - Style SportsBooking.mt */}
-          <Link to="/" className="flex items-center gap-2">
-            {/* Logo Icon */}
-            <div className="relative w-8 h-8">
-              <div className="absolute inset-0 bg-[#1e3a5f] rounded-sm transform rotate-12"></div>
-              <div className="absolute top-1 left-2 w-1 h-6 bg-orange-500"></div>
-              <div className="absolute top-0 left-2 w-2 h-2 bg-orange-500 rounded-full"></div>
-            </div>
-            {/* Logo Text */}
-            <span className="text-xl md:text-2xl font-bold">
-              <span className="text-orange-500">Sports</span>
-              <span className="text-[#1e3a5f]">Booking</span>
-            </span>
-          </Link>
+    <nav className="sticky top-0 z-50">
+      {/* Top Bar - Dark Grey */}
+      <div className="bg-gray-800 text-white">
+        <div className="container-custom">
+          <div className="flex justify-end items-center h-10">
+            <span className="text-sm font-semibold">Français</span>
+          </div>
+        </div>
+      </div>
 
-          {/* Desktop Navigation - Style minimaliste SportsBooking */}
-          <div className="hidden md:flex items-center gap-6">
-            {isAuthenticated ? (
-              <>
-                <Link to="/dashboard" className="text-gray-700 hover:text-orange-500 transition-colors font-medium">
-                  Dashboard
-                </Link>
-                <Link to="/profile" className="text-gray-700 hover:text-orange-500 transition-colors font-medium">
-                  {user?.firstName}
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="text-gray-700 hover:text-orange-500 transition-colors font-medium"
-                >
-                  Déconnexion
-                </button>
-              </>
-            ) : (
-              <>
+      {/* Main Bar - White */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="container-custom">
+          <div className="flex justify-between items-center h-16">
+            {/* Left Side */}
+            <div className="flex items-center gap-4">
+              {/* Logo */}
+              <Link to="/" className="hover:opacity-80 transition-opacity">
+                <Logo />
+              </Link>
+
+              {/* Separator */}
+              <div className="hidden md:block w-px h-8 bg-gray-200"></div>
+
+              {/* Menu Button */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="flex items-center gap-2 text-gray-700 hover:text-green-600 transition-colors"
+              >
+                <Menu size={20} />
+                <span className="hidden md:inline font-medium">Menu</span>
+              </button>
+            </div>
+
+            {/* Right Side */}
+            <div className="flex items-center gap-6">
+              {/* Search */}
+              <Link 
+                to="/terrains" 
+                className="flex items-center gap-2 text-gray-700 hover:text-green-600 transition-colors"
+              >
+                <Search size={20} />
+                <span className="hidden md:inline font-medium">Recherche</span>
+              </Link>
+
+              {/* Separator */}
+              <div className="hidden md:block w-px h-8 bg-gray-200"></div>
+
+              {/* User Account */}
+              {isAuthenticated ? (
+                <div className="flex items-center gap-2 text-gray-700">
+                  <User size={20} />
+                  <Link to="/profile" className="hidden md:inline font-medium hover:text-green-600 transition-colors">
+                    {user?.firstName}
+                  </Link>
+                </div>
+              ) : (
                 <Link 
                   to="/login" 
-                  className="text-gray-700 hover:text-orange-500 transition-colors font-medium"
+                  className="flex items-center gap-2 text-gray-700 hover:text-green-600 transition-colors"
                 >
-                  Sign In
+                  <User size={20} />
+                  <span className="hidden md:inline font-medium">Mon compte</span>
                 </Link>
-                <Link 
-                  to="/register?role=owner" 
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-md transition-colors font-medium"
-                >
-                  Venue Managers
-                </Link>
-              </>
-            )}
-          </div>
-
-          {/* Mobile menu button */}
-          <button
-            className="md:hidden p-2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-
-        {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t">
-            <div className="flex flex-col space-y-4">
-              <Link to="/" className="text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>
-                Accueil
-              </Link>
-              <Link to="/terrains" className="text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>
-                Terrains
-              </Link>
-              <Link to="/teams" className="text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>
-                Équipes
-              </Link>
-
-              {isAuthenticated ? (
-                <>
-                  <Link to="/dashboard" className="text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>
-                    Dashboard
-                  </Link>
-                  <Link to="/profile" className="text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>
-                    Profil ({user?.firstName})
-                  </Link>
-                  <button
-                    onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
-                    className="text-left text-red-600 hover:text-red-700"
-                  >
-                    Déconnexion
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" className="text-gray-700 hover:text-orange-500 font-medium" onClick={() => setMobileMenuOpen(false)}>
-                    Connexion
-                  </Link>
-                  <Link to="/register?role=owner" className="bg-orange-500 text-white px-4 py-2 rounded-lg text-center font-semibold" onClick={() => setMobileMenuOpen(false)}>
-                    Gestionnaire de Terrain
-                  </Link>
-                </>
               )}
             </div>
           </div>
-        )}
+        </div>
       </div>
+
+      {/* Dropdown Menu */}
+      {mobileMenuOpen && (
+        <div className="bg-white border-b border-gray-200 shadow-lg">
+          <div className="container-custom py-6">
+            <div className="grid md:grid-cols-4 gap-6">
+              {/* Navigation Links */}
+              <div>
+                <h3 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Navigation</h3>
+                <div className="flex flex-col space-y-2">
+                  <Link 
+                    to="/" 
+                    className="text-gray-700 hover:text-green-600 transition-colors text-sm"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Accueil
+                  </Link>
+                  <Link 
+                    to="/terrains" 
+                    className="text-gray-700 hover:text-green-600 transition-colors text-sm"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Tous les terrains
+                  </Link>
+                  <Link 
+                    to="/terrains?size=5x5" 
+                    className="text-gray-700 hover:text-green-600 transition-colors text-sm"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Terrains 5x5
+                  </Link>
+                  <Link 
+                    to="/terrains?size=7x7" 
+                    className="text-gray-700 hover:text-green-600 transition-colors text-sm"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Terrains 7x7
+                  </Link>
+                  <Link 
+                    to="/terrains?size=11x11" 
+                    className="text-gray-700 hover:text-green-600 transition-colors text-sm"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Terrains 11x11
+                  </Link>
+                </div>
+              </div>
+
+              {/* User Actions */}
+              {isAuthenticated ? (
+                <div>
+                  <h3 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Mon espace</h3>
+                  <div className="flex flex-col space-y-2">
+                    <Link 
+                      to="/dashboard" 
+                      className="text-gray-700 hover:text-green-600 transition-colors text-sm"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    <Link 
+                      to="/reservations" 
+                      className="text-gray-700 hover:text-green-600 transition-colors text-sm"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Mes réservations
+                    </Link>
+                    <Link 
+                      to="/profile" 
+                      className="text-gray-700 hover:text-green-600 transition-colors text-sm"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Mon profil
+                    </Link>
+                    <button
+                      onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
+                      className="text-left text-red-600 hover:text-red-700 transition-colors text-sm"
+                    >
+                      Déconnexion
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <h3 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Compte</h3>
+                  <div className="flex flex-col space-y-2">
+                    <Link 
+                      to="/login" 
+                      className="text-gray-700 hover:text-green-600 transition-colors text-sm"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Connexion
+                    </Link>
+                    <Link 
+                      to="/register" 
+                      className="text-gray-700 hover:text-green-600 transition-colors text-sm"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Inscription
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              {/* Proprietaires */}
+              <div>
+                <h3 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Propriétaires</h3>
+                <div className="flex flex-col space-y-2">
+                  <Link 
+                    to="/register?role=owner" 
+                    className="text-gray-700 hover:text-green-600 transition-colors text-sm"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Ajouter mon terrain
+                  </Link>
+                  <Link 
+                    to="/dashboard" 
+                    className="text-gray-700 hover:text-green-600 transition-colors text-sm"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Gérer mes terrains
+                  </Link>
+                </div>
+              </div>
+
+              {/* Aide */}
+              <div>
+                <h3 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Aide</h3>
+                <div className="flex flex-col space-y-2">
+                  <a href="#" className="text-gray-700 hover:text-green-600 transition-colors text-sm">
+                    Comment ça marche ?
+                  </a>
+                  <a href="#" className="text-gray-700 hover:text-green-600 transition-colors text-sm">
+                    FAQ
+                  </a>
+                  <a href="#" className="text-gray-700 hover:text-green-600 transition-colors text-sm">
+                    Contact
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
