@@ -31,11 +31,29 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
-// CORS
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+// CORS - Autoriser toutes les URLs Vercel + localhost
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Liste des origins autorisées
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      process.env.FRONTEND_URL
+    ];
+    
+    // Autoriser toutes les URLs vercel.app
+    if (!origin || 
+        allowedOrigins.includes(origin) || 
+        origin.includes('.vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
 
 // Compression
 app.use(compression());
