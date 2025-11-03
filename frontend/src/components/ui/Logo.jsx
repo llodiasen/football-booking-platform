@@ -1,4 +1,5 @@
 const Logo = ({ className = "", variant = "full" }) => {
+  // Variante icon seulement
   if (variant === "icon") {
     return (
       <svg
@@ -34,6 +35,56 @@ const Logo = ({ className = "", variant = "full" }) => {
     );
   }
 
+  // Variante white pour footer
+  if (variant === "white") {
+    return (
+      <div className={`flex items-center gap-2 ${className}`}>
+        {/* Icône */}
+        <svg
+          className="w-10 h-10"
+          viewBox="0 0 50 50"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* Hexagone */}
+          <path
+            d="M25 5 L40 14 L40 36 L25 45 L10 36 L10 14 Z"
+            className="fill-green-500"
+          />
+          {/* Ballon */}
+          <circle cx="25" cy="25" r="11" className="fill-white" />
+          <path
+            d="M25 14 L27.5 20 L21.5 20 Z"
+            className="fill-green-500"
+          />
+          <path
+            d="M25 36 L27.5 30 L21.5 30 Z"
+            className="fill-green-500"
+          />
+          <path
+            d="M16 22 L20 25 L16 28 Z"
+            className="fill-green-500"
+          />
+          <path
+            d="M34 22 L30 25 L34 28 Z"
+            className="fill-green-500"
+          />
+        </svg>
+        
+        {/* Texte */}
+        <div className="flex flex-col">
+          <span className="text-2xl font-black text-white leading-none tracking-tight">
+            221FOOT
+          </span>
+          <span className="text-[10px] text-green-400 font-medium tracking-wide uppercase">
+            Sénégal
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // Variante full par défaut
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       {/* Icône */}
