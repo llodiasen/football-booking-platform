@@ -11,6 +11,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
+import SingleTerrainMap from '../components/terrain/SingleTerrainMap';
 
 const TerrainDetails = () => {
   const { id } = useParams();
@@ -415,19 +416,21 @@ const TerrainDetails = () => {
               </div>
             </Card>
 
-            {/* Adresse */}
+            {/* Adresse & Carte */}
             <Card className="p-6">
               <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
                 <MapPin className="text-primary-600" size={24} />
                 Adresse
               </h2>
-              <p className="text-gray-700 mb-3">
+              <p className="text-gray-700 mb-4">
                 {terrain.address.street && `${terrain.address.street}, `}
                 {terrain.address.city}, {terrain.address.region}
               </p>
-              <Button variant="outline" size="sm">
-                Voir la carte
-              </Button>
+              
+              {/* Carte Interactive */}
+              <div className="mt-4">
+                <SingleTerrainMap terrain={terrain} />
+              </div>
             </Card>
 
             {/* Description */}
