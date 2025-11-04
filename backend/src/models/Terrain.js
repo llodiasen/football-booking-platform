@@ -129,7 +129,11 @@ const terrainSchema = new mongoose.Schema({
       type: String,
       maxlength: [500, 'Politique d\'annulation maximum 500 caractères'],
       default: 'Annulation gratuite jusqu\'à 24h avant la réservation.'
-    }
+    },
+    rules: [{
+      type: String,
+      maxlength: [200, 'Règle maximum 200 caractères']
+    }]
   },
   openingHours: {
     monday: {
@@ -304,6 +308,47 @@ const terrainSchema = new mongoose.Schema({
   views: {
     type: Number,
     default: 0
+  },
+  // Nouveaux champs pour enrichir les fiches produits
+  highlights: [{
+    type: String,
+    maxlength: 200
+  }],
+  neighborhoodHighlights: [{
+    category: {
+      type: String,
+      enum: ['Transport', 'Commerce', 'Parking', 'Santé', 'Loisirs', 'Education']
+    },
+    items: [{
+      type: String,
+      maxlength: 100
+    }]
+  }],
+  additionalServices: [{
+    type: String,
+    maxlength: 150
+  }],
+  safetyInfo: [{
+    type: String,
+    maxlength: 150
+  }],
+  accessibility: {
+    wheelchairAccess: {
+      type: Boolean,
+      default: false
+    },
+    parkingPMR: {
+      type: Boolean,
+      default: false
+    },
+    elevatorAvailable: {
+      type: Boolean,
+      default: false
+    },
+    adaptedToilets: {
+      type: Boolean,
+      default: false
+    }
   },
   createdAt: {
     type: Date,
