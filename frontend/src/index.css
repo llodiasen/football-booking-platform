@@ -151,3 +151,19 @@
   background: #555;
 }
 
+/* Masquer scrollbar pour éléments spécifiques */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Amélioration du rendu des images */
+.image-crisp {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
