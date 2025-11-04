@@ -1,13 +1,29 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Menu, X, User, Search } from 'lucide-react';
-import { useState } from 'react';
+import { Menu, X, User, Search, Globe, Home, Gift, UserPlus, LogIn, HelpCircle } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
 import Logo from '../ui/Logo';
 
 const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  // Fermer le menu si clic en dehors
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setUserMenuOpen(false);
+      }
+    };
+
+    if (userMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [userMenuOpen]);
 
   const handleLogout = () => {
     logout();
@@ -51,179 +67,180 @@ const Navbar = () => {
 
             {/* Right Side */}
             <div className="flex items-center gap-6">
-              {/* Search */}
+              {/* Devenir propriétaire */}
               <Link 
-                to="/terrains" 
-                className="flex items-center gap-2 text-gray-700 hover:text-green-600 transition-colors"
+                to="/register?role=owner"
+                className="hidden md:block text-sm font-semibold text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-full transition-colors"
               >
-                <Search size={20} />
-                <span className="hidden md:inline font-medium">Recherche</span>
+                Devenir propriétaire
               </Link>
 
-              {/* Separator */}
-              <div className="hidden md:block w-px h-8 bg-gray-200"></div>
+              {/* Globe */}
+              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                <Globe size={18} className="text-gray-700" />
+              </button>
 
-              {/* User Account */}
-              {isAuthenticated ? (
-                <div className="flex items-center gap-2 text-gray-700">
-                  <User size={20} />
-                  <Link to="/profile" className="hidden md:inline font-medium hover:text-green-600 transition-colors">
-                    {user?.firstName}
-                  </Link>
-                </div>
-              ) : (
-                <Link 
-                  to="/login" 
-                  className="flex items-center gap-2 text-gray-700 hover:text-green-600 transition-colors"
+              {/* User Menu Button (Hamburger + Profile) */}
+              <div className="relative" ref={menuRef}>
+                <button
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="flex items-center gap-3 border border-gray-300 rounded-full pl-3 pr-2 py-1.5 hover:shadow-md transition-all"
                 >
-                  <User size={20} />
-                  <span className="hidden md:inline font-medium">Mon compte</span>
-                </Link>
-              )}
+                  <Menu size={18} className="text-gray-700" />
+                  <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
+                    <User size={18} className="text-white" />
+                  </div>
+                </button>
+
+                {/* Dropdown Menu (Style Airbnb) */}
+                {userMenuOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-200 py-2 z-50">
+                    {isAuthenticated ? (
+                      <>
+                        <Link
+                          to="/reservations"
+                          className="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors font-medium"
+                          onClick={() => setUserMenuOpen(false)}
+                        >
+                          Mes réservations
+                        </Link>
+                        <Link
+                          to="/profile"
+                          className="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors"
+                          onClick={() => setUserMenuOpen(false)}
+                        >
+                          Compte
+                        </Link>
+                        <div className="border-t border-gray-200 my-2"></div>
+                        
+                        {user?.role === 'owner' && (
+                          <>
+                            <Link
+                              to="/dashboard"
+                              className="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors"
+                              onClick={() => setUserMenuOpen(false)}
+                            >
+                              Gérer mes terrains
+                            </Link>
+                            <div className="border-t border-gray-200 my-2"></div>
+                          </>
+                        )}
+                        
+                        <a
+                          href="#"
+                          className="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors"
+                        >
+                          Centre d'aide
+                        </a>
+                        <button
+                          onClick={() => { handleLogout(); setUserMenuOpen(false); }}
+                          className="block w-full text-left px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors"
+                        >
+                          Déconnexion
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {/* Devenir propriétaire (mis en avant) */}
+                        <Link
+                          to="/register?role=owner"
+                          className="block px-4 py-3 hover:bg-gray-50 transition-colors"
+                          onClick={() => setUserMenuOpen(false)}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="flex-1">
+                              <div className="font-semibold text-gray-900 mb-1">
+                                Devenir propriétaire
+                              </div>
+                              <div className="text-xs text-gray-600">
+                                Ajoutez votre terrain et gagnez des revenus supplémentaires, c'est facile.
+                              </div>
+                            </div>
+                            <Home size={20} className="text-gray-600 mt-1 flex-shrink-0" />
+                          </div>
+                        </Link>
+
+                        <div className="border-t border-gray-200 my-2"></div>
+
+                        <Link
+                          to="/login"
+                          className="block px-4 py-3 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+                          onClick={() => setUserMenuOpen(false)}
+                        >
+                          Se connecter
+                        </Link>
+                        <Link
+                          to="/register"
+                          className="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors"
+                          onClick={() => setUserMenuOpen(false)}
+                        >
+                          S'inscrire
+                        </Link>
+
+                        <div className="border-t border-gray-200 my-2"></div>
+
+                        <a
+                          href="#"
+                          className="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors"
+                        >
+                          Cartes cadeaux
+                        </a>
+                        <a
+                          href="#"
+                          className="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors"
+                        >
+                          Centre d'aide
+                        </a>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Dropdown Menu */}
+      {/* Menu Navigation Mobile */}
       {mobileMenuOpen && (
-        <div className="bg-white border-b border-gray-200 shadow-lg">
-          <div className="container-custom py-6">
-            <div className="grid md:grid-cols-4 gap-6">
-              {/* Navigation Links */}
-              <div>
-                <h3 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Navigation</h3>
-                <div className="flex flex-col space-y-2">
-                  <Link 
-                    to="/" 
-                    className="text-gray-700 hover:text-green-600 transition-colors text-sm"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Accueil
-                  </Link>
-                  <Link 
-                    to="/terrains" 
-                    className="text-gray-700 hover:text-green-600 transition-colors text-sm"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Tous les terrains
-                  </Link>
-                  <Link 
-                    to="/terrains?size=5x5" 
-                    className="text-gray-700 hover:text-green-600 transition-colors text-sm"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Terrains 5x5
-                  </Link>
-                  <Link 
-                    to="/terrains?size=7x7" 
-                    className="text-gray-700 hover:text-green-600 transition-colors text-sm"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Terrains 7x7
-                  </Link>
-                  <Link 
-                    to="/terrains?size=11x11" 
-                    className="text-gray-700 hover:text-green-600 transition-colors text-sm"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Terrains 11x11
-                  </Link>
-                </div>
-              </div>
-
-              {/* User Actions */}
-              {isAuthenticated ? (
-                <div>
-                  <h3 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Mon espace</h3>
-                  <div className="flex flex-col space-y-2">
-                    <Link 
-                      to="/dashboard" 
-                      className="text-gray-700 hover:text-green-600 transition-colors text-sm"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Dashboard
-                    </Link>
-                    <Link 
-                      to="/reservations" 
-                      className="text-gray-700 hover:text-green-600 transition-colors text-sm"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Mes réservations
-                    </Link>
-                    <Link 
-                      to="/profile" 
-                      className="text-gray-700 hover:text-green-600 transition-colors text-sm"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Mon profil
-                    </Link>
-                    <button
-                      onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
-                      className="text-left text-red-600 hover:text-red-700 transition-colors text-sm"
-                    >
-                      Déconnexion
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <h3 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Compte</h3>
-                  <div className="flex flex-col space-y-2">
-                    <Link 
-                      to="/login" 
-                      className="text-gray-700 hover:text-green-600 transition-colors text-sm"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Connexion
-                    </Link>
-                    <Link 
-                      to="/register" 
-                      className="text-gray-700 hover:text-green-600 transition-colors text-sm"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Inscription
-                    </Link>
-                  </div>
-                </div>
-              )}
-
-              {/* Proprietaires */}
-              <div>
-                <h3 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Propriétaires</h3>
-                <div className="flex flex-col space-y-2">
-                  <Link 
-                    to="/register?role=owner" 
-                    className="text-gray-700 hover:text-green-600 transition-colors text-sm"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Ajouter mon terrain
-                  </Link>
-                  <Link 
-                    to="/dashboard" 
-                    className="text-gray-700 hover:text-green-600 transition-colors text-sm"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Gérer mes terrains
-                  </Link>
-                </div>
-              </div>
-
-              {/* Aide */}
-              <div>
-                <h3 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Aide</h3>
-                <div className="flex flex-col space-y-2">
-                  <a href="#" className="text-gray-700 hover:text-green-600 transition-colors text-sm">
-                    Comment ça marche ?
-                  </a>
-                  <a href="#" className="text-gray-700 hover:text-green-600 transition-colors text-sm">
-                    FAQ
-                  </a>
-                  <a href="#" className="text-gray-700 hover:text-green-600 transition-colors text-sm">
-                    Contact
-                  </a>
-                </div>
-              </div>
+        <div className="bg-white border-b border-gray-200 shadow-lg md:hidden">
+          <div className="container-custom py-4">
+            <div className="flex flex-col space-y-2">
+              <Link 
+                to="/" 
+                className="text-gray-900 hover:bg-gray-50 px-4 py-3 rounded-lg transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Accueil
+              </Link>
+              <Link 
+                to="/terrains" 
+                className="text-gray-900 hover:bg-gray-50 px-4 py-3 rounded-lg transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Tous les terrains
+              </Link>
+              <Link 
+                to="/terrains?size=5x5" 
+                className="text-gray-900 hover:bg-gray-50 px-4 py-3 rounded-lg transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Terrains 5x5
+              </Link>
+              <Link 
+                to="/terrains?size=7x7" 
+                className="text-gray-900 hover:bg-gray-50 px-4 py-3 rounded-lg transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Terrains 7x7
+              </Link>
+              <Link 
+                to="/terrains?size=11x11" 
+                className="text-gray-900 hover:bg-gray-50 px-4 py-3 rounded-lg transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Terrains 11x11
+              </Link>
             </div>
           </div>
         </div>

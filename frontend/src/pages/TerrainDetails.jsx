@@ -310,28 +310,26 @@ const TerrainDetails = () => {
         </div>
 
         {/* Avis - FULL WIDTH */}
-        <section className="mt-8 -mx-6 sm:-mx-10 lg:-mx-20">
+        <section className="mt-4 -mx-6 sm:-mx-10 lg:-mx-20">
           <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20">
             <ReviewsSection terrain={terrain} />
           </div>
         </section>
 
-        {/* Carte FULL WIDTH */}
-        <section className="mt-8 -mx-6 sm:-mx-10 lg:-mx-20">
-          <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 mb-6">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">
-              Où se situe le terrain
-            </h3>
-            <p className="text-gray-700">
-              {terrain.address.street}, {terrain.address.city}, {terrain.address.region}, Sénégal
-            </p>
-          </div>
+        {/* Carte - CENTRÉE (même taille que les autres sections) */}
+        <section className="mt-4 pb-8 border-b border-gray-200">
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">
+            Où se situe le terrain
+          </h3>
+          <p className="text-gray-700 mb-6">
+            {terrain.address.street}, {terrain.address.city}, {terrain.address.region}, Sénégal
+          </p>
 
           <SingleTerrainMap terrain={terrain} />
           
           {/* Points forts du quartier - Horizontal et joli */}
-          <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 mt-8">
-            <h4 className="font-semibold text-gray-900 mb-6">
+          <div className="mt-6">
+            <h4 className="font-semibold text-gray-900 mb-4">
               Points forts du quartier
             </h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -367,8 +365,8 @@ const TerrainDetails = () => {
           </div>
         </section>
 
-        {/* Propriétaire - FULL WIDTH (sans bordures, fond blanc) */}
-        <section className="mt-8 -mx-6 sm:-mx-10 lg:-mx-20">
+        {/* Propriétaire - FULL WIDTH */}
+        <section className="mt-4 -mx-6 sm:-mx-10 lg:-mx-20">
           <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 py-12">
             <OwnerProfile owner={terrain.owner} />
           </div>
