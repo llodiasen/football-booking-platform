@@ -1,6 +1,8 @@
-import { Star, Award, Sparkles, CheckCircle, MapPin, MessageCircle, DollarSign, Key } from 'lucide-react';
+import { useState } from 'react';
+import { Star, Award, Sparkles, CheckCircle, MapPin, MessageCircle, DollarSign, Key, X } from 'lucide-react';
 
 const ReviewsSection = ({ terrain }) => {
+  const [selectedReview, setSelectedReview] = useState(null);
   const averageRating = terrain.rating?.average || 0;
   const totalReviews = terrain.reviews?.length || 0;
 
@@ -138,7 +140,10 @@ const ReviewsSection = ({ terrain }) => {
 
                   {/* Lien "Lire la suite" */}
                   {showReadMore && (
-                    <button className="text-sm font-semibold text-gray-900 underline hover:text-gray-700 text-left">
+                    <button 
+                      onClick={() => setSelectedReview(review)}
+                      className="text-sm font-semibold text-gray-900 underline hover:text-gray-700 text-left"
+                    >
                       Lire la suite
                     </button>
                   )}
@@ -159,6 +164,63 @@ const ReviewsSection = ({ terrain }) => {
             </button>
           </div>
         </>
+      )}
+
+      {/* Modal pour afficher le commentaire complet */}
+      {selectedReview && (
+        <div className="fixed inset-0 bg-black/50 z-[200] flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-8 py-6 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">Avis complet</h2>
+              <button
+                onClick={() => setSelectedReview(null)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="px-8 py-6">
+              {/* Info utilisateur */}
+              <div className="flex items-start gap-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-2xl flex-shrink-0">
+                  {selectedReview.user?.firstName?.[0] || 'J'}
+                </div>
+                <div className="flex-1">
+                  <div className="font-bold text-gray-900 text-lg">
+                    {selectedReview.user?.firstName || 'Joueur'}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {selectedReview.user?.city || '4 ans sur 221FOOT'}
+                  </div>
+                  <div className="flex items-center gap-1 mt-2">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        size={14}
+                        className="text-gray-900 fill-gray-900"
+                      />
+                    ))}
+                  </div>
+                  <div className="text-sm text-gray-600 mt-1">
+                    {new Date(selectedReview.createdAt).toLocaleDateString('fr-FR', { 
+                      day: 'numeric',
+                      month: 'long', 
+                      year: 'numeric' 
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* Commentaire complet */}
+              <div className="prose prose-sm max-w-none">
+                <p className="text-gray-900 leading-relaxed whitespace-pre-line">
+                  {selectedReview.comment}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );
