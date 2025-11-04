@@ -1,0 +1,199 @@
+import { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
+import { terrainAPI } from '../../services/api';
+
+const AvailabilityCalendar = ({ terrainId }) => {
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [bookedDates, setBookedDates] = useState(new Set());
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadAvailability();
+  }, [terrainId, currentMonth]);
+
+  const loadAvailability = async () => {
+    if (!terrainId) return;
+    
+    setLoading(true);
+    try {
+      const bookedSet = new Set();
+      const today = new Date();
+      
+      // Charger les 30 prochains jours
+      for (let i = 0; i < 30; i++) {
+        const checkDate = new Date(today);
+        checkDate.setDate(today.getDate() + i);
+        const dateString = checkDate.toISOString().split('T')[0];
+        
+        try {
+          const response = await terrainAPI.getAvailability(terrainId, dateString);
+          const availability = response.data.data;
+          
+          const dayName = checkDate.toLocaleDateString('en-US', { weekday: 'lowercase' });
+          const hours = availability.terrain.openingHours[dayName];
+          
+          if (hours && !hours.closed) {
+            const openMinutes = parseInt(hours.open.split(':')[0]) * 60;
+            const closeMinutes = parseInt(hours.close.split(':')[0]) * 60;
+            const totalSlots = Math.floor((closeMinutes - openMinutes) / 60);
+            
+            const reservedSlots = availability.reservations?.length || 0;
+            const blockedSlots = availability.blockedSlots?.length || 0;
+            const takenSlots = reservedSlots + blockedSlots;
+            
+            if (takenSlots >= totalSlots) {
+              bookedSet.add(dateString);
+            }
+          }
+        } catch (err) {
+          console.error(`Erreur date ${dateString}:`, err);
+        }
+      }
+      
+      setBookedDates(bookedSet);
+    } catch (error) {
+      console.error('Erreur chargement disponibilités:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getDaysInMonth = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDayOfWeek = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+
+    return { daysInMonth, startingDayOfWeek, year, month };
+  };
+
+  const renderMonth = () => {
+    const { daysInMonth, startingDayOfWeek, year, month } = getDaysInMonth(currentMonth);
+    const days = [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Jours vides au début
+    for (let i = 0; i < startingDayOfWeek; i++) {
+      days.push(<div key={`empty-${i}`} className="h-10" />);
+    }
+
+    // Jours du mois
+    for (let day = 1; day <= daysInMonth; day++) {
+      const currentDate = new Date(year, month, day);
+      const dateString = currentDate.toISOString().split('T')[0];
+      const isPast = currentDate < today;
+      const isBooked = bookedDates.has(dateString);
+      const isToday = currentDate.toDateString() === today.toDateString();
+      
+      let dayClasses = 'h-10 w-10 flex items-center justify-center rounded-full text-sm font-medium relative';
+      
+      if (isPast) {
+        dayClasses += ' text-gray-300';
+      } else if (isBooked) {
+        dayClasses += ' text-gray-400 line-through';
+      } else if (isToday) {
+        dayClasses += ' bg-gray-900 text-white font-bold';
+      } else {
+        dayClasses += ' text-gray-900';
+      }
+
+      days.push(
+        <div key={day} className={dayClasses}>
+          {day}
+          {isBooked && !isPast && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-[1px] h-12 bg-red-400 rotate-45" />
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    return days;
+  };
+
+  const prevMonth = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
+  };
+
+  const nextMonth = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
+  };
+
+  return (
+    <div className="border border-gray-200 rounded-xl p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <CalendarIcon size={20} className="text-gray-700" />
+          <h3 className="text-lg font-semibold text-gray-900">
+            Disponibilité
+          </h3>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={prevMonth}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <span className="text-sm font-medium text-gray-900 min-w-[120px] text-center">
+            {currentMonth.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
+          </span>
+          <button
+            onClick={nextMonth}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+      </div>
+
+      {/* Jours de la semaine */}
+      <div className="grid grid-cols-7 gap-1 mb-2">
+        {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, idx) => (
+          <div key={idx} className="h-10 flex items-center justify-center text-xs font-medium text-gray-600">
+            {day}
+          </div>
+        ))}
+      </div>
+
+      {/* Calendrier */}
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-7 gap-1">
+          {renderMonth()}
+        </div>
+      )}
+
+      {/* Légende */}
+      <div className="flex flex-wrap gap-4 mt-6 pt-4 border-t border-gray-200 text-xs">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-gray-900 rounded-full"></div>
+          <span className="text-gray-600">Aujourd'hui</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full relative">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-[1px] h-5 bg-red-400 rotate-45"></div>
+            </div>
+          </div>
+          <span className="text-gray-600">Complet</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full border border-gray-300"></div>
+          <span className="text-gray-600">Disponible</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AvailabilityCalendar;
+

@@ -15,6 +15,7 @@ import OwnerProfile from '../components/terrain/OwnerProfile';
 import ThingsToKnow from '../components/terrain/ThingsToKnow';
 import SingleTerrainMap from '../components/terrain/SingleTerrainMap';
 import StickyBookingBar from '../components/terrain/StickyBookingBar';
+import AvailabilityCalendar from '../components/terrain/AvailabilityCalendar';
 
 const TerrainDetails = () => {
   const { id } = useParams();
@@ -295,8 +296,10 @@ const TerrainDetails = () => {
               )}
             </section>
 
-            {/* Avis */}
-            <ReviewsSection terrain={terrain} />
+            {/* Calendrier de disponibilité */}
+            <section className="pb-8 border-b border-gray-200">
+              <AvailabilityCalendar terrainId={terrain._id} />
+            </section>
 
           </div>
 
@@ -305,6 +308,13 @@ const TerrainDetails = () => {
             <BookingCard terrain={terrain} />
           </div>
         </div>
+
+        {/* Avis - FULL WIDTH */}
+        <section className="mt-8 -mx-6 sm:-mx-10 lg:-mx-20">
+          <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20">
+            <ReviewsSection terrain={terrain} />
+          </div>
+        </section>
 
         {/* Carte FULL WIDTH */}
         <section className="mt-8 -mx-6 sm:-mx-10 lg:-mx-20">
