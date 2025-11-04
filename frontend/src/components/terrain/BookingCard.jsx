@@ -37,16 +37,27 @@ const BookingCard = ({ terrain }) => {
   };
 
   const handleReserve = () => {
+    // Vérifier si l'utilisateur est connecté
+    const token = localStorage.getItem('token');
+    
+    let bookingUrl;
     if (bookingType === 'subscription') {
       // Abonnement mensuel
-      navigate(`/booking/${terrain._id}?type=subscription`);
+      bookingUrl = `/booking/${terrain._id}?type=subscription`;
     } else {
       // Réservation ponctuelle
       if (selectedDate) {
-        navigate(`/booking/${terrain._id}?type=single&date=${selectedDate}`);
+        bookingUrl = `/booking/${terrain._id}?type=single&date=${selectedDate}`;
       } else {
-        navigate(`/booking/${terrain._id}?type=single`);
+        bookingUrl = `/booking/${terrain._id}?type=single`;
       }
+    }
+
+    // Si non connecté, rediriger vers login avec URL de retour
+    if (!token) {
+      navigate(`/login?redirect=${encodeURIComponent(bookingUrl)}`);
+    } else {
+      navigate(bookingUrl);
     }
   };
 

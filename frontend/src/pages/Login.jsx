@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { Mail, Lock } from 'lucide-react';
@@ -10,10 +10,14 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
   
   const { login } = useAuth();
   const { success, error: showError } = useToast();
   const navigate = useNavigate();
+
+  // Récupérer l'URL de redirection si présente
+  const redirectUrl = searchParams.get('redirect');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +26,13 @@ const Login = () => {
     try {
       await login(email, password);
       success('Connexion réussie ! Bienvenue 👋');
-      navigate('/dashboard');
+      
+      // Rediriger vers l'URL de redirection ou vers le dashboard par défaut
+      if (redirectUrl) {
+        navigate(redirectUrl);
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       showError(err.message || 'Erreur de connexion');
     } finally {
@@ -72,7 +82,10 @@ const Login = () => {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Pas encore de compte ?{' '}
-              <Link to="/register" className="text-primary-600 hover:underline font-medium">
+              <Link 
+                to={redirectUrl ? `/register?redirect=${encodeURIComponent(redirectUrl)}` : '/register'} 
+                className="text-primary-600 hover:underline font-medium"
+              >
                 S'inscrire
               </Link>
             </p>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { Mail, Lock, User, Phone } from 'lucide-react';
@@ -17,10 +17,14 @@ const Register = () => {
     businessName: ''
   });
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
   
   const { register } = useAuth();
   const { success: showSuccess, error: showError } = useToast();
   const navigate = useNavigate();
+
+  // Récupérer l'URL de redirection si présente
+  const redirectUrl = searchParams.get('redirect');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -50,7 +54,15 @@ const Register = () => {
 
       const result = await register(dataToSend);
       showSuccess(result.message || 'Inscription réussie! 🎉');
-      setTimeout(() => navigate('/dashboard'), 2000);
+      
+      // Rediriger vers l'URL de redirection ou vers le dashboard par défaut
+      setTimeout(() => {
+        if (redirectUrl) {
+          navigate(redirectUrl);
+        } else {
+          navigate('/dashboard');
+        }
+      }, 2000);
     } catch (err) {
       showError(err.message || 'Erreur lors de l\'inscription');
     } finally {
@@ -159,7 +171,10 @@ const Register = () => {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Déjà un compte ?{' '}
-              <Link to="/login" className="text-primary-600 hover:underline font-medium">
+              <Link 
+                to={redirectUrl ? `/login?redirect=${encodeURIComponent(redirectUrl)}` : '/login'} 
+                className="text-primary-600 hover:underline font-medium"
+              >
                 Se connecter
               </Link>
             </p>
