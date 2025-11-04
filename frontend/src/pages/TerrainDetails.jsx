@@ -272,27 +272,62 @@ const TerrainDetails = () => {
               </p>
             </section>
 
-            {/* Équipements */}
+            {/* Équipements et Services */}
             <section className="pb-8 border-b border-gray-200">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">
                 Ce que propose ce terrain
               </h3>
-              <div className="grid sm:grid-cols-2 gap-4">
+              
+              {/* Équipements principaux */}
+              <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4 mb-8">
                 {terrain.amenities && terrain.amenities.map((amenity, index) => {
                   const Icon = amenityIcons[amenity] || CheckCircle;
                   const label = amenityLabels[amenity] || amenity;
                   return (
-                    <div key={index} className="flex items-center gap-3">
-                      <Icon size={24} className="text-gray-700" />
-                      <span className="text-gray-900 font-medium">{label}</span>
+                    <div key={index} className="flex items-center gap-4 py-2">
+                      <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
+                        <Icon size={24} className="text-gray-800" strokeWidth={1.5} />
+                      </div>
+                      <span className="text-gray-900 font-medium text-base">{label}</span>
                     </div>
                   );
                 })}
               </div>
-              {terrain.amenities && terrain.amenities.length > 8 && (
-                <button className="mt-6 px-6 py-3 border-2 border-gray-900 rounded-lg font-semibold text-gray-900 hover:bg-gray-50 transition-colors">
-                  Afficher les {terrain.amenities.length} équipements
-                </button>
+
+              {/* Points forts du terrain */}
+              {terrain.highlights && terrain.highlights.length > 0 && (
+                <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-6 border-2 border-green-200">
+                  <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <span className="text-xl">✨</span>
+                    <span>Points forts</span>
+                  </h4>
+                  <div className="grid sm:grid-cols-2 gap-x-6 gap-y-3">
+                    {terrain.highlights.map((highlight, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <CheckCircle size={20} className="text-green-600 flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-gray-800 text-sm leading-snug">{highlight}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Services supplémentaires */}
+              {terrain.additionalServices && terrain.additionalServices.length > 0 && (
+                <div className="mt-6 bg-purple-50 rounded-2xl p-6 border-2 border-purple-200">
+                  <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <span className="text-xl">🎯</span>
+                    <span>Services supplémentaires</span>
+                  </h4>
+                  <div className="grid sm:grid-cols-2 gap-x-6 gap-y-3">
+                    {terrain.additionalServices.map((service, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <CheckCircle size={18} className="text-purple-600 flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-gray-800 text-sm leading-snug">{service}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
             </section>
 
@@ -327,42 +362,55 @@ const TerrainDetails = () => {
 
           <SingleTerrainMap terrain={terrain} />
           
-          {/* Points forts du quartier - Horizontal et joli */}
-          <div className="mt-6">
-            <h4 className="font-semibold text-gray-900 mb-4">
-              Points forts du quartier
-            </h4>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-xl border border-blue-100">
-                <div className="text-3xl">🚌</div>
-                <div>
-                  <p className="font-semibold text-gray-900 text-sm">Transport</p>
-                  <p className="text-xs text-gray-600">Bus à 5 min</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-100">
-                <div className="text-3xl">🏪</div>
-                <div>
-                  <p className="font-semibold text-gray-900 text-sm">Commerce</p>
-                  <p className="text-xs text-gray-600">À 2 minutes</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-4 bg-purple-50 rounded-xl border border-purple-100">
-                <div className="text-3xl">🚗</div>
-                <div>
-                  <p className="font-semibold text-gray-900 text-sm">Parking</p>
-                  <p className="text-xs text-gray-600">Gratuit</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-4 bg-red-50 rounded-xl border border-red-100">
-                <div className="text-3xl">🏥</div>
-                <div>
-                  <p className="font-semibold text-gray-900 text-sm">Santé</p>
-                  <p className="text-xs text-gray-600">À 10 min</p>
-                </div>
+          {/* Points forts du quartier - Données dynamiques */}
+          {terrain.neighborhoodHighlights && terrain.neighborhoodHighlights.length > 0 && (
+            <div className="mt-6">
+              <h4 className="font-semibold text-gray-900 mb-4">
+                Points forts du quartier
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {terrain.neighborhoodHighlights.map((category, catIndex) => {
+                  const categoryIcons = {
+                    'Transport': '🚌',
+                    'Commerce': '🏪',
+                    'Parking': '🚗',
+                    'Santé': '🏥',
+                    'Loisirs': '🎮',
+                    'Education': '🎓'
+                  };
+                  
+                  const categoryColors = {
+                    'Transport': { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-900' },
+                    'Commerce': { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-900' },
+                    'Parking': { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-900' },
+                    'Santé': { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-900' },
+                    'Loisirs': { bg: 'bg-yellow-50', border: 'border-yellow-200', text: 'text-yellow-900' },
+                    'Education': { bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-900' }
+                  };
+                  
+                  const icon = categoryIcons[category.category] || '📍';
+                  const colors = categoryColors[category.category] || { bg: 'bg-gray-50', border: 'border-gray-200', text: 'text-gray-900' };
+                  
+                  return (
+                    <div key={catIndex} className={`${colors.bg} rounded-xl p-4 border-2 ${colors.border}`}>
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="text-2xl">{icon}</div>
+                        <p className={`font-bold ${colors.text} text-sm`}>{category.category}</p>
+                      </div>
+                      <ul className="space-y-1.5">
+                        {category.items && category.items.slice(0, 3).map((item, itemIndex) => (
+                          <li key={itemIndex} className="text-xs text-gray-700 flex items-start gap-2">
+                            <span className="text-gray-400 mt-0.5">•</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          </div>
+          )}
         </section>
 
         {/* Propriétaire - FULL WIDTH */}
@@ -371,6 +419,50 @@ const TerrainDetails = () => {
             <OwnerProfile owner={terrain.owner} />
           </div>
         </section>
+
+        {/* Accessibilité PMR - FULL WIDTH */}
+        {terrain.accessibility && (terrain.accessibility.wheelchairAccess || terrain.accessibility.parkingPMR || terrain.accessibility.elevatorAvailable || terrain.accessibility.adaptedToilets) && (
+          <section className="mt-0 -mx-6 sm:-mx-10 lg:-mx-20 bg-blue-50 border-y-2 border-blue-200">
+            <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 py-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
+                  <Users className="text-white" size={24} />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">Accessibilité</h2>
+                  <p className="text-sm text-gray-600">Ce terrain est adapté aux personnes à mobilité réduite</p>
+                </div>
+              </div>
+              
+              <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
+                {terrain.accessibility.wheelchairAccess && (
+                  <div className="bg-white rounded-xl p-4 border-2 border-blue-200">
+                    <CheckCircle className="text-blue-600 mb-2" size={24} strokeWidth={2} />
+                    <p className="font-semibold text-gray-900 text-sm">Accès fauteuil roulant</p>
+                  </div>
+                )}
+                {terrain.accessibility.parkingPMR && (
+                  <div className="bg-white rounded-xl p-4 border-2 border-blue-200">
+                    <Car className="text-blue-600 mb-2" size={24} strokeWidth={2} />
+                    <p className="font-semibold text-gray-900 text-sm">Parking PMR</p>
+                  </div>
+                )}
+                {terrain.accessibility.elevatorAvailable && (
+                  <div className="bg-white rounded-xl p-4 border-2 border-blue-200">
+                    <CheckCircle className="text-blue-600 mb-2" size={24} strokeWidth={2} />
+                    <p className="font-semibold text-gray-900 text-sm">Ascenseur disponible</p>
+                  </div>
+                )}
+                {terrain.accessibility.adaptedToilets && (
+                  <div className="bg-white rounded-xl p-4 border-2 border-blue-200">
+                    <Home className="text-blue-600 mb-2" size={24} strokeWidth={2} />
+                    <p className="font-semibold text-gray-900 text-sm">Toilettes adaptées</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* À savoir - FULL WIDTH */}
         <section className="mt-0 -mx-6 sm:-mx-10 lg:-mx-20">
@@ -384,3 +476,4 @@ const TerrainDetails = () => {
 };
 
 export default TerrainDetails;
+

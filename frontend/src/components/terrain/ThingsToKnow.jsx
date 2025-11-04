@@ -8,23 +8,29 @@ const ThingsToKnow = ({ terrain }) => {
   
   const openingHours = terrain.openingHours || {};
   
-  const rules = [
-    'Chaussures à crampons adaptées obligatoires',
-    'Respect des horaires de réservation',
-    'Vestiaires et douches disponibles',
-    'Maximum de joueurs selon la taille du terrain',
-    'Consommation d\'alcool interdite',
-    'Respect du matériel et des installations'
-  ];
+  // Utiliser les règles du terrain si disponibles, sinon règles par défaut
+  const rules = terrain.bookingRules?.rules && terrain.bookingRules.rules.length > 0
+    ? terrain.bookingRules.rules
+    : [
+        'Chaussures à crampons adaptées obligatoires',
+        'Respect des horaires de réservation',
+        'Vestiaires et douches disponibles',
+        'Maximum de joueurs selon la taille du terrain',
+        'Consommation d\'alcool interdite',
+        'Respect du matériel et des installations'
+      ];
 
-  const safetyInfo = [
-    'Trousse de premiers secours disponible sur place',
-    'Éclairage de sécurité fonctionnel',
-    'Numéros d\'urgence affichés',
-    'Personnel qualifié présent',
-    'Assurance responsabilité civile',
-    'Protocole COVID-19 en place'
-  ];
+  // Utiliser les infos de sécurité du terrain si disponibles, sinon infos par défaut
+  const safetyInfo = terrain.safetyInfo && terrain.safetyInfo.length > 0
+    ? terrain.safetyInfo
+    : [
+        'Trousse de premiers secours disponible sur place',
+        'Éclairage de sécurité fonctionnel',
+        'Numéros d\'urgence affichés',
+        'Personnel qualifié présent',
+        'Assurance responsabilité civile',
+        'Protocole COVID-19 en place'
+      ];
 
   const cancellationPolicy = [
     {
