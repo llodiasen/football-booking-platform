@@ -292,26 +292,29 @@ const DateRangePicker = ({ terrainId, onDateSelect, selectedStartDate, selectedE
       )}
 
       {/* Légende */}
-      <div className="mt-6 pt-4 border-t border-gray-200 flex flex-wrap gap-4 text-xs text-gray-600">
+      <div className="mt-6 pt-4 border-t border-gray-200 flex flex-wrap gap-6 text-sm">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full bg-gray-900"></div>
-          <span>Dates sélectionnées</span>
+          <div className="w-5 h-5 rounded-full bg-gray-900"></div>
+          <span className="text-gray-700 font-medium">Dates sélectionnées</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full bg-gray-100"></div>
-          <span>Plage sélectionnée</span>
+          <div className="w-5 h-5 rounded-full bg-gray-100 border border-gray-200"></div>
+          <span className="text-gray-700 font-medium">Plage sélectionnée</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full relative">
+          <div className="w-5 h-5 rounded-full relative flex items-center justify-center">
+            <span className="text-gray-400 line-through font-bold">15</span>
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-[1px] h-5 bg-red-400 rotate-45"></div>
+              <div className="w-[1.5px] h-6 bg-red-500 rotate-45"></div>
             </div>
           </div>
-          <span>Dates déjà prises</span>
+          <span className="text-red-600 font-medium">Dates déjà prises</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full text-gray-300 flex items-center justify-center text-[8px]">✗</div>
-          <span>Dates passées</span>
+          <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center">
+            <span className="text-xs text-gray-500">20</span>
+          </div>
+          <span className="text-gray-700 font-medium">Disponible</span>
         </div>
       </div>
     </div>

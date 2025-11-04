@@ -173,22 +173,25 @@ const AvailabilityCalendar = ({ terrainId }) => {
       )}
 
       {/* Légende */}
-      <div className="flex flex-wrap gap-4 mt-6 pt-4 border-t border-gray-200 text-xs">
+      <div className="flex flex-wrap gap-6 mt-6 pt-4 border-t border-gray-200 text-sm">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-gray-900 rounded-full"></div>
-          <span className="text-gray-600">Aujourd'hui</span>
+          <div className="w-5 h-5 bg-gray-900 rounded-full"></div>
+          <span className="text-gray-700 font-medium">Aujourd'hui</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full relative">
+          <div className="w-5 h-5 rounded-full relative flex items-center justify-center">
+            <span className="text-gray-400 line-through font-bold">15</span>
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-[1px] h-5 bg-red-400 rotate-45"></div>
+              <div className="w-[1.5px] h-6 bg-red-500 rotate-45"></div>
             </div>
           </div>
-          <span className="text-gray-600">Complet</span>
+          <span className="text-red-600 font-medium">Dates déjà prises</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full border border-gray-300"></div>
-          <span className="text-gray-600">Disponible</span>
+          <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center">
+            <span className="text-xs text-gray-500">20</span>
+          </div>
+          <span className="text-gray-700 font-medium">Disponible</span>
         </div>
       </div>
     </div>
