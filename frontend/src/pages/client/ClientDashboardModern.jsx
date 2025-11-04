@@ -6,6 +6,7 @@ import {
   MapPin, Clock, TrendingUp, ArrowUpRight
 } from 'lucide-react';
 import ClientSidebar from '../../components/client/ClientSidebar';
+import SettingsSection from '../../components/dashboard/SettingsSection';
 import { reservationAPI } from '../../services/api';
 
 const ClientDashboardModern = () => {
@@ -296,18 +297,7 @@ const ClientDashboardModern = () => {
               )}
 
               {/* PARAMÈTRES */}
-              {section === 'settings' && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-                  <div className="p-6 border-b border-gray-200">
-                    <h2 className="text-xl font-bold text-gray-900">Paramètres</h2>
-                  </div>
-                  <div className="p-12 text-center">
-                    <SettingsIcon className="mx-auto text-gray-400 mb-4" size={64} />
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Paramètres du compte</h3>
-                    <p className="text-gray-600">Gérez vos préférences</p>
-                  </div>
-                </div>
-              )}
+              {section === 'settings' && <SettingsSection />}
             </div>
 
             {/* COLONNE DROITE - Panneaux (1/3) */}

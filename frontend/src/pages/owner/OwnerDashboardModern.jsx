@@ -11,6 +11,8 @@ import {
 import OwnerSidebar from '../../components/owner/OwnerSidebar';
 import TerrainFormModal from '../../components/owner/TerrainFormModal';
 import AvailabilityManager from '../../components/owner/AvailabilityManager';
+import SettingsSection from '../../components/dashboard/SettingsSection';
+import ReservationsTable from '../../components/owner/ReservationsTable';
 
 const OwnerDashboardModern = () => {
   const { user } = useAuth();
@@ -396,19 +398,8 @@ const OwnerDashboardModern = () => {
                 </div>
               )}
 
-              {/* RÉSERVATIONS - Tableau style capture */}
-              {section === 'reservations' && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-                  <div className="p-6 border-b border-gray-200">
-                    <h2 className="text-xl font-bold text-gray-900">Réservations</h2>
-                  </div>
-                  <div className="p-12 text-center">
-                    <Calendar className="mx-auto text-gray-400 mb-4" size={64} />
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Aucune réservation</h3>
-                    <p className="text-gray-600">Les réservations de vos terrains apparaîtront ici</p>
-                  </div>
-                </div>
-              )}
+              {/* RÉSERVATIONS - Tableau complet avec actions */}
+              {section === 'reservations' && <ReservationsTable terrains={terrains} />}
 
               {/* DISPONIBILITÉS */}
               {section === 'availability' && (
@@ -469,18 +460,7 @@ const OwnerDashboardModern = () => {
               )}
 
               {/* PARAMÈTRES */}
-              {section === 'settings' && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-                  <div className="p-6 border-b border-gray-200">
-                    <h2 className="text-xl font-bold text-gray-900">Paramètres</h2>
-                  </div>
-                  <div className="p-12 text-center">
-                    <SettingsIcon className="mx-auto text-gray-400 mb-4" size={64} />
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Paramètres du compte</h3>
-                    <p className="text-gray-600">Gérez vos préférences et paramètres de compte</p>
-                  </div>
-                </div>
-              )}
+              {section === 'settings' && <SettingsSection />}
             </div>
 
             {/* COLONNE DROITE - Panneaux fixes visibles sur toutes les sections */}
