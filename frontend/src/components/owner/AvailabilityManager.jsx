@@ -5,7 +5,7 @@ import { useToast } from '../../context/ToastContext';
 import Button from '../ui/Button';
 import Card from '../ui/Card';
 
-const AvailabilityManager = ({ terrain, onUpdate }) => {
+const AvailabilityManager = ({ terrains, selectedTerrain, onSelectTerrain }) => {
   const { success: showSuccess, error: showError } = useToast();
   const [selectedDate, setSelectedDate] = useState('');
   const [availability, setAvailability] = useState(null);
@@ -17,6 +17,9 @@ const AvailabilityManager = ({ terrain, onUpdate }) => {
     reason: 'maintenance',
     note: ''
   });
+
+  // Terrain actuel (soit sélectionné, soit le premier de la liste)
+  const terrain = selectedTerrain || terrains?.[0];
 
   useEffect(() => {
     if (selectedDate && terrain) {
@@ -130,8 +133,39 @@ const AvailabilityManager = ({ terrain, onUpdate }) => {
     'other': 'Autre'
   };
 
+  if (!terrain) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-600">Aucun terrain disponible</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
+      {/* Sélecteur de terrain */}
+      {terrains && terrains.length > 1 && (
+        <div className="bg-white rounded-lg p-4 border border-gray-200">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Sélectionner un terrain
+          </label>
+          <select
+            value={terrain._id}
+            onChange={(e) => {
+              const selected = terrains.find(t => t._id === e.target.value);
+              if (onSelectTerrain) onSelectTerrain(selected);
+            }}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          >
+            {terrains.map(t => (
+              <option key={t._id} value={t._id}>
+                {t.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
       {/* En-tête */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
