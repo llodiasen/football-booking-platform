@@ -306,7 +306,7 @@ const TerrainDetails = () => {
           </div>
         </div>
 
-        {/* Carte FULL WIDTH - En dehors du layout 2 colonnes */}
+        {/* Carte FULL WIDTH */}
         <section className="mt-16 -mx-6 sm:-mx-10 lg:-mx-20">
           <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 mb-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-2">
@@ -319,33 +319,57 @@ const TerrainDetails = () => {
 
           <SingleTerrainMap terrain={terrain} />
           
-          {/* Points forts du quartier */}
+          {/* Points forts du quartier - Horizontal et joli */}
           <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 mt-8">
-            <h4 className="font-semibold text-gray-900 mb-4">
+            <h4 className="font-semibold text-gray-900 mb-6">
               Points forts du quartier
             </h4>
-            <ul className="space-y-2 text-sm text-gray-700">
-              <li>🚌 Arrêt de bus à 5 minutes à pied</li>
-              <li>🏪 Commerce de proximité à 2 minutes</li>
-              <li>🚗 Parking gratuit disponible</li>
-              <li>🏥 Centre de santé à 10 minutes</li>
-            </ul>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                <div className="text-3xl">🚌</div>
+                <div>
+                  <p className="font-semibold text-gray-900 text-sm">Transport</p>
+                  <p className="text-xs text-gray-600">Bus à 5 min</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-100">
+                <div className="text-3xl">🏪</div>
+                <div>
+                  <p className="font-semibold text-gray-900 text-sm">Commerce</p>
+                  <p className="text-xs text-gray-600">À 2 minutes</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-4 bg-purple-50 rounded-xl border border-purple-100">
+                <div className="text-3xl">🚗</div>
+                <div>
+                  <p className="font-semibold text-gray-900 text-sm">Parking</p>
+                  <p className="text-xs text-gray-600">Gratuit</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-4 bg-red-50 rounded-xl border border-red-100">
+                <div className="text-3xl">🏥</div>
+                <div>
+                  <p className="font-semibold text-gray-900 text-sm">Santé</p>
+                  <p className="text-xs text-gray-600">À 10 min</p>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* Propriétaire et À savoir - Retour au layout 2 colonnes */}
-        <div className="grid lg:grid-cols-3 gap-16 mt-16">
-          <div className="lg:col-span-2 space-y-12">
-            {/* Propriétaire */}
+        {/* Propriétaire - FULL WIDTH */}
+        <section className="mt-16 -mx-6 sm:-mx-10 lg:-mx-20 bg-gray-50 py-12">
+          <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20">
             <OwnerProfile owner={terrain.owner} />
+          </div>
+        </section>
 
-            {/* À savoir */}
+        {/* À savoir - FULL WIDTH */}
+        <section className="mt-0 -mx-6 sm:-mx-10 lg:-mx-20">
+          <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 py-12">
             <ThingsToKnow terrain={terrain} />
           </div>
-
-          {/* Colonne droite vide pour maintenir l'alignement */}
-          <div className="lg:col-span-1"></div>
-        </div>
+        </section>
       </div>
     </div>
   );
