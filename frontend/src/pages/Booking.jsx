@@ -7,6 +7,7 @@ import { useToast } from '../context/ToastContext';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import Input from '../components/ui/Input';
+import TimeSlotPicker from '../components/reservation/TimeSlotPicker';
 
 const Booking = () => {
   const { terrainId } = useParams();
@@ -99,6 +100,14 @@ const Booking = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleTimeSelect = (timeSlot) => {
+    setFormData({
+      ...formData,
+      startTime: timeSlot.startTime,
+      endTime: timeSlot.endTime
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -197,7 +206,8 @@ const Booking = () => {
                     Date et Horaire
                   </h2>
 
-                  <div className="space-y-4">
+                  <div className="space-y-6">
+                    {/* Sélection de la date */}
                     <Input
                       label="Date de réservation"
                       type="date"
@@ -208,46 +218,26 @@ const Booking = () => {
                       required
                     />
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Heure de début
-                        </label>
-                        <select
-                          name="startTime"
-                          value={formData.startTime}
-                          onChange={handleChange}
-                          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary-500"
-                          required
-                        >
-                          {timeOptions.map(time => (
-                            <option key={time} value={time}>{time}</option>
-                          ))}
-                        </select>
-                      </div>
+                    {/* Sélecteur de créneaux avec disponibilité */}
+                    <TimeSlotPicker
+                      terrain={terrain}
+                      selectedDate={formData.date}
+                      onTimeSelect={handleTimeSelect}
+                      selectedStartTime={formData.startTime}
+                      selectedEndTime={formData.endTime}
+                    />
 
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Heure de fin
-                        </label>
-                        <select
-                          name="endTime"
-                          value={formData.endTime}
-                          onChange={handleChange}
-                          className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary-500"
-                          required
-                        >
-                          {timeOptions.map(time => (
-                            <option key={time} value={time}>{time}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    {priceCalculation && (
-                      <div className="p-4 bg-green-50 rounded-lg">
+                    {/* Résumé du créneau sélectionné */}
+                    {formData.startTime && formData.endTime && priceCalculation && (
+                      <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-sm font-semibold text-green-900">
+                            ✅ Créneau sélectionné
+                          </p>
+                          <Clock className="text-green-600" size={16} />
+                        </div>
                         <p className="text-sm text-green-800">
-                          ✅ Durée : {priceCalculation.durationHours}h (minimum 1h requis)
+                          {formData.startTime} - {formData.endTime} ({priceCalculation.durationHours}h)
                         </p>
                       </div>
                     )}
