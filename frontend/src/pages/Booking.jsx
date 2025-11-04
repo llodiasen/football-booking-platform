@@ -443,30 +443,27 @@ const Booking = () => {
                           </div>
                         </div>
 
-                        {/* TimeSlotPicker pour choisir le créneau */}
+                        {/* TimeSlotPicker pour choisir le créneau - VERSION COMPACTE */}
                         <div>
-                          <div className="mb-4">
-                            <div className="font-semibold text-gray-900 mb-1">⏰ Étape 2 : Choisissez votre créneau horaire</div>
-                            {formData.startTime && formData.endTime ? (
+                          {formData.startTime && formData.endTime ? (
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3 flex items-center justify-between">
                               <div className="flex items-center gap-2">
-                                <span className="text-green-700 text-lg">✓</span>
-                                <span className="text-gray-700">
-                                  Créneau : <span className="font-medium">{formData.startTime} - {formData.endTime}</span>
-                                  {priceCalc && <span className="ml-2 text-gray-600">({priceCalc.durationHours}h)</span>}
-                                </span>
-                                <button 
-                                  onClick={() => setFormData({ ...formData, startTime: '', endTime: '' })}
-                                  className="text-sm font-semibold text-green-700 hover:text-green-900 underline ml-2"
-                                >
-                                  Modifier
-                                </button>
+                                <span className="text-blue-700">⏰</span>
+                                <span className="text-sm font-medium text-gray-900">{formData.startTime} - {formData.endTime}</span>
+                                {priceCalc && <span className="text-xs text-gray-600">({priceCalc.durationHours}h)</span>}
                               </div>
-                            ) : (
-                              <p className="text-sm text-gray-600">Cliquez sur un créneau disponible pour le sélectionner</p>
-                            )}
-                          </div>
+                              <button 
+                                onClick={() => setFormData({ ...formData, startTime: '', endTime: '' })}
+                                className="text-xs font-semibold text-blue-700 hover:text-blue-900 underline"
+                              >
+                                Modifier
+                              </button>
+                            </div>
+                          ) : (
+                            <p className="text-xs text-gray-600 mb-2">⏰ Sélectionnez un créneau</p>
+                          )}
 
-                          <div className="border-2 border-blue-200 rounded-xl p-6 bg-blue-50/20">
+                          <div className="border border-gray-200 rounded-lg p-3 bg-gray-50">
                             <TimeSlotPicker
                               terrain={terrain}
                               selectedDate={formData.date}
@@ -521,40 +518,28 @@ const Booking = () => {
                       </div>
                     </div>
 
-                    {/* ÉTAPE 2 : Choisir le créneau (si jour sélectionné) */}
+                    {/* ÉTAPE 2 : Choisir le créneau (si jour sélectionné) - VERSION COMPACTE */}
                     {formData.weekday && (
-                      <div className="space-y-4">
-                        <div>
-                          <div className="font-semibold text-gray-900 mb-1 flex items-center gap-2">
-                            {formData.startTime ? <span className="text-purple-700">✓</span> : <span>2️⃣</span>}
-                            <span>Choisissez votre créneau horaire</span>
-                          </div>
-                          <p className="text-sm text-gray-600">
-                            Ce créneau se répétera chaque {formData.weekday === 'monday' ? 'lundi' : formData.weekday === 'tuesday' ? 'mardi' : formData.weekday === 'wednesday' ? 'mercredi' : formData.weekday === 'thursday' ? 'jeudi' : formData.weekday === 'friday' ? 'vendredi' : formData.weekday === 'saturday' ? 'samedi' : 'dimanche'}
-                          </p>
-                        </div>
-
-                        {formData.startTime && formData.endTime && (
-                          <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-4">
+                      <div>
+                        {formData.startTime && formData.endTime ? (
+                          <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-3 flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                              <span className="text-purple-700 text-lg">✓</span>
-                              <span className="text-gray-700">
-                                Créneau : <span className="font-medium">{formData.startTime} - {formData.endTime}</span>
-                              </span>
-                              <button 
-                                onClick={() => setFormData({ ...formData, startTime: '', endTime: '' })}
-                                className="text-sm font-semibold text-purple-700 hover:text-purple-900 underline ml-2"
-                              >
-                                Modifier
-                              </button>
+                              <span className="text-purple-700">⏰</span>
+                              <span className="text-sm font-medium text-gray-900">{formData.startTime} - {formData.endTime}</span>
+                              <span className="text-xs text-gray-600">(Chaque {formData.weekday === 'monday' ? 'lundi' : formData.weekday === 'tuesday' ? 'mardi' : formData.weekday === 'wednesday' ? 'mercredi' : formData.weekday === 'thursday' ? 'jeudi' : formData.weekday === 'friday' ? 'vendredi' : formData.weekday === 'saturday' ? 'samedi' : 'dimanche'})</span>
                             </div>
+                            <button 
+                              onClick={() => setFormData({ ...formData, startTime: '', endTime: '' })}
+                              className="text-xs font-semibold text-purple-700 hover:text-purple-900 underline"
+                            >
+                              Modifier
+                            </button>
                           </div>
+                        ) : (
+                          <p className="text-xs text-gray-600 mb-2">2️⃣ Sélectionnez un créneau (se répétera chaque {formData.weekday === 'monday' ? 'lundi' : formData.weekday === 'tuesday' ? 'mardi' : formData.weekday === 'wednesday' ? 'mercredi' : formData.weekday === 'thursday' ? 'jeudi' : formData.weekday === 'friday' ? 'vendredi' : formData.weekday === 'saturday' ? 'samedi' : 'dimanche'})</p>
                         )}
 
-                        <div className="border-2 border-purple-200 rounded-xl p-6 bg-purple-50/20">
-                          <p className="text-sm text-gray-600 mb-4">
-                            💡 Les créneaux affichés sont basés sur un {formData.weekday === 'monday' ? 'lundi' : formData.weekday === 'tuesday' ? 'mardi' : formData.weekday === 'wednesday' ? 'mercredi' : formData.weekday === 'thursday' ? 'jeudi' : formData.weekday === 'friday' ? 'vendredi' : formData.weekday === 'saturday' ? 'samedi' : 'dimanche'} type
-                          </p>
+                        <div className="border border-gray-200 rounded-lg p-3 bg-gray-50">
                           <TimeSlotPicker
                             terrain={terrain}
                             selectedDate={(() => {
