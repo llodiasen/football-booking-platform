@@ -138,16 +138,24 @@ const BookingCard = ({ terrain }) => {
           </div>
         </div>
 
-        {/* Calendrier dropdown */}
+        {/* Calendrier dropdown - Style Airbnb exact */}
         {showCalendar && (
-          <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 p-6 z-50 max-w-[650px]">
-            <DateRangePicker 
-              terrainId={terrain._id}
-              onDateSelect={handleDateSelect}
-              selectedStartDate={selectedStartDate}
-              selectedEndDate={selectedEndDate}
+          <>
+            {/* Overlay transparent pour fermer au clic */}
+            <div 
+              className="fixed inset-0 z-40"
+              onClick={() => setShowCalendar(false)}
             />
-          </div>
+            {/* Modal calendrier */}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-200 p-8 z-50 w-[650px] max-w-[95vw]">
+              <DateRangePicker 
+                terrainId={terrain._id}
+                onDateSelect={handleDateSelect}
+                selectedStartDate={selectedStartDate}
+                selectedEndDate={selectedEndDate}
+              />
+            </div>
+          </>
         )}
       </div>
 

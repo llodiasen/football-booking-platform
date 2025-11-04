@@ -29,23 +29,29 @@ const ReviewsSection = ({ terrain }) => {
     <section className="py-12 border-t border-gray-200">
       {/* Distribution et catégories côte à côte (même hauteur) */}
       <div className="grid md:grid-cols-2 gap-16 mb-12">
-        {/* Gauche: Évaluation globale (distribution) */}
+        {/* Gauche: Évaluation globale (distribution) - Style Airbnb exact */}
         <div className="flex flex-col">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">Évaluation globale</h3>
-          <div className="flex-1 flex flex-col justify-between space-y-4">
-            {starDistribution.reverse().map((item) => (
-              <div key={item.stars} className="flex items-center gap-3">
-                <span className="text-sm text-gray-900 w-3">
-                  {item.stars}
-                </span>
-                <div className="flex-1 bg-gray-200 rounded-full h-1 overflow-hidden">
-                  <div
-                    className="bg-gray-900 h-full rounded-full"
-                    style={{ width: `${(item.count / maxCount) * 100}%` }}
-                  />
+          <div className="flex-1 flex flex-col justify-between space-y-3">
+            {starDistribution.reverse().map((item) => {
+              const percentage = (item.count / maxCount) * 100;
+              const barHeight = item.stars === 5 ? 'h-2' : 'h-1.5'; // 5 étoiles plus épais
+              const barColor = item.stars === 5 ? 'bg-gray-900' : 'bg-gray-300'; // 5 étoiles noir, autres gris
+              
+              return (
+                <div key={item.stars} className="flex items-center gap-3">
+                  <span className="text-sm font-medium text-gray-900 w-3">
+                    {item.stars}
+                  </span>
+                  <div className="flex-1 bg-transparent overflow-hidden">
+                    <div
+                      className={`${barHeight} ${barColor} rounded-sm transition-all duration-500`}
+                      style={{ width: `${percentage}%` }}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 

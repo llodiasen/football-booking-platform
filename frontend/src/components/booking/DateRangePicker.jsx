@@ -246,20 +246,19 @@ const DateRangePicker = ({ terrainId, onDateSelect, selectedStartDate, selectedE
   return (
     <div className="bg-white">
       {/* En-tête avec dates sélectionnées */}
-      <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
-        <div className="flex-1">
-          {formatDateRange()}
-        </div>
-        {startDate && (
+      {startDate && (
+        <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+          <div className="flex-1">
+            {formatDateRange()}
+          </div>
           <button
             onClick={handleClearDates}
             className="text-sm text-gray-600 underline hover:text-gray-900 flex items-center gap-1"
           >
-            <X size={14} />
             Effacer les dates
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Navigation mois */}
       <div className="flex items-center justify-between mb-6">
