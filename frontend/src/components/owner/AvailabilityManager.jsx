@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, Lock, Unlock, Plus, X, AlertCircle, CheckCircle } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, Lock, Unlock, Plus, X, AlertCircle, CheckCircle } from 'lucide-react';
 import { terrainAPI } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
 import Button from '../ui/Button';
 import Card from '../ui/Card';
+import Calendar from '../ui/Calendar';
+import { format } from 'date-fns';
 
 const AvailabilityManager = ({ terrains, selectedTerrain, onSelectTerrain }) => {
   const { success: showSuccess, error: showError } = useToast();
@@ -176,19 +178,17 @@ const AvailabilityManager = ({ terrains, selectedTerrain, onSelectTerrain }) => 
         </p>
       </div>
 
-      {/* Sélection de date */}
-      <Card className="p-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Sélectionnez une date
-        </label>
-        <input
-          type="date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-          min={new Date().toISOString().split('T')[0]}
-          className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-        />
-      </Card>
+      {/* Calendrier moderne Shadcn UI */}
+      <Calendar
+        selected={selectedDate ? new Date(selectedDate) : null}
+        onSelect={(date) => {
+          if (date) {
+            setSelectedDate(format(date, 'yyyy-MM-dd'));
+          }
+        }}
+        bookedDates={availability?.reservations?.map(r => new Date(r.date)) || []}
+        className="shadow-sm"
+      />
 
       {/* Grille de créneaux */}
       {selectedDate && (
