@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
 import { terrainAPI } from '../../services/api';
 
-const AvailabilityCalendar = ({ terrainId }) => {
+const AvailabilityCalendar = ({ terrainId, onDateSelect, selectedDate }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [bookedDates, setBookedDates] = useState(new Set());
   const [loading, setLoading] = useState(true);
@@ -87,28 +87,36 @@ const AvailabilityCalendar = ({ terrainId }) => {
       const isPast = currentDate < today;
       const isBooked = bookedDates.has(dateString);
       const isToday = currentDate.toDateString() === today.toDateString();
+      const isSelected = selectedDate === dateString;
+      const isDisabled = isPast || isBooked;
       
-      let dayClasses = 'h-10 w-10 flex items-center justify-center rounded-full text-sm font-medium relative';
+      let dayClasses = 'h-10 w-10 flex items-center justify-center rounded-full text-sm font-medium relative transition-all';
       
-      if (isPast) {
-        dayClasses += ' text-gray-300';
-      } else if (isBooked) {
-        dayClasses += ' text-gray-400 line-through';
+      if (isDisabled) {
+        dayClasses += ' text-gray-300 cursor-not-allowed';
+      } else if (isSelected) {
+        dayClasses += ' bg-gray-900 text-white font-bold cursor-pointer';
       } else if (isToday) {
-        dayClasses += ' bg-gray-900 text-white font-bold';
+        dayClasses += ' border-2 border-gray-900 text-gray-900 font-bold cursor-pointer hover:bg-gray-100';
       } else {
-        dayClasses += ' text-gray-900';
+        dayClasses += ' text-gray-900 cursor-pointer hover:bg-gray-100';
       }
 
       days.push(
-        <div key={day} className={dayClasses}>
+        <button
+          key={day}
+          onClick={() => !isDisabled && onDateSelect && onDateSelect(dateString)}
+          disabled={isDisabled}
+          className={dayClasses}
+          title={isBooked ? 'Tous les créneaux sont pris' : isPast ? 'Date passée' : ''}
+        >
           {day}
           {isBooked && !isPast && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-[1px] h-12 bg-red-400 rotate-45" />
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-[1.5px] h-12 bg-red-500 rotate-45" />
             </div>
           )}
-        </div>
+        </button>
       );
     }
 
@@ -124,13 +132,20 @@ const AvailabilityCalendar = ({ terrainId }) => {
   };
 
   return (
-    <div className="border border-gray-200 rounded-xl p-6">
+    <div>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-2">
-          <CalendarIcon size={20} className="text-gray-700" />
+        <div>
+          {selectedDate && (
+            <p className="text-sm text-gray-700 mb-1">
+              Date sélectionnée
+            </p>
+          )}
           <h3 className="text-lg font-semibold text-gray-900">
-            Disponibilité
+            {selectedDate 
+              ? new Date(selectedDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+              : 'Sélectionnez une date'
+            }
           </h3>
         </div>
         <div className="flex items-center gap-2">
@@ -140,7 +155,7 @@ const AvailabilityCalendar = ({ terrainId }) => {
           >
             <ChevronLeft size={20} />
           </button>
-          <span className="text-sm font-medium text-gray-900 min-w-[120px] text-center">
+          <span className="text-sm font-medium text-gray-900 min-w-[140px] text-center capitalize">
             {currentMonth.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
           </span>
           <button

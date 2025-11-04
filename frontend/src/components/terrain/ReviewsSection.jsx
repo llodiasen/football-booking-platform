@@ -29,23 +29,25 @@ const ReviewsSection = ({ terrain }) => {
     <section className="py-12 border-t border-gray-200">
       {/* Distribution et catégories côte à côte (même hauteur) */}
       <div className="grid md:grid-cols-2 gap-16 mb-12">
-        {/* Gauche: Évaluation globale (distribution) - Style Airbnb exact */}
+        {/* Gauche: Évaluation globale (distribution) - Style Airbnb 2ème capture */}
         <div className="flex flex-col">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Évaluation globale</h3>
-          <div className="flex-1 flex flex-col justify-between space-y-3">
+          <h3 className="text-base font-semibold text-gray-900 mb-8">Évaluation globale</h3>
+          <div className="flex-1 flex flex-col justify-evenly space-y-2">
             {starDistribution.reverse().map((item) => {
               const percentage = (item.count / maxCount) * 100;
-              const barHeight = item.stars === 5 ? 'h-2' : 'h-1.5'; // 5 étoiles plus épais
-              const barColor = item.stars === 5 ? 'bg-gray-900' : 'bg-gray-300'; // 5 étoiles noir, autres gris
+              // Barre très épaisse et noire pour 5 étoiles, fines et grises pour le reste
+              const barHeight = item.stars === 5 ? 'h-2.5' : 'h-1'; 
+              const barColor = item.stars === 5 ? 'bg-gray-900' : 'bg-gray-300';
+              const barRadius = item.stars === 5 ? 'rounded' : 'rounded-sm';
               
               return (
-                <div key={item.stars} className="flex items-center gap-3">
-                  <span className="text-sm font-medium text-gray-900 w-3">
+                <div key={item.stars} className="flex items-center gap-4">
+                  <span className="text-sm font-normal text-gray-900 w-2">
                     {item.stars}
                   </span>
-                  <div className="flex-1 bg-transparent overflow-hidden">
+                  <div className="flex-1">
                     <div
-                      className={`${barHeight} ${barColor} rounded-sm transition-all duration-500`}
+                      className={`${barHeight} ${barColor} ${barRadius} transition-all duration-700`}
                       style={{ width: `${percentage}%` }}
                     />
                   </div>
@@ -55,20 +57,20 @@ const ReviewsSection = ({ terrain }) => {
           </div>
         </div>
 
-        {/* Droite: Catégories avec icônes (alignées en hauteur) */}
+        {/* Droite: Catégories avec icônes (alignées en hauteur) - Style 2ème capture */}
         <div className="flex flex-col">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6 opacity-0">Catégories</h3>
-          <div className="flex-1 flex flex-col justify-between space-y-4">
+          <h3 className="text-base font-semibold text-gray-900 mb-8 opacity-0">Catégories</h3>
+          <div className="flex-1 flex flex-col justify-evenly space-y-2">
             {ratingCategories.map((category) => {
               const Icon = category.icon;
               return (
-                <div key={category.key} className="flex items-center justify-between">
+                <div key={category.key} className="flex items-center justify-between gap-8">
                   <div className="flex items-center gap-3">
-                    <Icon size={20} className="text-gray-700" />
-                    <span className="text-base text-gray-900">{category.name}</span>
+                    <Icon size={18} className="text-gray-600" />
+                    <span className="text-sm text-gray-900">{category.name}</span>
                   </div>
-                  <span className="text-base font-semibold text-gray-900">
-                    {category.value.toFixed(1)}
+                  <span className="text-sm font-semibold text-gray-900">
+                    {category.value.toFixed(1).replace('.', ',')}
                   </span>
                 </div>
               );
