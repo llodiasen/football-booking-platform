@@ -44,19 +44,22 @@ const TimeSlotPicker = ({ terrain, selectedDate, onTimeSelect, selectedStartTime
       return;
     }
 
-    // Générer les créneaux de 30 minutes
+    // Générer les créneaux selon la durée minimum de réservation
     const [openHour, openMin] = hours.open.split(':').map(Number);
     const [closeHour, closeMin] = hours.close.split(':').map(Number);
     
     const openMinutes = openHour * 60 + openMin;
     const closeMinutes = closeHour * 60 + closeMin;
+    
+    // Durée minimum de réservation (par défaut 2h = 120 min)
+    const minDuration = (availabilityData.terrain.bookingRules?.minDuration || 2) * 60;
 
-    for (let minutes = openMinutes; minutes < closeMinutes; minutes += 30) {
+    for (let minutes = openMinutes; minutes + minDuration <= closeMinutes; minutes += minDuration) {
       const hour = Math.floor(minutes / 60);
       const min = minutes % 60;
       const startTime = `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
       
-      const endMinutes = minutes + 60; // Créneaux de 1h minimum
+      const endMinutes = minutes + minDuration;
       const endHour = Math.floor(endMinutes / 60);
       const endMin = endMinutes % 60;
       const endTime = `${endHour.toString().padStart(2, '0')}:${endMin.toString().padStart(2, '0')}`;

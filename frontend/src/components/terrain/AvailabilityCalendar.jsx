@@ -45,12 +45,16 @@ const AvailabilityCalendar = ({ terrainId, onDateSelect, selectedDate }) => {
         if (hours && !hours.closed) {
           const openMinutes = parseInt(hours.open.split(':')[0]) * 60;
           const closeMinutes = parseInt(hours.close.split(':')[0]) * 60;
-          const totalSlots = Math.floor((closeMinutes - openMinutes) / 60);
+          
+          // Utiliser la durée min de réservation (par défaut 2h = 120 min)
+          const slotDuration = (terrain.bookingRules?.minDuration || 2) * 60;
+          const totalSlots = Math.floor((closeMinutes - openMinutes) / slotDuration);
           
           const reservedSlots = reservationsByDate[dateString]?.length || 0;
           const blockedSlots = blocksByDate[dateString]?.length || 0;
           const takenSlots = reservedSlots + blockedSlots;
           
+          // Une date est complète si TOUS les créneaux sont pris
           if (takenSlots >= totalSlots) {
             bookedSet.add(dateString);
           }
