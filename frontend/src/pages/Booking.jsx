@@ -79,6 +79,12 @@ const Booking = () => {
   };
 
   const handleSubmit = async () => {
+    if (!user) {
+      showError('Veuillez vous connecter pour finaliser la réservation');
+      navigate('/login', { state: { returnTo: `/booking/${terrainId}?date=${formData.date}` }});
+      return;
+    }
+
     if (!priceCalc) {
       showError('Veuillez sélectionner une date et un créneau');
       return;
