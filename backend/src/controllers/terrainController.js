@@ -359,6 +359,14 @@ exports.getAvailability = async (req, res) => {
       status: { $in: ['pending', 'confirmed'] }
     }).select('startTime endTime status').lean();
 
+    // Récupérer les blocages personnalisés pour cette date
+    const targetDate = new Date(date);
+    targetDate.setHours(0, 0, 0, 0);
+    
+    const customBlocks = terrain.customAvailability.find(
+      ca => ca.date.toISOString().split('T')[0] === targetDate.toISOString().split('T')[0]
+    );
+
     res.json({
       success: true,
       data: {
@@ -368,7 +376,8 @@ exports.getAvailability = async (req, res) => {
           name: terrain.name,
           openingHours: terrain.openingHours
         },
-        reservations
+        reservations,
+        blockedSlots: customBlocks?.blockedSlots || []
       }
     });
   } catch (error) {
@@ -376,6 +385,141 @@ exports.getAvailability = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Erreur lors de la récupération des disponibilités',
+      error: error.message
+    });
+  }
+};
+
+// @route   POST /api/terrains/:id/block-slot
+// @desc    Block a time slot (owner/admin only)
+// @access  Private (Owner, Admin)
+exports.blockTimeSlot = async (req, res) => {
+  try {
+    const { date, startTime, endTime, reason, note } = req.body;
+
+    if (!date || !startTime || !endTime) {
+      return res.status(400).json({
+        success: false,
+        message: 'Date, heure de début et heure de fin requis'
+      });
+    }
+
+    const terrain = await Terrain.findById(req.params.id);
+
+    if (!terrain) {
+      return res.status(404).json({
+        success: false,
+        message: 'Terrain non trouvé'
+      });
+    }
+
+    // Vérifier que l'utilisateur est le propriétaire ou admin
+    if (terrain.owner.toString() !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Non autorisé'
+      });
+    }
+
+    // Chercher si une entrée existe déjà pour cette date
+    const targetDate = new Date(date);
+    targetDate.setHours(0, 0, 0, 0);
+
+    let dayAvailability = terrain.customAvailability.find(
+      ca => ca.date.toISOString().split('T')[0] === targetDate.toISOString().split('T')[0]
+    );
+
+    const newSlot = {
+      startTime,
+      endTime,
+      reason: reason || 'other',
+      note: note || ''
+    };
+
+    if (dayAvailability) {
+      // Ajouter le créneau bloqué à la date existante
+      dayAvailability.blockedSlots.push(newSlot);
+    } else {
+      // Créer une nouvelle entrée pour cette date
+      terrain.customAvailability.push({
+        date: targetDate,
+        blockedSlots: [newSlot]
+      });
+    }
+
+    await terrain.save();
+
+    res.json({
+      success: true,
+      message: 'Créneau bloqué avec succès',
+      data: terrain.customAvailability
+    });
+  } catch (error) {
+    console.error('Erreur blockTimeSlot:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Erreur lors du blocage du créneau',
+      error: error.message
+    });
+  }
+};
+
+// @route   DELETE /api/terrains/:id/block-slot/:slotId
+// @desc    Unblock a time slot (owner/admin only)
+// @access  Private (Owner, Admin)
+exports.unblockTimeSlot = async (req, res) => {
+  try {
+    const { date, startTime } = req.body;
+
+    const terrain = await Terrain.findById(req.params.id);
+
+    if (!terrain) {
+      return res.status(404).json({
+        success: false,
+        message: 'Terrain non trouvé'
+      });
+    }
+
+    // Vérifier que l'utilisateur est le propriétaire ou admin
+    if (terrain.owner.toString() !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Non autorisé'
+      });
+    }
+
+    const targetDate = new Date(date);
+    targetDate.setHours(0, 0, 0, 0);
+
+    const dayAvailability = terrain.customAvailability.find(
+      ca => ca.date.toISOString().split('T')[0] === targetDate.toISOString().split('T')[0]
+    );
+
+    if (dayAvailability) {
+      dayAvailability.blockedSlots = dayAvailability.blockedSlots.filter(
+        slot => slot.startTime !== startTime
+      );
+
+      // Si plus de créneaux bloqués pour cette date, supprimer la date
+      if (dayAvailability.blockedSlots.length === 0) {
+        terrain.customAvailability = terrain.customAvailability.filter(
+          ca => ca.date.toISOString().split('T')[0] !== targetDate.toISOString().split('T')[0]
+        );
+      }
+    }
+
+    await terrain.save();
+
+    res.json({
+      success: true,
+      message: 'Créneau débloqué avec succès',
+      data: terrain.customAvailability
+    });
+  } catch (error) {
+    console.error('Erreur unblockTimeSlot:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Erreur lors du déblocage du créneau',
       error: error.message
     });
   }

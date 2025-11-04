@@ -4,11 +4,12 @@ import { useToast } from '../../context/ToastContext';
 import { terrainAPI } from '../../services/api';
 import { 
   Plus, MapPin, Calendar, DollarSign, Eye, TrendingUp,
-  Clock, CheckCircle, XCircle, AlertCircle, Edit, Trash2
+  Clock, CheckCircle, XCircle, AlertCircle, Edit, Trash2, Settings
 } from 'lucide-react';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import TerrainFormModal from '../../components/owner/TerrainFormModal';
+import AvailabilityManager from '../../components/owner/AvailabilityManager';
 
 const OwnerDashboard = () => {
   const { user } = useAuth();
@@ -17,6 +18,8 @@ const OwnerDashboard = () => {
   const [showTerrainForm, setShowTerrainForm] = useState(false);
   const [selectedTerrain, setSelectedTerrain] = useState(null);
   const [terrains, setTerrains] = useState([]);
+  const [activeTab, setActiveTab] = useState('terrains'); // 'terrains' ou 'availability'
+  const [selectedTerrainForAvailability, setSelectedTerrainForAvailability] = useState(null);
   const [stats, setStats] = useState({
     totalTerrains: 0,
     approvedTerrains: 0,
@@ -92,6 +95,11 @@ const OwnerDashboard = () => {
     setShowTerrainForm(false);
     setSelectedTerrain(null);
     loadDashboardData();
+  };
+
+  const handleManageAvailability = (terrain) => {
+    setSelectedTerrainForAvailability(terrain);
+    setActiveTab('availability');
   };
 
   if (loading) {
@@ -215,120 +223,206 @@ const OwnerDashboard = () => {
         </Card>
       )}
 
-      {/* Liste des Terrains */}
-      <Card className="p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold">Mes Terrains</h2>
-          {terrains.length > 0 && (
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={handleAddTerrain}
+      {/* Onglets Navigation */}
+      <div className="mb-6">
+        <div className="border-b border-gray-200">
+          <nav className="flex gap-8">
+            <button
+              onClick={() => setActiveTab('terrains')}
+              className={`
+                py-4 px-2 border-b-2 font-medium text-sm transition-colors
+                ${activeTab === 'terrains' 
+                  ? 'border-green-600 text-green-600' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
+              `}
             >
-              <Plus size={16} className="mr-2" />
-              Ajouter
-            </Button>
-          )}
+              <MapPin size={18} className="inline mr-2" />
+              Mes Terrains
+            </button>
+            <button
+              onClick={() => {
+                if (terrains.length > 0) {
+                  setActiveTab('availability');
+                  if (!selectedTerrainForAvailability) {
+                    setSelectedTerrainForAvailability(terrains[0]);
+                  }
+                }
+              }}
+              disabled={terrains.length === 0}
+              className={`
+                py-4 px-2 border-b-2 font-medium text-sm transition-colors
+                ${activeTab === 'availability' 
+                  ? 'border-green-600 text-green-600' 
+                  : terrains.length === 0
+                    ? 'border-transparent text-gray-300 cursor-not-allowed'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
+              `}
+            >
+              <Calendar size={18} className="inline mr-2" />
+              Gestion des Disponibilités
+            </button>
+          </nav>
         </div>
+      </div>
 
-        {terrains.length === 0 ? (
-          <div className="text-center py-12">
-            <MapPin className="mx-auto text-gray-400 mb-4" size={48} />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Aucun terrain enregistré
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Commencez par ajouter votre premier terrain
-            </p>
-            <Button onClick={handleAddTerrain}>
-              <Plus size={20} className="mr-2" />
-              Ajouter mon premier terrain
-            </Button>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {terrains.map((terrain) => (
-              <div 
-                key={terrain._id}
-                className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+      {/* Contenu selon l'onglet actif */}
+      {activeTab === 'terrains' && (
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold">Mes Terrains</h2>
+            {terrains.length > 0 && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleAddTerrain}
               >
-                <div className="flex items-start gap-4">
-                  {/* Image */}
-                  <div className="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden">
-                    {terrain.images && terrain.images.length > 0 ? (
-                      <img 
-                        src={terrain.images[0].url} 
-                        alt={terrain.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <MapPin className="text-gray-400" size={32} />
-                      </div>
-                    )}
-                  </div>
+                <Plus size={16} className="mr-2" />
+                Ajouter
+              </Button>
+            )}
+          </div>
 
-                  {/* Info */}
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h3 className="font-semibold text-lg">{terrain.name}</h3>
-                        <p className="text-sm text-gray-600 mt-1">
-                          {terrain.address.city} • {terrain.type} • {terrain.size}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => handleEditTerrain(terrain)}
-                        >
-                          <Edit size={16} />
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => handleDeleteTerrain(terrain._id)}
-                          className="text-red-600 hover:bg-red-50"
-                        >
-                          <Trash2 size={16} />
-                        </Button>
-                      </div>
+          {terrains.length === 0 ? (
+            <div className="text-center py-12">
+              <MapPin className="mx-auto text-gray-400 mb-4" size={48} />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Aucun terrain enregistré
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Commencez par ajouter votre premier terrain
+              </p>
+              <Button onClick={handleAddTerrain}>
+                <Plus size={20} className="mr-2" />
+                Ajouter mon premier terrain
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {terrains.map((terrain) => (
+                <div 
+                  key={terrain._id}
+                  className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                >
+                  <div className="flex items-start gap-4">
+                    {/* Image */}
+                    <div className="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden">
+                      {terrain.images && terrain.images.length > 0 ? (
+                        <img 
+                          src={terrain.images[0].url} 
+                          alt={terrain.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <MapPin className="text-gray-400" size={32} />
+                        </div>
+                      )}
                     </div>
 
-                    <div className="flex items-center gap-4 mt-3">
-                      <span className="text-sm font-semibold text-primary-600">
-                        {terrain.pricePerHour.toLocaleString()} FCFA/h
-                      </span>
-                      <span className="text-sm text-gray-500 flex items-center gap-1">
-                        <Eye size={14} />
-                        {terrain.views || 0} vues
-                      </span>
-                      {terrain.isApproved ? (
-                        <span className="text-sm text-green-600 flex items-center gap-1">
-                          <CheckCircle size={14} />
-                          Approuvé
+                    {/* Info */}
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h3 className="font-semibold text-lg">{terrain.name}</h3>
+                          <p className="text-sm text-gray-600 mt-1">
+                            {terrain.address.city} • {terrain.type} • {terrain.size}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleManageAvailability(terrain)}
+                            className="text-green-600 hover:bg-green-50"
+                            title="Gérer les disponibilités"
+                          >
+                            <Settings size={16} />
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleEditTerrain(terrain)}
+                          >
+                            <Edit size={16} />
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleDeleteTerrain(terrain._id)}
+                            className="text-red-600 hover:bg-red-50"
+                          >
+                            <Trash2 size={16} />
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-4 mt-3">
+                        <span className="text-sm font-semibold text-primary-600">
+                          {terrain.pricePerHour.toLocaleString()} FCFA/h
                         </span>
-                      ) : (
-                        <span className="text-sm text-orange-600 flex items-center gap-1">
-                          <Clock size={14} />
-                          En attente
+                        <span className="text-sm text-gray-500 flex items-center gap-1">
+                          <Eye size={14} />
+                          {terrain.views || 0} vues
                         </span>
-                      )}
-                      {!terrain.isActive && (
-                        <span className="text-sm text-red-600 flex items-center gap-1">
-                          <XCircle size={14} />
-                          Désactivé
-                        </span>
-                      )}
+                        {terrain.isApproved ? (
+                          <span className="text-sm text-green-600 flex items-center gap-1">
+                            <CheckCircle size={14} />
+                            Approuvé
+                          </span>
+                        ) : (
+                          <span className="text-sm text-orange-600 flex items-center gap-1">
+                            <Clock size={14} />
+                            En attente
+                          </span>
+                        )}
+                        {!terrain.isActive && (
+                          <span className="text-sm text-red-600 flex items-center gap-1">
+                            <XCircle size={14} />
+                            Désactivé
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </Card>
+              ))}
+            </div>
+          )}
+        </Card>
+      )}
+
+      {activeTab === 'availability' && selectedTerrainForAvailability && (
+        <Card className="p-6">
+          {/* Sélecteur de terrain */}
+          {terrains.length > 1 && (
+            <div className="mb-6 pb-6 border-b">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Sélectionnez un terrain
+              </label>
+              <select
+                value={selectedTerrainForAvailability._id}
+                onChange={(e) => {
+                  const terrain = terrains.find(t => t._id === e.target.value);
+                  setSelectedTerrainForAvailability(terrain);
+                }}
+                className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+              >
+                {terrains.map(terrain => (
+                  <option key={terrain._id} value={terrain._id}>
+                    {terrain.name} - {terrain.address.city}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Composant de gestion des disponibilités */}
+          <AvailabilityManager 
+            terrain={selectedTerrainForAvailability}
+            onUpdate={loadDashboardData}
+          />
+        </Card>
+      )}
 
       {/* Modal Formulaire Terrain */}
       {showTerrainForm && (

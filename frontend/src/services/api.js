@@ -55,7 +55,9 @@ export const terrainAPI = {
   update: (id, data) => api.put(`/terrains/${id}`, data),
   delete: (id) => api.delete(`/terrains/${id}`),
   getAvailability: (id, date) => api.get(`/terrains/${id}/availability`, { params: { date } }),
-  addReview: (id, data) => api.post(`/terrains/${id}/reviews`, data)
+  addReview: (id, data) => api.post(`/terrains/${id}/reviews`, data),
+  blockTimeSlot: (id, data) => api.post(`/terrains/${id}/block-slot`, data),
+  unblockTimeSlot: (id, data) => api.post(`/terrains/${id}/unblock-slot`, data)
 };
 
 // Reservations API

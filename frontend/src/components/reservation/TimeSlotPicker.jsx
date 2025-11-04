@@ -53,13 +53,17 @@ const TimeSlotPicker = ({ terrain, selectedDate, onTimeSelect, selectedStartTime
       const endMin = endMinutes % 60;
       const endTime = `${endHour.toString().padStart(2, '0')}:${endMin.toString().padStart(2, '0')}`;
 
-      // Vérifier si ce créneau est disponible
-      const isBooked = isTimeSlotBooked(startTime, endTime, availabilityData.reservations);
+      // Vérifier si ce créneau est disponible (réservations + blocages manuels)
+      const isBookedByReservation = isTimeSlotBooked(startTime, endTime, availabilityData.reservations);
+      const isBlockedManually = isTimeSlotBooked(startTime, endTime, availabilityData.blockedSlots || []);
+      const isBooked = isBookedByReservation || isBlockedManually;
 
       slots.push({
         startTime,
         endTime,
         isBooked,
+        isManualBlock: isBlockedManually,
+        blockReason: isBlockedManually ? getBlockReason(startTime, endTime, availabilityData.blockedSlots) : null,
         display: `${startTime} - ${endTime}`
       });
     }
@@ -81,6 +85,30 @@ const TimeSlotPicker = ({ terrain, selectedDate, onTimeSelect, selectedStartTime
         (slotStart <= resStart && slotEnd >= resEnd)
       );
     });
+  };
+
+  const getBlockReason = (slotStart, slotEnd, blockedSlots) => {
+    if (!blockedSlots) return null;
+    
+    const blocked = blockedSlots.find(slot => {
+      return (
+        (slotStart >= slot.startTime && slotStart < slot.endTime) ||
+        (slotEnd > slot.startTime && slotEnd <= slot.endTime) ||
+        (slotStart <= slot.startTime && slotEnd >= slot.endTime)
+      );
+    });
+
+    if (blocked) {
+      const reasonLabels = {
+        'maintenance': 'Maintenance',
+        'private_event': 'Événement privé',
+        'closed': 'Fermé',
+        'other': 'Indisponible'
+      };
+      return reasonLabels[blocked.reason] || 'Indisponible';
+    }
+
+    return null;
   };
 
   const handleSlotClick = (slot) => {
@@ -231,7 +259,13 @@ const TimeSlotPicker = ({ terrain, selectedDate, onTimeSelect, selectedStartTime
                       ? 'text-blue-600'
                       : 'text-green-600'
                 }`}>
-                  {slot.isBooked ? 'Réservé' : isSelected ? 'Sélectionné' : 'Libre'}
+                  {slot.isBooked 
+                    ? (slot.isManualBlock && slot.blockReason) 
+                      ? slot.blockReason 
+                      : 'Réservé'
+                    : isSelected 
+                      ? 'Sélectionné' 
+                      : 'Libre'}
                 </span>
               </div>
             </button>

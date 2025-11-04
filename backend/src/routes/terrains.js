@@ -8,7 +8,9 @@ const {
   updateTerrain,
   deleteTerrain,
   getAvailability,
-  addReview
+  addReview,
+  blockTimeSlot,
+  unblockTimeSlot
 } = require('../controllers/terrainController');
 const { protect, authorize } = require('../middleware/auth');
 const { validateTerrain, handleValidationErrors } = require('../middleware/validation');
@@ -20,9 +22,17 @@ router.get('/my-terrains', protect, authorize('owner', 'admin'), getOwnerTerrain
 router.get('/', getTerrains);
 router.get('/:id', getTerrain);
 router.get('/:id/availability', getAvailability);
+
+// Routes CRUD terrains
 router.post('/', protect, authorize('owner', 'admin'), validateTerrain, handleValidationErrors, createTerrain);
 router.put('/:id', protect, authorize('owner', 'admin'), updateTerrain);
 router.delete('/:id', protect, authorize('owner', 'admin'), deleteTerrain);
+
+// Routes disponibilité (propriétaires seulement)
+router.post('/:id/block-slot', protect, authorize('owner', 'admin'), blockTimeSlot);
+router.post('/:id/unblock-slot', protect, authorize('owner', 'admin'), unblockTimeSlot);
+
+// Routes reviews
 router.post('/:id/reviews', protect, addReview);
 
 module.exports = router;

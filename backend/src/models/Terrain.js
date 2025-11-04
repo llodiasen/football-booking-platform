@@ -264,6 +264,35 @@ const terrainSchema = new mongoose.Schema({
       default: Date.now
     }
   }],
+  customAvailability: [{
+    date: {
+      type: Date,
+      required: true
+    },
+    blockedSlots: [{
+      startTime: {
+        type: String,
+        required: true
+      },
+      endTime: {
+        type: String,
+        required: true
+      },
+      reason: {
+        type: String,
+        enum: ['maintenance', 'private_event', 'closed', 'other'],
+        default: 'other'
+      },
+      note: {
+        type: String,
+        maxlength: 200
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now
+      }
+    }]
+  }],
   isActive: {
     type: Boolean,
     default: true
