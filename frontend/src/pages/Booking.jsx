@@ -31,11 +31,6 @@ const Booking = () => {
   });
 
   useEffect(() => {
-    if (!user) {
-      showError('Veuillez vous connecter pour réserver');
-      navigate('/login');
-      return;
-    }
     loadTerrain();
   }, [terrainId]);
 
