@@ -11,11 +11,14 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
-  Plus
+  Plus,
+  Menu,
+  X
 } from 'lucide-react';
 
 const OwnerSidebar = ({ collapsed, setCollapsed, onAddTerrain, user }) => {
   const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const menuItems = [
     { icon: LayoutDashboard, label: 'Vue d\'ensemble', path: '/dashboard', section: 'overview' },
@@ -34,10 +37,27 @@ const OwnerSidebar = ({ collapsed, setCollapsed, onAddTerrain, user }) => {
   };
 
   return (
-    <div className={`${collapsed ? 'w-20' : 'w-64'} bg-gray-900 min-h-screen text-white transition-all duration-300 flex flex-col fixed left-0 top-0 z-40 
-      ${collapsed ? 'md:translate-x-0' : 'md:translate-x-0'}
-      hidden md:flex
-    `}>
+    <>
+      {/* Bouton Menu Mobile - Visible uniquement sur mobile */}
+      <button
+        onClick={() => setMobileMenuOpen(true)}
+        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-gray-900 text-white rounded-lg shadow-lg"
+      >
+        <Menu size={24} />
+      </button>
+
+      {/* Overlay Mobile */}
+      {mobileMenuOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Sidebar - Desktop toujours visible, Mobile avec overlay */}
+      <div className={`${collapsed ? 'w-20' : 'w-64'} bg-gray-900 min-h-screen text-white transition-all duration-300 flex flex-col fixed left-0 top-0 z-50
+        ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+      `}>
       {/* Header Logo */}
       <div className="p-6 flex items-center justify-between border-b border-gray-800">
         {!collapsed && (
@@ -48,11 +68,17 @@ const OwnerSidebar = ({ collapsed, setCollapsed, onAddTerrain, user }) => {
             <span className="font-bold text-base">Propriétaire</span>
           </div>
         )}
+        
+        {/* Bouton fermer sur mobile, collapse sur desktop */}
         <button
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={() => {
+            setMobileMenuOpen(false);
+            setCollapsed(!collapsed);
+          }}
           className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
         >
-          {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+          <span className="md:hidden"><X size={20} /></span>
+          <span className="hidden md:inline">{collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}</span>
         </button>
       </div>
 
@@ -80,6 +106,7 @@ const OwnerSidebar = ({ collapsed, setCollapsed, onAddTerrain, user }) => {
             <Link
               key={item.section}
               to={`${item.path}?section=${item.section}`}
+              onClick={() => setMobileMenuOpen(false)}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all group relative ${
                 active
                   ? 'bg-gray-800 text-white'
@@ -113,6 +140,7 @@ const OwnerSidebar = ({ collapsed, setCollapsed, onAddTerrain, user }) => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
