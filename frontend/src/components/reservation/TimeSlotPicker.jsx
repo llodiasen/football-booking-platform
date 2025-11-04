@@ -14,13 +14,21 @@ const TimeSlotPicker = ({ terrain, selectedDate, onTimeSelect, selectedStartTime
   }, [selectedDate, terrain]);
 
   const loadAvailability = async () => {
+    if (!selectedDate || !terrain?._id) {
+      console.log('❌ selectedDate ou terrain._id manquant');
+      return;
+    }
+
     setLoading(true);
     try {
+      console.log('🔄 Chargement disponibilités pour:', selectedDate);
       const response = await terrainAPI.getAvailability(terrain._id, selectedDate);
+      console.log('✅ Disponibilités chargées:', response.data.data);
       setAvailability(response.data.data);
       generateTimeSlots(response.data.data);
     } catch (error) {
-      console.error('Erreur chargement disponibilité:', error);
+      console.error('❌ Erreur chargement disponibilité:', error);
+      setTimeSlots([]); // Réinitialiser les créneaux en cas d'erreur
     } finally {
       setLoading(false);
     }
@@ -28,7 +36,7 @@ const TimeSlotPicker = ({ terrain, selectedDate, onTimeSelect, selectedStartTime
 
   const generateTimeSlots = (availabilityData) => {
     const slots = [];
-    const dayName = new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'lowercase' });
+    const dayName = new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
     const hours = availabilityData.terrain.openingHours[dayName];
 
     if (!hours || hours.closed) {

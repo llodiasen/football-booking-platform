@@ -39,7 +39,7 @@ const AvailabilityCalendar = ({ terrainId, onDateSelect, selectedDate }) => {
         checkDate.setDate(today.getDate() + i);
         const dateString = checkDate.toISOString().split('T')[0];
         
-        const dayName = checkDate.toLocaleDateString('en-US', { weekday: 'lowercase' });
+        const dayName = checkDate.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
         const hours = terrain.openingHours[dayName];
         
         if (hours && !hours.closed) {
