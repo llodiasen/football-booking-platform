@@ -29,9 +29,9 @@ const TimeSlot = ({
           actionButton: (
             <button
               onClick={onUnblock}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-all hover:shadow-md text-sm"
+              className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-all hover:shadow-md text-xs"
             >
-              <Unlock size={16} />
+              <Unlock size={14} />
               Débloquer
             </button>
           )
@@ -46,9 +46,9 @@ const TimeSlot = ({
           actionButton: (
             <button
               onClick={onBlock}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white rounded-lg font-medium transition-all hover:shadow-md text-sm"
+              className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white rounded-lg font-medium transition-all hover:shadow-md text-xs"
             >
-              <Lock size={16} />
+              <Lock size={14} />
               Bloquer
             </button>
           )
@@ -60,7 +60,7 @@ const TimeSlot = ({
 
   return (
     <div className={`
-      relative p-5 rounded-xl border-2 transition-all duration-300
+      relative p-4 rounded-lg border-2 transition-all duration-300
       ${styles.container}
       ${className}
     `}>
@@ -76,27 +76,19 @@ const TimeSlot = ({
       </div>
 
       {/* Heure principale */}
-      <div className="text-center mb-4">
-        <div className="flex items-center justify-center gap-2">
-          <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900 tracking-tight">
-              {startTime}
-            </p>
-          </div>
-          <div className="text-gray-400">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 10L13 10M13 10L10 7M13 10L10 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900 tracking-tight">
-              {endTime}
-            </p>
-          </div>
+      <div className="text-center mb-3">
+        <div className="flex items-center justify-center gap-1.5">
+          <p className="text-base font-bold text-gray-900">
+            {startTime}
+          </p>
+          <span className="text-xs text-gray-400">—</span>
+          <p className="text-base font-bold text-gray-900">
+            {endTime}
+          </p>
         </div>
         
         {/* Durée */}
-        <p className="text-xs text-gray-500 mt-2 font-medium">
+        <p className="text-xs text-gray-500 mt-1 font-medium">
           {(() => {
             const [startH, startM] = startTime.split(':').map(Number);
             const [endH, endM] = endTime.split(':').map(Number);
@@ -108,7 +100,7 @@ const TimeSlot = ({
 
       {/* Note de blocage si présente */}
       {status === 'blocked' && blockNote && (
-        <div className="mb-4 p-3 bg-white/80 rounded-lg border border-orange-200">
+        <div className="mb-3 p-2 bg-white/80 rounded-lg border border-orange-200">
           <p className="text-xs text-orange-800 font-medium">
             📝 {blockNote}
           </p>
@@ -117,9 +109,9 @@ const TimeSlot = ({
 
       {/* Raison si réservé */}
       {status === 'booked' && (
-        <div className="mb-4 p-3 bg-white/80 rounded-lg border border-blue-200">
+        <div className="mb-3 p-2 bg-white/80 rounded-lg border border-blue-200">
           <p className="text-xs text-blue-800 font-medium text-center">
-            Ce créneau est déjà réservé par un client
+            Réservé par un client
           </p>
         </div>
       )}

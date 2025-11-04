@@ -284,7 +284,7 @@ const terrainSchema = new mongoose.Schema({
       },
       reason: {
         type: String,
-        enum: ['maintenance', 'private_event', 'closed', 'other'],
+        enum: ['reserved', 'maintenance', 'private_event', 'closed', 'other'],
         default: 'other'
       },
       note: {

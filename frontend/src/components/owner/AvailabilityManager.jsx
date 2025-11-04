@@ -131,6 +131,7 @@ const AvailabilityManager = ({ terrains, selectedTerrain, onSelectTerrain }) => 
   };
 
   const reasonLabels = {
+    'reserved': 'Réservé',
     'maintenance': 'Maintenance',
     'private_event': 'Événement privé',
     'closed': 'Fermé',
@@ -317,6 +318,7 @@ const AvailabilityManager = ({ terrains, selectedTerrain, onSelectTerrain }) => 
                   onChange={(e) => setBlockForm({ ...blockForm, reason: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                 >
+                  <option value="reserved">📅 Réservé</option>
                   <option value="maintenance">🔧 Maintenance</option>
                   <option value="private_event">🎉 Événement privé</option>
                   <option value="closed">🚫 Fermé</option>
