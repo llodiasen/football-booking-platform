@@ -35,7 +35,7 @@ const DateRangePicker = ({ terrainId, onDateSelect, selectedStartDate, selectedE
               
               // Si toutes les créneaux sont réservés, marquer la date comme complète
               const openingHours = availability.terrain.openingHours;
-              const dayName = checkDate.toLocaleDateString('en-US', { weekday: 'lowercase' });
+              const dayName = checkDate.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
               const hours = openingHours[dayName];
               
               if (hours && !hours.closed) {

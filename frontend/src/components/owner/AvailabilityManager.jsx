@@ -40,7 +40,7 @@ const AvailabilityManager = ({ terrain, onUpdate }) => {
 
   const generateTimeSlots = (availabilityData) => {
     const slots = [];
-    const dayName = new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'lowercase' });
+    const dayName = new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
     const hours = availabilityData.terrain.openingHours[dayName];
 
     if (!hours || hours.closed) {

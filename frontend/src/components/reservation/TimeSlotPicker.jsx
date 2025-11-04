@@ -149,7 +149,7 @@ const TimeSlotPicker = ({ terrain, selectedDate, onTimeSelect, selectedStartTime
   }
 
   if (availability && availability.terrain.openingHours) {
-    const dayName = new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'lowercase' });
+    const dayName = new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
     const hours = availability.terrain.openingHours[dayName];
 
     if (hours && hours.closed) {

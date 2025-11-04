@@ -31,15 +31,19 @@ const Booking = () => {
   });
 
   useEffect(() => {
+    console.log('🔄 Booking - useEffect déclenché, terrainId:', terrainId);
     loadTerrain();
   }, [terrainId]);
 
   const loadTerrain = async () => {
+    console.log('📥 Booking - Chargement du terrain:', terrainId);
     try {
       const response = await terrainAPI.getOne(terrainId);
+      console.log('✅ Booking - Terrain chargé:', response.data.data);
       setTerrain(response.data.data);
       setLoading(false);
     } catch (error) {
+      console.error('❌ Booking - Erreur chargement terrain:', error);
       showError('Erreur lors du chargement du terrain');
       setLoading(false);
     }
@@ -124,7 +128,10 @@ const Booking = () => {
     { id: 4, title: 'Vérifiez votre demande', icon: CheckCircle }
   ];
 
+  console.log('🎨 Booking - Rendu composant, loading:', loading, 'terrain:', terrain ? 'existe' : 'null');
+
   if (loading) {
+    console.log('⏳ Booking - Affichage spinner de chargement');
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900"></div>
@@ -133,6 +140,7 @@ const Booking = () => {
   }
 
   if (!terrain) {
+    console.log('❌ Booking - Terrain non trouvé, affichage message erreur');
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p>Terrain non trouvé</p>
@@ -140,6 +148,7 @@ const Booking = () => {
     );
   }
 
+  console.log('✅ Booking - Affichage de la page complète');
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20 py-8">
