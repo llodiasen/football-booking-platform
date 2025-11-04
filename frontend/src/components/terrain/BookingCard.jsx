@@ -1,15 +1,51 @@
-import { useState } from 'react';
-import { Star, Flag } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Star, Flag, Calendar as CalendarIcon, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
+import DateRangePicker from '../booking/DateRangePicker';
 
 const BookingCard = ({ terrain }) => {
   const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const calendarRef = useRef(null);
+
+  // Fermer le calendrier si clic en dehors
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+        setShowCalendar(false);
+      }
+    };
+
+    if (showCalendar) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showCalendar]);
+
+  const handleDateSelect = (startDate, endDate) => {
+    setSelectedStartDate(startDate);
+    setSelectedEndDate(endDate);
+    
+    // Fermer le calendrier si les deux dates sont sélectionnées
+    if (startDate && endDate) {
+      setTimeout(() => setShowCalendar(false), 300);
+    }
+  };
+
+  const handleClearDates = (e) => {
+    e.stopPropagation();
+    setSelectedStartDate(null);
+    setSelectedEndDate(null);
+  };
 
   const handleReserve = () => {
-    if (selectedDate) {
-      navigate(`/booking/${terrain._id}?date=${selectedDate}`);
+    if (selectedStartDate) {
+      const params = new URLSearchParams({ date: selectedStartDate });
+      if (selectedEndDate) params.append('endDate', selectedEndDate);
+      navigate(`/booking/${terrain._id}?${params.toString()}`);
     } else {
       navigate(`/booking/${terrain._id}`);
     }
@@ -17,6 +53,18 @@ const BookingCard = ({ terrain }) => {
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('fr-FR').format(price);
+  };
+
+  const calculateNights = () => {
+    if (!selectedStartDate || !selectedEndDate) return 0;
+    const start = new Date(selectedStartDate);
+    const end = new Date(selectedEndDate);
+    return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+  };
+
+  const calculateTotal = () => {
+    const nights = calculateNights();
+    return nights > 0 ? terrain.pricePerHour * nights : terrain.pricePerHour;
   };
 
   const averageRating = terrain.rating?.average || 0;
@@ -47,18 +95,60 @@ const BookingCard = ({ terrain }) => {
         </div>
       </div>
 
-      {/* Sélecteur de date */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Sélectionnez une date
-        </label>
-        <input
-          type="date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-          min={new Date().toISOString().split('T')[0]}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-        />
+      {/* Sélecteur de dates - Style Airbnb */}
+      <div className="mb-4 relative" ref={calendarRef}>
+        <div 
+          onClick={() => setShowCalendar(!showCalendar)}
+          className="grid grid-cols-2 border border-gray-300 rounded-lg overflow-hidden cursor-pointer hover:border-gray-900 transition-colors"
+        >
+          {/* Arrivée */}
+          <div className="px-4 py-3 border-r border-gray-300">
+            <label className="block text-xs font-semibold text-gray-900 mb-1">
+              ARRIVÉE
+            </label>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-900">
+                {selectedStartDate 
+                  ? new Date(selectedStartDate).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                  : 'Ajouter'
+                }
+              </span>
+              {selectedStartDate && (
+                <button
+                  onClick={handleClearDates}
+                  className="text-gray-400 hover:text-gray-900"
+                >
+                  <X size={16} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Départ */}
+          <div className="px-4 py-3">
+            <label className="block text-xs font-semibold text-gray-900 mb-1">
+              DÉPART
+            </label>
+            <span className="text-sm text-gray-900 block">
+              {selectedEndDate 
+                ? new Date(selectedEndDate).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                : 'Ajouter'
+              }
+            </span>
+          </div>
+        </div>
+
+        {/* Calendrier dropdown */}
+        {showCalendar && (
+          <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 p-6 z-50 max-w-[650px]">
+            <DateRangePicker 
+              terrainId={terrain._id}
+              onDateSelect={handleDateSelect}
+              selectedStartDate={selectedStartDate}
+              selectedEndDate={selectedEndDate}
+            />
+          </div>
+        )}
       </div>
 
       {/* Bouton réserver */}
@@ -78,29 +168,33 @@ const BookingCard = ({ terrain }) => {
       <div className="border-t border-gray-200 my-6"></div>
 
       {/* Estimation */}
-      <div className="space-y-3 mb-4">
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-700 underline decoration-dotted">
-            {formatPrice(terrain.pricePerHour)} FCFA x 1 heure
-          </span>
-          <span className="text-gray-900">{formatPrice(terrain.pricePerHour)} FCFA</span>
-        </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-700 underline decoration-dotted">
-            Frais de service
-          </span>
-          <span className="text-gray-900">0 FCFA</span>
-        </div>
-      </div>
+      {selectedStartDate && selectedEndDate && (
+        <>
+          <div className="space-y-3 mb-4">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-700 underline decoration-dotted">
+                {formatPrice(terrain.pricePerHour)} FCFA x {calculateNights()} {calculateNights() > 1 ? 'nuits' : 'nuit'}
+              </span>
+              <span className="text-gray-900">{formatPrice(calculateTotal())} FCFA</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-700 underline decoration-dotted">
+                Frais de service
+              </span>
+              <span className="text-gray-900">0 FCFA</span>
+            </div>
+          </div>
 
-      {/* Divider */}
-      <div className="border-t border-gray-200 my-4"></div>
+          {/* Divider */}
+          <div className="border-t border-gray-200 my-4"></div>
 
-      {/* Total */}
-      <div className="flex justify-between items-center font-semibold">
-        <span className="text-gray-900">Total</span>
-        <span className="text-gray-900">{formatPrice(terrain.pricePerHour)} FCFA</span>
-      </div>
+          {/* Total */}
+          <div className="flex justify-between items-center font-semibold">
+            <span className="text-gray-900">Total</span>
+            <span className="text-gray-900">{formatPrice(calculateTotal())} FCFA</span>
+          </div>
+        </>
+      )}
 
       {/* Signaler */}
       <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm mt-6 mx-auto transition-colors">
