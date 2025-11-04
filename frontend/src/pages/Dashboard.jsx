@@ -3,11 +3,17 @@ import { Navigate } from 'react-router-dom';
 import { LayoutDashboard, MapPin, Calendar, DollarSign } from 'lucide-react';
 import Card from '../components/ui/Card';
 import OwnerDashboard from './owner/OwnerDashboard';
+import AdminDashboard from './admin/AdminDashboard';
 
 const Dashboard = () => {
   const { user } = useAuth();
 
-  // Rediriger vers le dashboard propriétaire si c'est un owner
+  // Dashboard Admin moderne (style Shakuro)
+  if (user?.role === 'admin') {
+    return <AdminDashboard />;
+  }
+
+  // Dashboard Propriétaire
   if (user?.role === 'owner') {
     return <OwnerDashboard />;
   }
