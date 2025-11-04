@@ -307,8 +307,8 @@ const TerrainDetails = () => {
         </div>
 
         {/* Carte FULL WIDTH */}
-        <section className="mt-16 -mx-6 sm:-mx-10 lg:-mx-20">
-          <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 mb-8">
+        <section className="mt-8 -mx-6 sm:-mx-10 lg:-mx-20">
+          <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 mb-6">
             <h3 className="text-2xl font-bold text-gray-900 mb-2">
               Où se situe le terrain
             </h3>
@@ -357,9 +357,9 @@ const TerrainDetails = () => {
           </div>
         </section>
 
-        {/* Propriétaire - FULL WIDTH */}
-        <section className="mt-16 -mx-6 sm:-mx-10 lg:-mx-20 bg-gray-50 py-12">
-          <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20">
+        {/* Propriétaire - FULL WIDTH (sans bordures, fond blanc) */}
+        <section className="mt-8 -mx-6 sm:-mx-10 lg:-mx-20">
+          <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 py-12">
             <OwnerProfile owner={terrain.owner} />
           </div>
         </section>
