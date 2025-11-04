@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
-import { useSearchParams, Link } from 'react-router-dom';
-import { terrainAPI } from '../../services/api';
+import { useSearchParams, Link, useNavigate } from 'react-router-dom';
+import { terrainAPI, reservationAPI } from '../../services/api';
 import { 
   Plus, MapPin, Calendar, DollarSign, Eye, TrendingUp,
   ArrowUpRight, Edit, Trash2, Settings as SettingsIcon,
@@ -18,6 +18,7 @@ const OwnerDashboardModern = () => {
   const { user } = useAuth();
   const { success: showSuccess, error: showError } = useToast();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const section = searchParams.get('section') || 'overview';
   
   const [collapsed, setCollapsed] = useState(false);
@@ -46,6 +47,7 @@ const OwnerDashboardModern = () => {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
+      // Charger les terrains
       const terrainsResponse = await terrainAPI.getOwnerTerrains();
       const myTerrains = terrainsResponse.data.data;
       setTerrains(myTerrains);
@@ -55,14 +57,40 @@ const OwnerDashboardModern = () => {
       const pendingTerrains = myTerrains.filter(t => !t.isApproved).length;
       const totalViews = myTerrains.reduce((sum, t) => sum + (t.views || 0), 0);
 
+      // Charger les réservations
+      const reservationsResponse = await reservationAPI.getAll();
+      const allReservations = reservationsResponse.data?.data || [];
+      
+      // Filtrer seulement les réservations des terrains du propriétaire
+      const terrainIds = myTerrains.map(t => t._id);
+      const myReservations = allReservations.filter(r => 
+        terrainIds.includes(r.terrain?._id)
+      );
+
+      const totalBookings = myReservations.length;
+      const confirmedBookings = myReservations.filter(r => r.status === 'confirmed').length;
+      const totalRevenue = myReservations
+        .filter(r => r.status === 'confirmed' || r.status === 'completed')
+        .reduce((sum, r) => sum + (r.totalPrice || 0), 0);
+      
+      // Revenus du mois en cours
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const monthlyRevenue = myReservations
+        .filter(r => {
+          const resDate = new Date(r.date);
+          return resDate >= startOfMonth && (r.status === 'confirmed' || r.status === 'completed');
+        })
+        .reduce((sum, r) => sum + (r.totalPrice || 0), 0);
+
       setStats({
         totalTerrains,
         approvedTerrains,
         pendingTerrains,
-        totalBookings: 0,
-        confirmedBookings: 0,
-        totalRevenue: 0,
-        monthlyRevenue: 0,
+        totalBookings,
+        confirmedBookings,
+        totalRevenue,
+        monthlyRevenue,
         totalViews,
         revenueChange: 12.5
       });
@@ -113,7 +141,8 @@ const OwnerDashboardModern = () => {
       subtitle: `${stats.approvedTerrains} approuvés`,
       icon: MapPin,
       color: 'blue',
-      change: null
+      change: null,
+      section: 'terrains'
     },
     {
       title: 'Réservations',
@@ -121,7 +150,8 @@ const OwnerDashboardModern = () => {
       subtitle: `${stats.confirmedBookings} confirmées`,
       icon: Calendar,
       color: 'green',
-      change: null
+      change: null,
+      section: 'reservations'
     },
     {
       title: 'Revenus Total',
@@ -129,7 +159,8 @@ const OwnerDashboardModern = () => {
       subtitle: `Ce mois: ${formatPrice(stats.monthlyRevenue)} FCFA`,
       icon: DollarSign,
       color: 'green',
-      change: stats.revenueChange
+      change: stats.revenueChange,
+      section: 'revenue'
     },
     {
       title: 'Vues Totales',
@@ -137,7 +168,8 @@ const OwnerDashboardModern = () => {
       subtitle: 'Sur tous vos terrains',
       icon: Eye,
       color: 'purple',
-      change: null
+      change: null,
+      section: 'stats'
     }
   ];
 
@@ -194,7 +226,7 @@ const OwnerDashboardModern = () => {
 
         {/* Content selon section - Layout comme capture Shakuro */}
         <div className="p-4 md:p-8">
-          {/* Stats Cards en haut si overview */}
+          {/* Stats Cards en haut si overview - Cliquables */}
           {section === 'overview' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {statCards.map((stat, index) => {
@@ -202,9 +234,13 @@ const OwnerDashboardModern = () => {
                 const colors = colorClasses[stat.color];
                 
                 return (
-                  <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+                  <div 
+                    key={index} 
+                    onClick={() => navigate(`/dashboard?section=${stat.section}`)}
+                    className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-lg hover:border-green-300 transition-all cursor-pointer group"
+                  >
                     <div className="flex items-start justify-between mb-4">
-                      <div className={`${colors.bg} p-3 rounded-xl`}>
+                      <div className={`${colors.bg} p-3 rounded-xl group-hover:scale-110 transition-transform`}>
                         <Icon className={colors.icon} size={24} />
                       </div>
                       {stat.change && (
@@ -251,13 +287,17 @@ const OwnerDashboardModern = () => {
                     ) : (
                       <div className="space-y-4">
                         <p className="text-gray-700">Aperçu rapide de vos terrains et réservations</p>
-                        {/* Statistiques globales */}
+                        {/* Statistiques globales - Cliquables */}
                         <div className="grid grid-cols-2 gap-4 mt-4">
                           {statCards.map((stat, index) => {
                             const Icon = stat.icon;
                             const colors = colorClasses[stat.color];
                             return (
-                              <div key={index} className="bg-gray-50 rounded-lg p-4">
+                              <div 
+                                key={index} 
+                                onClick={() => navigate(`/dashboard?section=${stat.section}`)}
+                                className="bg-gray-50 hover:bg-white rounded-lg p-4 cursor-pointer hover:shadow-md transition-all border border-transparent hover:border-green-300"
+                              >
                                 <div className="flex items-center gap-3 mb-2">
                                   <div className={`${colors.bg} p-2 rounded-lg`}>
                                     <Icon className={colors.icon} size={20} />
