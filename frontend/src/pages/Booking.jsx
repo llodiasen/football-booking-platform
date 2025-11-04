@@ -354,75 +354,84 @@ const Booking = () => {
 
               {/* Date et créneaux */}
               <div className="mb-6 pb-6 border-b border-gray-200">
-                {/* Sélection de la date */}
-                {!formData.date && (
-                  <div>
-                    <div className="font-semibold text-gray-900 mb-4">
-                      📅 Sélectionnez une date
-                    </div>
-                    <AvailabilityCalendar
-                      terrainId={terrainId}
-                      onDateSelect={(date) => setFormData({ ...formData, date })}
-                      selectedDate={formData.date}
-                    />
-                  </div>
-                )}
-
-                {/* Date sélectionnée */}
-                {formData.date && (
+                {/* Sélection de la date (toujours visible) */}
+                <div className="mb-6">
                   <div className="flex items-start justify-between mb-4">
-                    <div>
+                    <div className="flex-1">
                       <div className="font-semibold text-gray-900">Date</div>
-                      <div className="text-sm text-gray-700">
-                        {new Date(formData.date).toLocaleDateString('fr-FR', { 
-                          weekday: 'long',
-                          day: 'numeric', 
-                          month: 'long', 
-                          year: 'numeric' 
-                        })}
-                      </div>
+                      {formData.date ? (
+                        <div className="text-sm text-gray-700">
+                          {new Date(formData.date).toLocaleDateString('fr-FR', { 
+                            weekday: 'long',
+                            day: 'numeric', 
+                            month: 'long', 
+                            year: 'numeric' 
+                          })}
+                        </div>
+                      ) : (
+                        <div className="text-sm text-gray-500 italic">
+                          Sélectionnez une date ci-dessous
+                        </div>
+                      )}
                     </div>
-                    <button 
-                      onClick={() => setFormData({ ...formData, date: '', startTime: '', endTime: '' })}
-                      className="text-sm font-semibold underline"
-                    >
-                      Modifier
-                    </button>
+                    {formData.date && (
+                      <button 
+                        onClick={() => setFormData({ ...formData, date: '', startTime: '', endTime: '' })}
+                        className="text-sm font-semibold underline"
+                      >
+                        Modifier
+                      </button>
+                    )}
                   </div>
-                )}
 
-                {/* Sélection créneaux (apparaît après sélection date) */}
+                  {/* Calendrier (réduit si date déjà sélectionnée) */}
+                  {!formData.date && (
+                    <div className="border border-gray-200 rounded-xl p-4">
+                      <AvailabilityCalendar
+                        terrainId={terrainId}
+                        onDateSelect={(date) => setFormData({ ...formData, date })}
+                        selectedDate={formData.date}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Créneaux horaires (apparaissent IMMÉDIATEMENT après sélection date) */}
                 {formData.date && (
                   <div>
-                    {formData.startTime && formData.endTime ? (
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <div className="font-semibold text-gray-900">Créneau horaire</div>
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <div className="font-semibold text-gray-900">Créneau horaire</div>
+                        {formData.startTime && formData.endTime ? (
                           <div className="text-sm text-gray-700">
                             {formData.startTime} - {formData.endTime} ({priceCalc?.durationHours}h)
                           </div>
-                        </div>
+                        ) : (
+                          <div className="text-sm text-gray-500 italic">
+                            Sélectionnez un créneau ci-dessous
+                          </div>
+                        )}
+                      </div>
+                      {formData.startTime && formData.endTime && (
                         <button 
                           onClick={() => setFormData({ ...formData, startTime: '', endTime: '' })}
                           className="text-sm font-semibold underline"
                         >
                           Modifier
                         </button>
-                      </div>
-                    ) : (
-                      <div className="mt-4">
-                        <div className="font-semibold text-gray-900 mb-4">
-                          ⏰ Sélectionnez un créneau horaire
-                        </div>
-                        <TimeSlotPicker
-                          terrain={terrain}
-                          selectedDate={formData.date}
-                          onTimeSelect={handleTimeSelect}
-                          selectedStartTime={formData.startTime}
-                          selectedEndTime={formData.endTime}
-                        />
-                      </div>
-                    )}
+                      )}
+                    </div>
+
+                    {/* TimeSlotPicker (toujours visible après sélection date) */}
+                    <div className="border border-gray-200 rounded-xl p-4">
+                      <TimeSlotPicker
+                        terrain={terrain}
+                        selectedDate={formData.date}
+                        onTimeSelect={handleTimeSelect}
+                        selectedStartTime={formData.startTime}
+                        selectedEndTime={formData.endTime}
+                      />
+                    </div>
                   </div>
                 )}
               </div>
