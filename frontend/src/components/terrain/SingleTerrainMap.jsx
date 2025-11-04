@@ -1,5 +1,5 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { MapPin, Navigation } from 'lucide-react';
+import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
+import { MapPin, Navigation, CheckCircle } from 'lucide-react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -11,9 +11,9 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Icône verte personnalisée
-const greenIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+// Icône rouge personnalisée (style Airbnb)
+const redIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -52,7 +52,7 @@ const SingleTerrainMap = ({ terrain }) => {
       <MapContainer
         center={center}
         zoom={15}
-        style={{ height: '350px', width: '100%', borderRadius: '12px' }}
+        style={{ height: '450px', width: '100%', borderRadius: '12px' }}
         scrollWheelZoom={false}
         className="z-0"
       >
@@ -61,7 +61,21 @@ const SingleTerrainMap = ({ terrain }) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
-        <Marker position={center} icon={greenIcon}>
+        {/* Cercle rose translucide style Airbnb */}
+        <Circle
+          center={center}
+          radius={300}
+          pathOptions={{
+            color: '#FF385C',
+            fillColor: '#FF385C',
+            fillOpacity: 0.15,
+            weight: 1,
+            opacity: 0.3
+          }}
+        />
+
+        {/* Marqueur rouge */}
+        <Marker position={center} icon={redIcon}>
           <Popup>
             <div className="p-2 min-w-[200px]">
               <h3 className="font-bold text-base mb-2">{terrain.name}</h3>
@@ -90,17 +104,15 @@ const SingleTerrainMap = ({ terrain }) => {
         Itinéraire
       </button>
 
-      {/* Badge Adresse */}
-      <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm shadow-lg rounded-lg px-3 py-2 z-[1000] max-w-[calc(100%-8rem)]">
-        <div className="flex items-start gap-2">
-          <MapPin size={16} className="text-green-600 flex-shrink-0 mt-0.5" />
-          <div className="text-xs">
-            <p className="font-semibold text-gray-900">{terrain.name}</p>
-            <p className="text-gray-600">
-              {terrain.address.street && `${terrain.address.street}, `}
-              {terrain.address.city}
-            </p>
+      {/* Badge "Emplacement vérifié" style Airbnb */}
+      <div className="absolute bottom-4 left-4 bg-white shadow-lg rounded-lg px-4 py-2.5 z-[1000] border border-gray-200">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <CheckCircle size={18} className="text-white" />
           </div>
+          <span className="font-semibold text-gray-900 text-sm">
+            Emplacement vérifié
+          </span>
         </div>
       </div>
     </div>

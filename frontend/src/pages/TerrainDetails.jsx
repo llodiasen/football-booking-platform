@@ -14,6 +14,7 @@ import ReviewsSection from '../components/terrain/ReviewsSection';
 import OwnerProfile from '../components/terrain/OwnerProfile';
 import ThingsToKnow from '../components/terrain/ThingsToKnow';
 import SingleTerrainMap from '../components/terrain/SingleTerrainMap';
+import StickyBookingBar from '../components/terrain/StickyBookingBar';
 
 const TerrainDetails = () => {
   const { id } = useParams();
@@ -120,6 +121,14 @@ const TerrainDetails = () => {
 
   return (
     <div className="bg-white">
+      {/* Sticky Booking Bar - Apparaît au scroll */}
+      <StickyBookingBar 
+        terrain={terrain}
+        onShareClick={() => setShowShareMenu(!showShareMenu)}
+        onFavoriteClick={handleFavorite}
+        isFavorite={isFavorite}
+      />
+
       {/* Container principal */}
       <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 py-6">
         
@@ -289,30 +298,44 @@ const TerrainDetails = () => {
             {/* Avis */}
             <ReviewsSection terrain={terrain} />
 
-            {/* Carte */}
-            <section className="pb-8 border-t border-gray-200 pt-12">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                Où se situe le terrain
-              </h3>
-              <p className="text-gray-700 mb-6">
-                {terrain.address.street}, {terrain.address.city}, {terrain.address.region}, Sénégal
-              </p>
-              <SingleTerrainMap terrain={terrain} />
-              
-              {/* Points forts du quartier */}
-              <div className="mt-8">
-                <h4 className="font-semibold text-gray-900 mb-4">
-                  Points forts du quartier
-                </h4>
-                <ul className="space-y-2 text-sm text-gray-700">
-                  <li>🚌 Arrêt de bus à 5 minutes à pied</li>
-                  <li>🏪 Commerce de proximité à 2 minutes</li>
-                  <li>🚗 Parking gratuit disponible</li>
-                  <li>🏥 Centre de santé à 10 minutes</li>
-                </ul>
-              </div>
-            </section>
+          </div>
 
+          {/* Colonne droite: Booking Card (1/3) - Sticky */}
+          <div className="lg:col-span-1">
+            <BookingCard terrain={terrain} />
+          </div>
+        </div>
+
+        {/* Carte FULL WIDTH - En dehors du layout 2 colonnes */}
+        <section className="mt-16 -mx-6 sm:-mx-10 lg:-mx-20">
+          <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 mb-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              Où se situe le terrain
+            </h3>
+            <p className="text-gray-700">
+              {terrain.address.street}, {terrain.address.city}, {terrain.address.region}, Sénégal
+            </p>
+          </div>
+
+          <SingleTerrainMap terrain={terrain} />
+          
+          {/* Points forts du quartier */}
+          <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 mt-8">
+            <h4 className="font-semibold text-gray-900 mb-4">
+              Points forts du quartier
+            </h4>
+            <ul className="space-y-2 text-sm text-gray-700">
+              <li>🚌 Arrêt de bus à 5 minutes à pied</li>
+              <li>🏪 Commerce de proximité à 2 minutes</li>
+              <li>🚗 Parking gratuit disponible</li>
+              <li>🏥 Centre de santé à 10 minutes</li>
+            </ul>
+          </div>
+        </section>
+
+        {/* Propriétaire et À savoir - Retour au layout 2 colonnes */}
+        <div className="grid lg:grid-cols-3 gap-16 mt-16">
+          <div className="lg:col-span-2 space-y-12">
             {/* Propriétaire */}
             <OwnerProfile owner={terrain.owner} />
 
@@ -320,10 +343,8 @@ const TerrainDetails = () => {
             <ThingsToKnow terrain={terrain} />
           </div>
 
-          {/* Colonne droite: Booking Card (1/3) - Sticky */}
-          <div className="lg:col-span-1">
-            <BookingCard terrain={terrain} />
-          </div>
+          {/* Colonne droite vide pour maintenir l'alignement */}
+          <div className="lg:col-span-1"></div>
         </div>
       </div>
     </div>
