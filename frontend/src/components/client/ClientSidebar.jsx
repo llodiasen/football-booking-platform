@@ -1,29 +1,23 @@
-import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
-  MapPin,
-  Calendar, 
-  DollarSign,
-  BarChart3,
-  Clock,
+  Calendar,
+  Heart,
+  User,
   Settings,
   ChevronLeft,
   ChevronRight,
-  Search,
-  Plus
+  Search
 } from 'lucide-react';
 
-const OwnerSidebar = ({ collapsed, setCollapsed, onAddTerrain, user }) => {
+const ClientSidebar = ({ collapsed, setCollapsed, user }) => {
   const location = useLocation();
 
   const menuItems = [
     { icon: LayoutDashboard, label: 'Vue d\'ensemble', path: '/dashboard', section: 'overview' },
-    { icon: MapPin, label: 'Mes Terrains', path: '/dashboard', section: 'terrains' },
-    { icon: Calendar, label: 'Réservations', path: '/dashboard', section: 'reservations' },
-    { icon: Clock, label: 'Disponibilités', path: '/dashboard', section: 'availability' },
-    { icon: DollarSign, label: 'Revenus', path: '/dashboard', section: 'revenue' },
-    { icon: BarChart3, label: 'Statistiques', path: '/dashboard', section: 'stats' },
+    { icon: Calendar, label: 'Mes Réservations', path: '/dashboard', section: 'reservations' },
+    { icon: Heart, label: 'Favoris', path: '/dashboard', section: 'favorites' },
+    { icon: User, label: 'Mon Profil', path: '/dashboard', section: 'profile' },
     { icon: Settings, label: 'Paramètres', path: '/dashboard', section: 'settings' }
   ];
 
@@ -42,7 +36,7 @@ const OwnerSidebar = ({ collapsed, setCollapsed, onAddTerrain, user }) => {
             <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">221</span>
             </div>
-            <span className="font-bold text-base">Propriétaire</span>
+            <span className="font-bold text-base">Mon Espace</span>
           </div>
         )}
         <button
@@ -55,7 +49,7 @@ const OwnerSidebar = ({ collapsed, setCollapsed, onAddTerrain, user }) => {
 
       {/* Search Bar */}
       {!collapsed && (
-        <div className="px-4 pb-4">
+        <div className="px-4 py-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
             <input
@@ -98,13 +92,13 @@ const OwnerSidebar = ({ collapsed, setCollapsed, onAddTerrain, user }) => {
         <div className="p-4 border-t border-gray-800">
           <div className="flex items-center gap-3 px-3 py-2">
             <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center font-bold">
-              {user?.firstName?.charAt(0).toUpperCase() || 'P'}
+              {user?.firstName?.charAt(0).toUpperCase() || 'C'}
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-sm truncate">
                 {user?.firstName} {user?.lastName}
               </p>
-              <p className="text-xs text-gray-400 truncate">Propriétaire</p>
+              <p className="text-xs text-gray-400 truncate">Client</p>
             </div>
           </div>
         </div>
@@ -113,5 +107,5 @@ const OwnerSidebar = ({ collapsed, setCollapsed, onAddTerrain, user }) => {
   );
 };
 
-export default OwnerSidebar;
+export default ClientSidebar;
 

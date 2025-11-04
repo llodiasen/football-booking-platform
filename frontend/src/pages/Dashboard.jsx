@@ -4,6 +4,7 @@ import { LayoutDashboard, MapPin, Calendar, DollarSign } from 'lucide-react';
 import Card from '../components/ui/Card';
 import OwnerDashboardModern from './owner/OwnerDashboardModern';
 import AdminDashboard from './admin/AdminDashboard';
+import ClientDashboardModern from './client/ClientDashboardModern';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -16,6 +17,11 @@ const Dashboard = () => {
   // Dashboard Propriétaire moderne (style Shakuro)
   if (user?.role === 'owner') {
     return <OwnerDashboardModern />;
+  }
+
+  // Dashboard Client moderne (style Shakuro)
+  if (user?.role === 'client') {
+    return <ClientDashboardModern />;
   }
 
   return (

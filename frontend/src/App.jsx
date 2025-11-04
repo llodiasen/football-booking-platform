@@ -53,15 +53,17 @@ const PrivateRoute = ({ children, roles }) => {
 
 function App() {
   const location = useLocation();
+  const { user } = useAuth();
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const isDashboardRoute = location.pathname === '/dashboard' && (user?.role === 'owner' || user?.role === 'admin');
 
   return (
     <div className="flex flex-col min-h-screen">
       <Toast />
       <CookieBanner />
       
-      {/* Routes Admin sans Navbar/Footer */}
-      {isAdminRoute ? (
+      {/* Routes Admin/Owner Dashboard sans Navbar/Footer */}
+      {(isAdminRoute || isDashboardRoute) ? (
         <Routes>
           <Route 
             path="/admin" 
@@ -79,7 +81,14 @@ function App() {
               </PrivateRoute>
             } 
           />
-          {/* Autres routes admin à ajouter */}
+          <Route 
+            path="/dashboard" 
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            } 
+          />
         </Routes>
       ) : (
         /* Routes normales avec Navbar/Footer */
@@ -97,14 +106,6 @@ function App() {
               <Route path="/teams/:id" element={<TeamDetail />} />
 
               {/* Routes protégées */}
-              <Route 
-                path="/dashboard" 
-                element={
-                  <PrivateRoute>
-                    <Dashboard />
-                  </PrivateRoute>
-                } 
-              />
               <Route 
                 path="/profile" 
                 element={
