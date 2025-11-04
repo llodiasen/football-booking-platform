@@ -5,7 +5,9 @@ import { useToast } from '../../context/ToastContext';
 import Button from '../ui/Button';
 import Card from '../ui/Card';
 import Calendar from '../ui/Calendar';
+import TimeSlot from '../ui/TimeSlot';
 import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 const AvailabilityManager = ({ terrains, selectedTerrain, onSelectTerrain }) => {
   const { success: showSuccess, error: showError } = useToast();
@@ -205,121 +207,75 @@ const AvailabilityManager = ({ terrains, selectedTerrain, onSelectTerrain }) => 
             </div>
           ) : (
             <>
-              {/* Légende */}
-              <div className="flex flex-wrap items-center gap-4 text-xs mb-6 p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-green-500 rounded"></div>
-                  <span>Disponible</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-blue-500 rounded"></div>
-                  <span>Réservé par client</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-orange-500 rounded"></div>
-                  <span>Bloqué manuellement</span>
-                </div>
+              {/* En-tête des créneaux */}
+              <div className="mb-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                  Créneaux horaires - {format(new Date(selectedDate), 'EEEE d MMMM yyyy', { locale: fr })}
+                </h3>
+                <p className="text-sm text-gray-600">
+                  Gérez la disponibilité de chaque créneau
+                </p>
               </div>
 
-              {/* Grille */}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {timeSlots.map((slot, index) => (
-                  <div
-                    key={index}
-                    className={`
-                      relative p-4 rounded-lg border-2 transition-all
-                      ${slot.isBlocked 
-                        ? 'bg-orange-50 border-orange-300' 
-                        : slot.hasReservation
-                          ? 'bg-blue-50 border-blue-300'
-                          : 'bg-white border-gray-200'
-                      }
-                    `}
-                  >
-                    {/* Heure */}
-                    <div className="text-center mb-3">
-                      <p className="text-sm font-bold text-gray-900">
-                        {slot.startTime}
-                      </p>
-                      <p className="text-xs text-gray-500">à</p>
-                      <p className="text-sm font-bold text-gray-900">
-                        {slot.endTime}
-                      </p>
-                    </div>
+              {/* Grille moderne des créneaux Shadcn UI */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {timeSlots.map((slot, index) => {
+                  const status = slot.isBlocked ? 'blocked' : slot.hasReservation ? 'booked' : 'available';
+                  
+                  return (
+                    <TimeSlot
+                      key={index}
+                      startTime={slot.startTime}
+                      endTime={slot.endTime}
+                      status={status}
+                      blockReason={reasonLabels[slot.blockReason] || 'Bloqué'}
+                      blockNote={slot.blockNote}
+                      onBlock={() => handleBlockSlot(slot)}
+                      onUnblock={() => handleUnblockSlot(slot)}
+                    />
+                  );
+                })}
+              </div>
 
-                    {/* Statut */}
-                    <div className="text-center mb-3">
-                      {slot.isBlocked && (
-                        <div>
-                          <p className="text-xs font-medium text-orange-700 mb-1">
-                            🔒 {reasonLabels[slot.blockReason] || 'Bloqué'}
-                          </p>
-                          {slot.blockNote && (
-                            <p className="text-xs text-orange-600">
-                              {slot.blockNote}
-                            </p>
-                          )}
-                        </div>
-                      )}
-                      {slot.hasReservation && !slot.isBlocked && (
-                        <p className="text-xs font-medium text-blue-700">
-                          👤 Réservé
-                        </p>
-                      )}
-                      {!slot.isBlocked && !slot.hasReservation && (
-                        <p className="text-xs font-medium text-green-700">
-                          ✅ Libre
-                        </p>
-                      )}
+              {/* Stats modernes avec icônes */}
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl p-6 shadow-sm">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="bg-green-600 p-2.5 rounded-lg">
+                      <CheckCircle className="text-white" size={20} />
                     </div>
-
-                    {/* Actions */}
-                    <div className="flex gap-2">
-                      {slot.isBlocked ? (
-                        <button
-                          onClick={() => handleUnblockSlot(slot)}
-                          className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-medium transition"
-                        >
-                          <Unlock size={12} />
-                          Débloquer
-                        </button>
-                      ) : !slot.hasReservation ? (
-                        <button
-                          onClick={() => handleBlockSlot(slot)}
-                          className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 bg-orange-600 hover:bg-orange-700 text-white rounded text-xs font-medium transition"
-                        >
-                          <Lock size={12} />
-                          Bloquer
-                        </button>
-                      ) : (
-                        <div className="flex-1 px-2 py-1.5 bg-gray-200 text-gray-500 rounded text-xs font-medium text-center">
-                          Non modifiable
-                        </div>
-                      )}
-                    </div>
+                    <p className="text-sm font-semibold text-green-800">Créneaux Libres</p>
                   </div>
-                ))}
-              </div>
-
-              {/* Stats */}
-              <div className="mt-6 grid grid-cols-3 gap-4 text-center">
-                <div className="p-4 bg-green-50 rounded-lg">
-                  <p className="text-2xl font-bold text-green-700">
+                  <p className="text-3xl font-bold text-green-700">
                     {timeSlots.filter(s => !s.isBlocked && !s.hasReservation).length}
                   </p>
-                  <p className="text-xs text-green-600">Libres</p>
+                  <p className="text-xs text-green-600 mt-1">Disponibles à la réservation</p>
                 </div>
-                <div className="p-4 bg-blue-50 rounded-lg">
-                  <p className="text-2xl font-bold text-blue-700">
+                
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-6 shadow-sm">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="bg-blue-600 p-2.5 rounded-lg">
+                      <CalendarIcon className="text-white" size={20} />
+                    </div>
+                    <p className="text-sm font-semibold text-blue-800">Réservés</p>
+                  </div>
+                  <p className="text-3xl font-bold text-blue-700">
                     {timeSlots.filter(s => s.hasReservation).length}
                   </p>
-                  <p className="text-xs text-blue-600">Réservés</p>
+                  <p className="text-xs text-blue-600 mt-1">Par des clients</p>
                 </div>
-                <div className="p-4 bg-orange-50 rounded-lg">
-                  <p className="text-2xl font-bold text-orange-700">
+                
+                <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-6 shadow-sm">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="bg-orange-600 p-2.5 rounded-lg">
+                      <Lock className="text-white" size={20} />
+                    </div>
+                    <p className="text-sm font-semibold text-orange-800">Bloqués</p>
+                  </div>
+                  <p className="text-3xl font-bold text-orange-700">
                     {timeSlots.filter(s => s.isBlocked).length}
                   </p>
-                  <p className="text-xs text-orange-600">Bloqués</p>
+                  <p className="text-xs text-orange-600 mt-1">Manuellement par vous</p>
                 </div>
               </div>
             </>
