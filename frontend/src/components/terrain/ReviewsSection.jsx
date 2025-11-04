@@ -31,7 +31,10 @@ const ReviewsSection = ({ terrain }) => {
       <div className="grid md:grid-cols-2 gap-16 mb-12">
         {/* Gauche: Évaluation globale (distribution) - Style Airbnb 2ème capture */}
         <div className="flex flex-col">
-          <h3 className="text-base font-semibold text-gray-900 mb-8">Évaluation globale</h3>
+          <div className="flex items-center gap-2 mb-8">
+            <Star className="text-gray-900 fill-gray-900" size={18} />
+            <h3 className="text-base font-semibold text-gray-900">Évaluation globale</h3>
+          </div>
           <div className="flex-1 flex flex-col justify-evenly space-y-2">
             {starDistribution.reverse().map((item) => {
               const percentage = (item.count / maxCount) * 100;
