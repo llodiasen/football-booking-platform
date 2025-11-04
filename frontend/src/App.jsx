@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 
 // Layout
@@ -20,6 +20,10 @@ import Teams from './pages/Teams';
 import TeamDetail from './pages/TeamDetail';
 import CreateTerrain from './pages/CreateTerrain';
 import Booking from './pages/Booking';
+
+// Admin Pages
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminReservations from './pages/admin/AdminReservations';
 
 // Composant de route protégée
 const PrivateRoute = ({ children, roles }) => {
@@ -48,77 +52,107 @@ const PrivateRoute = ({ children, roles }) => {
 };
 
 function App() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   return (
     <div className="flex flex-col min-h-screen">
       <Toast />
       <CookieBanner />
-      <Navbar />
-      <main className="flex-grow">
+      
+      {/* Routes Admin sans Navbar/Footer */}
+      {isAdminRoute ? (
         <Routes>
-          {/* Routes publiques */}
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/terrains" element={<Search />} />
-          <Route path="/terrains/:id" element={<TerrainDetails />} />
-          <Route path="/teams" element={<Teams />} />
-          <Route path="/teams/:id" element={<TeamDetail />} />
-
-          {/* Routes protégées */}
           <Route 
-            path="/dashboard" 
+            path="/admin" 
             element={
-              <PrivateRoute>
-                <Dashboard />
+              <PrivateRoute roles={['admin']}>
+                <AdminDashboard />
               </PrivateRoute>
             } 
           />
           <Route 
-            path="/profile" 
+            path="/admin/reservations" 
             element={
-              <PrivateRoute>
-                <Profile />
+              <PrivateRoute roles={['admin']}>
+                <AdminReservations />
               </PrivateRoute>
             } 
           />
-          <Route 
-            path="/reservations" 
-            element={
-              <PrivateRoute>
-                <MyReservations />
-              </PrivateRoute>
-            } 
-          />
-          <Route 
-            path="/booking/:terrainId" 
-            element={
-              <PrivateRoute>
-                <Booking />
-              </PrivateRoute>
-            } 
-          />
-          <Route 
-            path="/terrains/new" 
-            element={
-              <PrivateRoute roles={['owner', 'admin']}>
-                <CreateTerrain />
-              </PrivateRoute>
-            } 
-          />
-
-          {/* 404 */}
-          <Route path="*" element={
-            <div className="container-custom py-20 text-center">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
-              <p className="text-gray-600 mb-8">Page non trouvée</p>
-              <a href="/" className="text-primary-600 hover:underline">
-                Retour à l'accueil
-              </a>
-            </div>
-          } />
+          {/* Autres routes admin à ajouter */}
         </Routes>
-      </main>
-      <Footer />
+      ) : (
+        /* Routes normales avec Navbar/Footer */
+        <>
+          <Navbar />
+          <main className="flex-grow">
+            <Routes>
+              {/* Routes publiques */}
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/terrains" element={<Search />} />
+              <Route path="/terrains/:id" element={<TerrainDetails />} />
+              <Route path="/teams" element={<Teams />} />
+              <Route path="/teams/:id" element={<TeamDetail />} />
+
+              {/* Routes protégées */}
+              <Route 
+                path="/dashboard" 
+                element={
+                  <PrivateRoute>
+                    <Dashboard />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/profile" 
+                element={
+                  <PrivateRoute>
+                    <Profile />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/reservations" 
+                element={
+                  <PrivateRoute>
+                    <MyReservations />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/booking/:terrainId" 
+                element={
+                  <PrivateRoute>
+                    <Booking />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/terrains/new" 
+                element={
+                  <PrivateRoute roles={['owner', 'admin']}>
+                    <CreateTerrain />
+                  </PrivateRoute>
+                } 
+              />
+
+              {/* 404 */}
+              <Route path="*" element={
+                <div className="container-custom py-20 text-center">
+                  <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
+                  <p className="text-gray-600 mb-8">Page non trouvée</p>
+                  <a href="/" className="text-primary-600 hover:underline">
+                    Retour à l'accueil
+                  </a>
+                </div>
+              } />
+            </Routes>
+          </main>
+          <Footer />
+        </>
+      )}
     </div>
   );
 }
