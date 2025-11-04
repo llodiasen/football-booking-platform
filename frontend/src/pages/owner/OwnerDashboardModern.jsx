@@ -6,7 +6,7 @@ import { terrainAPI, reservationAPI } from '../../services/api';
 import { 
   Plus, MapPin, Calendar, DollarSign, Eye, TrendingUp,
   ArrowUpRight, Edit, Trash2, Settings as SettingsIcon,
-  CheckCircle, Clock, XCircle, AlertCircle, Home, Bell, LogOut
+  CheckCircle, Clock, XCircle, AlertCircle, Home, Bell, LogOut, BarChart3
 } from 'lucide-react';
 import OwnerSidebar from '../../components/owner/OwnerSidebar';
 import TerrainFormModal from '../../components/owner/TerrainFormModal';

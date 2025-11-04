@@ -71,11 +71,13 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Routes
+const notificationRoutes = require('./routes/notifications');
 app.use('/api/auth', authRoutes);
 app.use('/api/terrains', terrainRoutes);
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/teams', teamRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

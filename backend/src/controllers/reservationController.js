@@ -1,6 +1,7 @@
 const Reservation = require('../models/Reservation');
 const Terrain = require('../models/Terrain');
 const Team = require('../models/Team');
+const notificationService = require('../services/notificationService');
 
 // Helper pour calculer la durée en heures
 const calculateDuration = (startTime, endTime) => {
@@ -217,6 +218,9 @@ exports.createReservation = async (req, res) => {
       teamDoc.stats.lastReservation = new Date();
       await teamDoc.save();
     }
+
+    // Créer une notification pour le propriétaire du terrain
+    await notificationService.createReservationNotification(reservation);
 
     res.status(201).json({
       success: true,
