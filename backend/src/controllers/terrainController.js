@@ -20,7 +20,7 @@ exports.getTerrains = async (req, res) => {
       radius = 10000, // 10km par défaut
       sort = '-createdAt',
       page = 1,
-      limit = 100 // Afficher jusqu'à 100 terrains
+      limit = 12 // Afficher 12 terrains par page (optimisé)
     } = req.query;
 
     let query = { isActive: true, isApproved: true };
@@ -94,9 +94,10 @@ exports.getTerrains = async (req, res) => {
     const limitNum = parseInt(limit);
     const skip = (pageNum - 1) * limitNum;
 
-    // Exécuter la requête
+    // Exécuter la requête avec limitation des champs (optimisation)
     // IMPORTANT : Si on utilise $near, on ne peut PAS appliquer de sort() supplémentaire
     let terrainsQuery = Terrain.find(query)
+      .select('-reviews -customAvailability') // Exclure reviews et customAvailability pour performance
       .populate('owner', 'firstName lastName phone email');
     
     // Appliquer le tri seulement si ce n'est pas une recherche géolocalisée
@@ -330,21 +331,17 @@ exports.deleteTerrain = async (req, res) => {
 };
 
 // @route   GET /api/terrains/:id/availability
-// @desc    Get terrain availability for a date
+// @desc    Get terrain availability for a date or date range
 // @access  Public
 exports.getAvailability = async (req, res) => {
   try {
-    const { date } = req.query;
+    const { date, startDate, endDate } = req.query;
     
-    if (!date) {
-      return res.status(400).json({
-        success: false,
-        message: 'Date requise (format: YYYY-MM-DD)'
-      });
-    }
-
-    // Vérifier que le terrain existe
-    const terrain = await Terrain.findById(req.params.id);
+    // Vérifier que le terrain existe (avec sélection limitée)
+    const terrain = await Terrain.findById(req.params.id)
+      .select('name openingHours customAvailability')
+      .lean();
+      
     if (!terrain) {
       return res.status(404).json({
         success: false,
@@ -352,34 +349,91 @@ exports.getAvailability = async (req, res) => {
       });
     }
 
-    // Récupérer les réservations pour cette date
-    const reservations = await Reservation.find({
-      terrain: req.params.id,
-      date: new Date(date),
-      status: { $in: ['pending', 'confirmed'] }
-    }).select('startTime endTime status').lean();
+    // Mode date unique (ancienne méthode)
+    if (date) {
+      const reservations = await Reservation.find({
+        terrain: req.params.id,
+        date: new Date(date),
+        status: { $in: ['pending', 'confirmed'] }
+      }).select('startTime endTime status').lean();
 
-    // Récupérer les blocages personnalisés pour cette date
-    const targetDate = new Date(date);
-    targetDate.setHours(0, 0, 0, 0);
-    
-    const customBlocks = terrain.customAvailability.find(
-      ca => ca.date.toISOString().split('T')[0] === targetDate.toISOString().split('T')[0]
-    );
+      const targetDate = new Date(date);
+      targetDate.setHours(0, 0, 0, 0);
+      
+      const customBlocks = terrain.customAvailability.find(
+        ca => ca.date.toISOString().split('T')[0] === targetDate.toISOString().split('T')[0]
+      );
 
-    res.json({
-      success: true,
-      data: {
-        date,
-        terrain: {
-          id: terrain._id,
-          name: terrain.name,
-          openingHours: terrain.openingHours
-        },
-        reservations,
-        blockedSlots: customBlocks?.blockedSlots || []
-      }
+      return res.json({
+        success: true,
+        data: {
+          date,
+          terrain: {
+            id: terrain._id,
+            name: terrain.name,
+            openingHours: terrain.openingHours
+          },
+          reservations,
+          blockedSlots: customBlocks?.blockedSlots || []
+        }
+      });
+    }
+
+    // Mode plage de dates (NOUVEAU - optimisé)
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      
+      // Récupérer toutes les réservations dans la plage
+      const reservations = await Reservation.find({
+        terrain: req.params.id,
+        date: { $gte: start, $lte: end },
+        status: { $in: ['pending', 'confirmed'] }
+      }).select('date startTime endTime status').lean();
+
+      // Créer une map par date pour accès rapide
+      const reservationsByDate = {};
+      reservations.forEach(res => {
+        const dateKey = new Date(res.date).toISOString().split('T')[0];
+        if (!reservationsByDate[dateKey]) {
+          reservationsByDate[dateKey] = [];
+        }
+        reservationsByDate[dateKey].push({
+          startTime: res.startTime,
+          endTime: res.endTime,
+          status: res.status
+        });
+      });
+
+      // Créer une map des blocages personnalisés
+      const blocksByDate = {};
+      terrain.customAvailability.forEach(ca => {
+        const dateKey = new Date(ca.date).toISOString().split('T')[0];
+        const caDate = new Date(ca.date);
+        if (caDate >= start && caDate <= end) {
+          blocksByDate[dateKey] = ca.blockedSlots;
+        }
+      });
+
+      return res.json({
+        success: true,
+        data: {
+          terrain: {
+            id: terrain._id,
+            name: terrain.name,
+            openingHours: terrain.openingHours
+          },
+          reservationsByDate,
+          blocksByDate
+        }
+      });
+    }
+
+    return res.status(400).json({
+      success: false,
+      message: 'Date requise (format: YYYY-MM-DD) ou plage de dates (startDate et endDate)'
     });
+
   } catch (error) {
     console.error('Erreur getAvailability:', error);
     res.status(500).json({

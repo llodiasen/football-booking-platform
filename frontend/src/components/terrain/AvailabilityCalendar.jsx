@@ -18,35 +18,42 @@ const AvailabilityCalendar = ({ terrainId, onDateSelect, selectedDate }) => {
     try {
       const bookedSet = new Set();
       const today = new Date();
+      const endDate = new Date(today);
+      endDate.setDate(today.getDate() + 30);
       
-      // Charger les 30 prochains jours
+      const startDateStr = today.toISOString().split('T')[0];
+      const endDateStr = endDate.toISOString().split('T')[0];
+      
+      // UN SEUL APPEL API pour récupérer toutes les disponibilités
+      const response = await terrainAPI.getAvailabilityRange(
+        terrainId, 
+        startDateStr, 
+        endDateStr
+      );
+      
+      const { terrain, reservationsByDate, blocksByDate } = response.data.data;
+      
+      // Vérifier chaque jour
       for (let i = 0; i < 30; i++) {
         const checkDate = new Date(today);
         checkDate.setDate(today.getDate() + i);
         const dateString = checkDate.toISOString().split('T')[0];
         
-        try {
-          const response = await terrainAPI.getAvailability(terrainId, dateString);
-          const availability = response.data.data;
+        const dayName = checkDate.toLocaleDateString('en-US', { weekday: 'lowercase' });
+        const hours = terrain.openingHours[dayName];
+        
+        if (hours && !hours.closed) {
+          const openMinutes = parseInt(hours.open.split(':')[0]) * 60;
+          const closeMinutes = parseInt(hours.close.split(':')[0]) * 60;
+          const totalSlots = Math.floor((closeMinutes - openMinutes) / 60);
           
-          const dayName = checkDate.toLocaleDateString('en-US', { weekday: 'lowercase' });
-          const hours = availability.terrain.openingHours[dayName];
+          const reservedSlots = reservationsByDate[dateString]?.length || 0;
+          const blockedSlots = blocksByDate[dateString]?.length || 0;
+          const takenSlots = reservedSlots + blockedSlots;
           
-          if (hours && !hours.closed) {
-            const openMinutes = parseInt(hours.open.split(':')[0]) * 60;
-            const closeMinutes = parseInt(hours.close.split(':')[0]) * 60;
-            const totalSlots = Math.floor((closeMinutes - openMinutes) / 60);
-            
-            const reservedSlots = availability.reservations?.length || 0;
-            const blockedSlots = availability.blockedSlots?.length || 0;
-            const takenSlots = reservedSlots + blockedSlots;
-            
-            if (takenSlots >= totalSlots) {
-              bookedSet.add(dateString);
-            }
+          if (takenSlots >= totalSlots) {
+            bookedSet.add(dateString);
           }
-        } catch (err) {
-          console.error(`Erreur date ${dateString}:`, err);
         }
       }
       

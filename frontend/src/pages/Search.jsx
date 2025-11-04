@@ -10,9 +10,11 @@ const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [terrains, setTerrains] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState('grid'); // grid, list, map
   const [userLocation, setUserLocation] = useState(null);
+  const [pagination, setPagination] = useState({ page: 1, totalPages: 1, total: 0 });
 
   // Filters state
   const [filters, setFilters] = useState({
@@ -51,8 +53,13 @@ const Search = () => {
     }
   }, [filters]);
 
-  const loadTerrains = async () => {
-    setLoading(true);
+  const loadTerrains = async (pageNum = 1, append = false) => {
+    if (append) {
+      setLoadingMore(true);
+    } else {
+      setLoading(true);
+    }
+    
     try {
       const params = {};
       if (filters.city) params.city = filters.city;
@@ -76,13 +83,34 @@ const Search = () => {
       }
       
       params.sort = filters.sort;
+      params.page = pageNum;
+      params.limit = 12;
 
       const response = await terrainAPI.getAll(params);
-      setTerrains(response.data.data);
+      
+      if (append) {
+        setTerrains(prev => [...prev, ...response.data.data]);
+      } else {
+        setTerrains(response.data.data);
+      }
+      
+      setPagination({
+        page: response.data.page,
+        totalPages: response.data.totalPages,
+        total: response.data.total
+      });
     } catch (error) {
       console.error('Error loading terrains:', error);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
+    }
+  };
+
+  const loadMore = () => {
+    const nextPage = pagination.page + 1;
+    if (nextPage <= pagination.totalPages) {
+      loadTerrains(nextPage, true);
     }
   };
 
@@ -312,17 +340,65 @@ const Search = () => {
     </div>
   );
 
-  if (loading) {
+  if (loading && terrains.length === 0) {
     return (
-      <div className="container-custom py-12">
-        <div className="grid md:grid-cols-4 gap-6">
-          {[1, 2, 3, 4].map(i => (
-            <div key={i} className="animate-pulse">
-              <div className="bg-gray-300 h-48 rounded-lg mb-4"></div>
-              <div className="bg-gray-300 h-4 rounded mb-2"></div>
-              <div className="bg-gray-300 h-4 rounded w-2/3"></div>
+      <div className="bg-gray-50 min-h-screen py-8">
+        <div className="container-custom">
+          {/* Header Skeleton */}
+          <div className="mb-6 animate-pulse">
+            <div className="h-8 bg-gray-300 rounded w-1/3 mb-2"></div>
+            <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+          </div>
+
+          {/* Toolbar Skeleton */}
+          <div className="bg-white rounded-lg shadow-sm p-4 mb-6 flex justify-between">
+            <div className="h-10 bg-gray-300 rounded w-32 animate-pulse"></div>
+            <div className="flex gap-2">
+              <div className="h-10 w-10 bg-gray-300 rounded animate-pulse"></div>
+              <div className="h-10 w-10 bg-gray-300 rounded animate-pulse"></div>
             </div>
-          ))}
+          </div>
+
+          {/* Main Content */}
+          <div className="grid lg:grid-cols-4 gap-6">
+            {/* Filters Sidebar Skeleton */}
+            <div className="hidden lg:block">
+              <div className="bg-white rounded-lg shadow-md p-6 space-y-6 animate-pulse">
+                <div className="h-6 bg-gray-300 rounded w-1/2"></div>
+                <div className="space-y-4">
+                  {[1, 2, 3, 4, 5].map(i => (
+                    <div key={i}>
+                      <div className="h-4 bg-gray-300 rounded w-1/3 mb-2"></div>
+                      <div className="h-10 bg-gray-300 rounded"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Terrains Grid Skeleton */}
+            <div className="lg:col-span-3">
+              <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => (
+                  <div key={i} className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+                    <div className="h-48 bg-gray-300"></div>
+                    <div className="p-4 space-y-3">
+                      <div className="h-5 bg-gray-300 rounded w-3/4"></div>
+                      <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                      <div className="flex gap-2">
+                        <div className="h-4 bg-gray-300 rounded w-12"></div>
+                        <div className="h-4 bg-gray-300 rounded w-16"></div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <div className="h-6 bg-gray-300 rounded w-24"></div>
+                        <div className="h-6 bg-gray-300 rounded-full w-16"></div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -344,7 +420,8 @@ const Search = () => {
             )}
           </h1>
           <p className="text-gray-600">
-            {terrains.length} terrain{terrains.length !== 1 ? 's' : ''} disponible{terrains.length !== 1 ? 's' : ''}
+            {terrains.length} terrain{terrains.length !== 1 ? 's' : ''} affiché{terrains.length !== 1 ? 's' : ''}
+            {pagination.total > terrains.length && ` sur ${pagination.total} au total`}
             {filters.city && ` à ${filters.city}`}
             {filters.latitude && filters.longitude && ` dans un rayon de ${parseInt(filters.radius) / 1000} km`}
           </p>
@@ -524,6 +601,26 @@ const Search = () => {
                         </Link>
                       </Card>
                     ))}
+                  </div>
+                )}
+                
+                {/* Bouton Charger Plus */}
+                {!loading && terrains.length > 0 && pagination.page < pagination.totalPages && (
+                  <div className="mt-8 text-center">
+                    <button
+                      onClick={loadMore}
+                      disabled={loadingMore}
+                      className="px-8 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loadingMore ? (
+                        <span className="flex items-center gap-2">
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                          Chargement...
+                        </span>
+                      ) : (
+                        `Charger plus (${pagination.total - terrains.length} restants)`
+                      )}
+                    </button>
                   </div>
                 )}
               </>
