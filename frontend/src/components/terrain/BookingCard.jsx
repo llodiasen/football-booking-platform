@@ -37,10 +37,16 @@ const BookingCard = ({ terrain }) => {
   };
 
   const handleReserve = () => {
-    if (selectedDate) {
-      navigate(`/booking/${terrain._id}?date=${selectedDate}`);
+    if (bookingType === 'subscription') {
+      // Abonnement mensuel
+      navigate(`/booking/${terrain._id}?type=subscription`);
     } else {
-      navigate(`/booking/${terrain._id}`);
+      // Réservation ponctuelle
+      if (selectedDate) {
+        navigate(`/booking/${terrain._id}?type=single&date=${selectedDate}`);
+      } else {
+        navigate(`/booking/${terrain._id}?type=single`);
+      }
     }
   };
 
