@@ -27,12 +27,12 @@ const ReviewsSection = ({ terrain }) => {
 
   return (
     <section className="py-12 border-t border-gray-200">
-      {/* Distribution et catégories côte à côte (style Airbnb exact) */}
+      {/* Distribution et catégories côte à côte (même hauteur) */}
       <div className="grid md:grid-cols-2 gap-16 mb-12">
         {/* Gauche: Évaluation globale (distribution) */}
-        <div>
+        <div className="flex flex-col">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">Évaluation globale</h3>
-          <div className="space-y-3">
+          <div className="flex-1 flex flex-col justify-between space-y-4">
             {starDistribution.reverse().map((item) => (
               <div key={item.stars} className="flex items-center gap-3">
                 <span className="text-sm text-gray-900 w-3">
@@ -49,18 +49,19 @@ const ReviewsSection = ({ terrain }) => {
           </div>
         </div>
 
-        {/* Droite: Catégories avec icônes (3x2 grid) */}
-        <div>
-          <div className="grid grid-cols-2 gap-x-12 gap-y-4">
+        {/* Droite: Catégories avec icônes (alignées en hauteur) */}
+        <div className="flex flex-col">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6 opacity-0">Catégories</h3>
+          <div className="flex-1 flex flex-col justify-between space-y-4">
             {ratingCategories.map((category) => {
               const Icon = category.icon;
               return (
                 <div key={category.key} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Icon size={16} className="text-gray-700" />
-                    <span className="text-sm text-gray-900">{category.name}</span>
+                    <Icon size={20} className="text-gray-700" />
+                    <span className="text-base text-gray-900">{category.name}</span>
                   </div>
-                  <span className="text-sm font-semibold text-gray-900">
+                  <span className="text-base font-semibold text-gray-900">
                     {category.value.toFixed(1)}
                   </span>
                 </div>
