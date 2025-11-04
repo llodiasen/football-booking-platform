@@ -6,7 +6,7 @@ import { terrainAPI, reservationAPI } from '../../services/api';
 import { 
   Plus, MapPin, Calendar, DollarSign, Eye, TrendingUp,
   ArrowUpRight, Edit, Trash2, Settings as SettingsIcon,
-  CheckCircle, Clock, XCircle, AlertCircle
+  CheckCircle, Clock, XCircle, AlertCircle, Home, Bell, LogOut
 } from 'lucide-react';
 import OwnerSidebar from '../../components/owner/OwnerSidebar';
 import TerrainFormModal from '../../components/owner/TerrainFormModal';
@@ -15,11 +15,12 @@ import SettingsSection from '../../components/dashboard/SettingsSection';
 import ReservationsTable from '../../components/owner/ReservationsTable';
 
 const OwnerDashboardModern = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { success: showSuccess, error: showError } = useToast();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const section = searchParams.get('section') || 'overview';
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   
   const [collapsed, setCollapsed] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -130,6 +131,11 @@ const OwnerDashboardModern = () => {
     loadDashboardData();
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   const formatPrice = (price) => {
     return new Intl.NumberFormat('fr-FR').format(price);
   };
@@ -197,30 +203,114 @@ const OwnerDashboardModern = () => {
 
       {/* Main Content - Responsive margins */}
       <div className={`flex-1 ${collapsed ? 'ml-0 md:ml-20' : 'ml-0 md:ml-64'} transition-all duration-300 overflow-auto`}>
-        {/* Header - Responsive padding et text */}
-        <div className="bg-white border-b border-gray-200 px-4 md:px-8 py-4 md:py-6 sticky top-0 z-30">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex-1 min-w-0">
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 truncate">
-                {section === 'overview' && 'Vue d\'ensemble'}
-                {section === 'terrains' && 'Mes Terrains'}
-                {section === 'reservations' && 'Réservations'}
-                {section === 'availability' && 'Gestion des Disponibilités'}
-                {section === 'revenue' && 'Revenus'}
-                {section === 'stats' && 'Statistiques'}
-                {section === 'settings' && 'Paramètres'}
-              </h1>
-              <p className="text-gray-600 mt-1 text-sm md:text-base truncate">
-                Bienvenue {user?.firstName}, gérez vos terrains et réservations
-              </p>
+        {/* Header avec Navigation - Responsive padding et text */}
+        <div className="bg-white border-b border-gray-200 px-4 md:px-8 py-3 md:py-4 sticky top-0 z-30">
+          <div className="flex items-center justify-between gap-4">
+            {/* Logo et Titre */}
+            <div className="flex items-center gap-4 flex-1 min-w-0">
+              <Link 
+                to="/"
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity flex-shrink-0"
+              >
+                <div className="w-8 h-8 md:w-10 md:h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm md:text-base">221</span>
+                </div>
+                <span className="hidden sm:inline font-bold text-gray-900 text-sm md:text-base">Foot Réservation</span>
+              </Link>
+              
+              <div className="flex-1 min-w-0">
+                <h1 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 truncate">
+                  {section === 'overview' && 'Vue d\'ensemble'}
+                  {section === 'terrains' && 'Mes Terrains'}
+                  {section === 'reservations' && 'Réservations'}
+                  {section === 'availability' && 'Disponibilités'}
+                  {section === 'revenue' && 'Revenus'}
+                  {section === 'stats' && 'Statistiques'}
+                  {section === 'settings' && 'Paramètres'}
+                </h1>
+              </div>
             </div>
-            <button
-              onClick={handleAddTerrain}
-              className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 md:px-6 py-2.5 md:py-3 rounded-lg flex items-center gap-2 transition-colors shadow-md text-sm md:text-base whitespace-nowrap w-full sm:w-auto justify-center"
-            >
-              <Plus size={18} className="md:w-5 md:h-5" />
-              <span>Ajouter un terrain</span>
-            </button>
+
+            {/* Actions Header */}
+            <div className="flex items-center gap-2 md:gap-4">
+              {/* Bouton Accueil - Desktop */}
+              <Link
+                to="/"
+                className="hidden md:flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <Home size={20} />
+                <span>Accueil</span>
+              </Link>
+
+              {/* Bouton Ajouter Terrain */}
+              <button
+                onClick={handleAddTerrain}
+                className="bg-green-600 hover:bg-green-700 text-white font-semibold px-3 md:px-4 py-2 md:py-2.5 rounded-lg flex items-center gap-2 transition-colors text-sm"
+              >
+                <Plus size={16} className="md:w-5 md:h-5" />
+                <span className="hidden sm:inline">Ajouter</span>
+              </button>
+
+              {/* Notifications */}
+              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors relative">
+                <Bell size={20} />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+              </button>
+
+              {/* Menu Profil */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                  className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                    {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
+                  </div>
+                </button>
+
+                {/* Dropdown Menu */}
+                {showProfileMenu && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-10" 
+                      onClick={() => setShowProfileMenu(false)}
+                    ></div>
+                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-20">
+                      <div className="px-4 py-3 border-b border-gray-200">
+                        <p className="font-semibold text-gray-900">{user?.firstName} {user?.lastName}</p>
+                        <p className="text-sm text-gray-600">{user?.email}</p>
+                      </div>
+                      
+                      <Link
+                        to="/"
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
+                        onClick={() => setShowProfileMenu(false)}
+                      >
+                        <Home size={18} />
+                        <span>Retour à l'accueil</span>
+                      </Link>
+                      
+                      <Link
+                        to="/dashboard?section=settings"
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
+                        onClick={() => setShowProfileMenu(false)}
+                      >
+                        <SettingsIcon size={18} />
+                        <span>Paramètres</span>
+                      </Link>
+                      
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors text-red-600"
+                      >
+                        <LogOut size={18} />
+                        <span>Déconnexion</span>
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -471,17 +561,86 @@ const OwnerDashboardModern = () => {
                 </div>
               )}
 
-              {/* REVENUS */}
+              {/* REVENUS - Page détaillée */}
               {section === 'revenue' && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-                  <div className="p-6 border-b border-gray-200">
-                    <h2 className="text-xl font-bold text-gray-900">Revenus</h2>
+                <div className="space-y-6">
+                  {/* Résumé Revenus */}
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h2 className="text-xl font-bold text-gray-900 mb-6">Résumé des Revenus</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="bg-green-50 rounded-lg p-6">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="bg-green-500 p-3 rounded-lg">
+                            <DollarSign className="text-white" size={24} />
+                          </div>
+                          <p className="text-sm font-semibold text-gray-700">Revenu Total</p>
+                        </div>
+                        <p className="text-3xl font-bold text-gray-900">{formatPrice(stats.totalRevenue)} FCFA</p>
+                        <p className="text-xs text-gray-600 mt-2">Depuis le début</p>
+                      </div>
+                      
+                      <div className="bg-blue-50 rounded-lg p-6">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="bg-blue-500 p-3 rounded-lg">
+                            <Calendar className="text-white" size={24} />
+                          </div>
+                          <p className="text-sm font-semibold text-gray-700">Ce Mois</p>
+                        </div>
+                        <p className="text-3xl font-bold text-gray-900">{formatPrice(stats.monthlyRevenue)} FCFA</p>
+                        <p className="text-xs text-gray-600 mt-2">{new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}</p>
+                      </div>
+                      
+                      <div className="bg-purple-50 rounded-lg p-6">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="bg-purple-500 p-3 rounded-lg">
+                            <TrendingUp className="text-white" size={24} />
+                          </div>
+                          <p className="text-sm font-semibold text-gray-700">Revenu Moyen/Terrain</p>
+                        </div>
+                        <p className="text-3xl font-bold text-gray-900">
+                          {stats.totalTerrains > 0 ? formatPrice(Math.round(stats.totalRevenue / stats.totalTerrains)) : 0} FCFA
+                        </p>
+                        <p className="text-xs text-gray-600 mt-2">Par terrain</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="p-12 text-center">
-                    <DollarSign className="mx-auto text-gray-400 mb-4" size={64} />
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Aucun revenu enregistré</h3>
-                    <p className="text-gray-600">Vos revenus apparaîtront ici après les premières réservations</p>
-                  </div>
+
+                  {/* Détails des Réservations Payées */}
+                  {stats.totalRevenue > 0 ? (
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                      <h3 className="text-lg font-bold text-gray-900 mb-4">Détails des Revenus</h3>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                          <div>
+                            <p className="font-semibold text-gray-900">Réservations Confirmées</p>
+                            <p className="text-sm text-gray-600">{stats.confirmedBookings} réservation{stats.confirmedBookings > 1 ? 's' : ''}</p>
+                          </div>
+                          <p className="text-lg font-bold text-green-600">{formatPrice(stats.totalRevenue)} FCFA</p>
+                        </div>
+                        
+                        <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                          <div>
+                            <p className="font-semibold text-gray-900">Réservations En Attente</p>
+                            <p className="text-sm text-gray-600">{stats.totalBookings - stats.confirmedBookings} réservation{stats.totalBookings - stats.confirmedBookings > 1 ? 's' : ''}</p>
+                          </div>
+                          <p className="text-lg font-bold text-yellow-600">En attente</p>
+                        </div>
+                        
+                        <div className="flex justify-between items-center py-3 bg-gray-50 rounded-lg px-4">
+                          <div>
+                            <p className="font-bold text-gray-900">Total Réservations</p>
+                          </div>
+                          <p className="text-xl font-bold text-gray-900">{stats.totalBookings}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
+                      <DollarSign className="mx-auto text-gray-400 mb-4" size={64} />
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">Aucun revenu enregistré</h3>
+                      <p className="text-gray-600">Vos revenus apparaîtront ici après les premières réservations confirmées</p>
+                    </div>
+                  )}
                 </div>
               )}
 
