@@ -34,7 +34,10 @@ const OwnerSidebar = ({ collapsed, setCollapsed, onAddTerrain, user }) => {
   };
 
   return (
-    <div className={`${collapsed ? 'w-20' : 'w-64'} bg-gray-900 min-h-screen text-white transition-all duration-300 flex flex-col fixed left-0 top-0 z-40`}>
+    <div className={`${collapsed ? 'w-20' : 'w-64'} bg-gray-900 min-h-screen text-white transition-all duration-300 flex flex-col fixed left-0 top-0 z-40 
+      ${collapsed ? 'md:translate-x-0' : 'md:translate-x-0'}
+      hidden md:flex
+    `}>
       {/* Header Logo */}
       <div className="p-6 flex items-center justify-between border-b border-gray-800">
         {!collapsed && (

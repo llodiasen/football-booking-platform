@@ -99,14 +99,14 @@ const ReservationsTable = ({ terrains }) => {
   return (
     <>
       <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-        {/* Header */}
-        <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-bold text-gray-900">Réservations</h2>
-            <p className="text-sm text-gray-600 mt-1">{reservations.length} réservation{reservations.length !== 1 ? 's' : ''}</p>
+        {/* Header - Responsive */}
+        <div className="p-4 md:p-6 border-b border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <h2 className="text-lg md:text-xl font-bold text-gray-900">Réservations</h2>
+            <p className="text-xs md:text-sm text-gray-600 mt-1">{reservations.length} réservation{reservations.length !== 1 ? 's' : ''}</p>
           </div>
-          <div className="flex items-center gap-2">
-            <button className="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <button className="flex-1 sm:flex-none px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-colors">
               <Download size={16} />
               <span>Export</span>
             </button>
@@ -115,14 +115,15 @@ const ReservationsTable = ({ terrains }) => {
 
         {/* Table */}
         {reservations.length === 0 ? (
-          <div className="p-12 text-center">
-            <CalendarIcon className="mx-auto text-gray-400 mb-4" size={64} />
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Aucune réservation</h3>
-            <p className="text-gray-600">Les réservations de vos terrains apparaîtront ici</p>
+          <div className="p-6 md:p-12 text-center">
+            <CalendarIcon className="mx-auto text-gray-400 mb-4" size={48} />
+            <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">Aucune réservation</h3>
+            <p className="text-sm md:text-base text-gray-600">Les réservations de vos terrains apparaîtront ici</p>
           </div>
         ) : (
           <>
-            <div className="overflow-x-auto">
+            {/* Version DESKTOP - Table classique (hidden sur mobile) */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
@@ -262,6 +263,117 @@ const ReservationsTable = ({ terrains }) => {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Version MOBILE - Cards (visible seulement sur mobile) */}
+            <div className="md:hidden divide-y divide-gray-200">
+              {reservations.map((reservation) => (
+                <div 
+                  key={reservation._id}
+                  className={`p-4 ${selectedReservations.includes(reservation._id) ? 'bg-blue-50' : ''}`}
+                >
+                  {/* Header avec checkbox et ID */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="checkbox" 
+                        checked={selectedReservations.includes(reservation._id)}
+                        onChange={() => toggleSelection(reservation._id)}
+                        className="rounded mt-1"
+                      />
+                      <div>
+                        <p className="font-bold text-gray-900 text-sm">
+                          #{reservation._id?.slice(-6).toUpperCase()}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {reservation.startTime} - {reservation.endTime}
+                        </p>
+                      </div>
+                    </div>
+                    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${
+                      reservation.status === 'confirmed'
+                        ? 'bg-green-100 text-green-800'
+                        : reservation.status === 'pending'
+                        ? 'bg-yellow-100 text-yellow-800'
+                        : reservation.status === 'cancelled'
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-gray-100 text-gray-800'
+                    }`}>
+                      {reservation.status === 'confirmed' && <CheckCircle size={10} />}
+                      {reservation.status === 'pending' && <Clock size={10} />}
+                      {reservation.status === 'cancelled' && <XCircle size={10} />}
+                      {reservation.status === 'confirmed' ? 'Confirmée' :
+                       reservation.status === 'pending' ? 'En attente' :
+                       reservation.status === 'cancelled' ? 'Annulée' : 'Terminée'}
+                    </span>
+                  </div>
+
+                  {/* Client Info */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                      {reservation.client?.firstName?.charAt(0)}{reservation.client?.lastName?.charAt(0)}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-semibold text-gray-900 text-sm truncate">
+                        {reservation.client?.firstName} {reservation.client?.lastName}
+                      </p>
+                      <p className="text-xs text-gray-500 truncate">{reservation.client?.email}</p>
+                    </div>
+                  </div>
+
+                  {/* Terrain et Date */}
+                  <div className="grid grid-cols-2 gap-3 mb-3 text-sm">
+                    <div>
+                      <p className="text-xs text-gray-500 mb-0.5">Terrain</p>
+                      <p className="font-medium text-gray-900 truncate">{reservation.terrain?.name}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 mb-0.5">Date</p>
+                      <p className="font-medium text-gray-900">
+                        {new Date(reservation.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Prix et Actions */}
+                  <div className="flex items-center justify-between pt-3 border-t border-gray-200">
+                    <div>
+                      <p className="text-xs text-gray-500">Montant</p>
+                      <p className="font-bold text-gray-900 text-base">
+                        {formatPrice(reservation.totalPrice)} FCFA
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {/* Actions selon statut */}
+                      {reservation.status === 'pending' && (
+                        <>
+                          <button
+                            onClick={() => handleStatusChange(reservation._id, 'confirmed')}
+                            className="p-2.5 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
+                            title="Confirmer"
+                          >
+                            <CheckCircle size={20} className="text-green-600" />
+                          </button>
+                          <button
+                            onClick={() => handleStatusChange(reservation._id, 'cancelled')}
+                            className="p-2.5 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
+                            title="Rejeter"
+                          >
+                            <XCircle size={20} className="text-red-600" />
+                          </button>
+                        </>
+                      )}
+                      <button
+                        onClick={() => handleViewDetails(reservation)}
+                        className="p-2.5 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                        title="Voir détails"
+                      >
+                        <Eye size={20} className="text-gray-600" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
 
             {/* Barre d'actions pour sélections multiples */}

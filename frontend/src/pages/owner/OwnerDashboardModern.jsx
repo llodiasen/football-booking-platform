@@ -160,16 +160,16 @@ const OwnerDashboardModern = () => {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
+      {/* Sidebar - Caché sur mobile avec overlay si ouvert */}
       <OwnerSidebar collapsed={collapsed} setCollapsed={setCollapsed} onAddTerrain={handleAddTerrain} user={user} />
 
-      {/* Main Content */}
-      <div className={`flex-1 ${collapsed ? 'ml-20' : 'ml-64'} transition-all duration-300 overflow-auto`}>
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-8 py-6 sticky top-0 z-30">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+      {/* Main Content - Responsive margins */}
+      <div className={`flex-1 ${collapsed ? 'ml-0 md:ml-20' : 'ml-0 md:ml-64'} transition-all duration-300 overflow-auto`}>
+        {/* Header - Responsive padding et text */}
+        <div className="bg-white border-b border-gray-200 px-4 md:px-8 py-4 md:py-6 sticky top-0 z-30">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 truncate">
                 {section === 'overview' && 'Vue d\'ensemble'}
                 {section === 'terrains' && 'Mes Terrains'}
                 {section === 'reservations' && 'Réservations'}
@@ -178,22 +178,22 @@ const OwnerDashboardModern = () => {
                 {section === 'stats' && 'Statistiques'}
                 {section === 'settings' && 'Paramètres'}
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-gray-600 mt-1 text-sm md:text-base truncate">
                 Bienvenue {user?.firstName}, gérez vos terrains et réservations
               </p>
             </div>
             <button
               onClick={handleAddTerrain}
-              className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg flex items-center gap-2 transition-colors shadow-md"
+              className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 md:px-6 py-2.5 md:py-3 rounded-lg flex items-center gap-2 transition-colors shadow-md text-sm md:text-base whitespace-nowrap w-full sm:w-auto justify-center"
             >
-              <Plus size={20} />
+              <Plus size={18} className="md:w-5 md:h-5" />
               <span>Ajouter un terrain</span>
             </button>
           </div>
         </div>
 
         {/* Content selon section - Layout comme capture Shakuro */}
-        <div className="p-8">
+        <div className="p-4 md:p-8">
           {/* Stats Cards en haut si overview */}
           {section === 'overview' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
