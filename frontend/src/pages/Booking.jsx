@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import Button from '../components/ui/Button';
 import TimeSlotPicker from '../components/reservation/TimeSlotPicker';
+import AvailabilityCalendar from '../components/terrain/AvailabilityCalendar';
 
 const Booking = () => {
   const { terrainId } = useParams();
@@ -352,48 +353,76 @@ const Booking = () => {
               </div>
 
               {/* Date et créneaux */}
-              <div className="space-y-4 mb-6 pb-6 border-b border-gray-200">
-                {/* Date */}
-                <div className="flex items-start justify-between">
+              <div className="mb-6 pb-6 border-b border-gray-200">
+                {/* Sélection de la date */}
+                {!formData.date && (
                   <div>
-                    <div className="font-semibold text-gray-900">Dates</div>
-                    <div className="text-sm text-gray-700">
-                      {formData.date 
-                        ? new Date(formData.date).toLocaleDateString('fr-FR', { 
-                            day: 'numeric', 
-                            month: 'short', 
-                            year: 'numeric' 
-                          })
-                        : 'Non sélectionnée'
-                      }
+                    <div className="font-semibold text-gray-900 mb-4">
+                      📅 Sélectionnez une date
                     </div>
-                  </div>
-                  <button className="text-sm font-semibold underline">Modifier</button>
-                </div>
-
-                {/* Créneaux */}
-                {formData.startTime && formData.endTime && (
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <div className="font-semibold text-gray-900">Créneaux</div>
-                      <div className="text-sm text-gray-700">
-                        {formData.startTime} - {formData.endTime} ({priceCalc?.durationHours}h)
-                      </div>
-                    </div>
-                    <button className="text-sm font-semibold underline">Modifier</button>
+                    <AvailabilityCalendar
+                      terrainId={terrainId}
+                      onDateSelect={(date) => setFormData({ ...formData, date })}
+                      selectedDate={formData.date}
+                    />
                   </div>
                 )}
 
-                {/* Sélection créneaux si pas encore fait */}
-                {formData.date && (!formData.startTime || !formData.endTime) && (
-                  <div className="mt-4">
-                    <TimeSlotPicker
-                      terrain={terrain}
-                      selectedDate={formData.date}
-                      onTimeSelect={handleTimeSelect}
-                      selectedStartTime={formData.startTime}
-                      selectedEndTime={formData.endTime}
-                    />
+                {/* Date sélectionnée */}
+                {formData.date && (
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <div className="font-semibold text-gray-900">Date</div>
+                      <div className="text-sm text-gray-700">
+                        {new Date(formData.date).toLocaleDateString('fr-FR', { 
+                          weekday: 'long',
+                          day: 'numeric', 
+                          month: 'long', 
+                          year: 'numeric' 
+                        })}
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => setFormData({ ...formData, date: '', startTime: '', endTime: '' })}
+                      className="text-sm font-semibold underline"
+                    >
+                      Modifier
+                    </button>
+                  </div>
+                )}
+
+                {/* Sélection créneaux (apparaît après sélection date) */}
+                {formData.date && (
+                  <div>
+                    {formData.startTime && formData.endTime ? (
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <div className="font-semibold text-gray-900">Créneau horaire</div>
+                          <div className="text-sm text-gray-700">
+                            {formData.startTime} - {formData.endTime} ({priceCalc?.durationHours}h)
+                          </div>
+                        </div>
+                        <button 
+                          onClick={() => setFormData({ ...formData, startTime: '', endTime: '' })}
+                          className="text-sm font-semibold underline"
+                        >
+                          Modifier
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="mt-4">
+                        <div className="font-semibold text-gray-900 mb-4">
+                          ⏰ Sélectionnez un créneau horaire
+                        </div>
+                        <TimeSlotPicker
+                          terrain={terrain}
+                          selectedDate={formData.date}
+                          onTimeSelect={handleTimeSelect}
+                          selectedStartTime={formData.startTime}
+                          selectedEndTime={formData.endTime}
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
