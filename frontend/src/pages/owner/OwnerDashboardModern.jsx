@@ -13,6 +13,9 @@ import TerrainFormModal from '../../components/owner/TerrainFormModal';
 import AvailabilityManager from '../../components/owner/AvailabilityManager';
 import SettingsSection from '../../components/dashboard/SettingsSection';
 import ReservationsTable from '../../components/owner/ReservationsTable';
+import StatCard from '../../components/dashboard/StatCard';
+import RevenueChart from '../../components/dashboard/RevenueChart';
+import Badge from '../../components/ui/Badge';
 
 const OwnerDashboardModern = () => {
   const { user, logout } = useAuth();
@@ -321,102 +324,93 @@ const OwnerDashboardModern = () => {
           </div>
         </div>
 
-        {/* Content selon section - Layout comme capture Shakuro */}
-        <div className="p-4 md:p-8">
-          {/* Stats Cards en haut si overview - Cliquables */}
+        {/* Content selon section - Design épuré avec plus d'espace blanc */}
+        <div className="p-5 md:p-10 max-w-[1600px] mx-auto">
+          {/* Stats Cards en haut si overview - Design épuré Shadcn */}
           {section === 'overview' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              {statCards.map((stat, index) => {
-                const Icon = stat.icon;
-                const colors = colorClasses[stat.color];
-                
-                return (
-                  <div 
-                    key={index} 
-                    onClick={() => navigate(`/dashboard?section=${stat.section}`)}
-                    className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-lg hover:border-green-300 transition-all cursor-pointer group"
-                  >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className={`${colors.bg} p-3 rounded-xl group-hover:scale-110 transition-transform`}>
-                        <Icon className={colors.icon} size={24} />
-                      </div>
-                      {stat.change && (
-                        <div className={`flex items-center gap-1 ${colors.badge} px-2 py-1 rounded-full text-xs font-semibold`}>
-                          <ArrowUpRight size={14} />
-                          <span>{stat.change}%</span>
-                        </div>
-                      )}
-                    </div>
-                    <p className="text-gray-600 text-sm font-medium mb-1">{stat.title}</p>
-                    <p className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</p>
-                    <p className="text-xs text-gray-500">{stat.subtitle}</p>
-                  </div>
-                );
-              })}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+              {statCards.map((stat, index) => (
+                <StatCard
+                  key={index}
+                  title={stat.title}
+                  value={stat.value}
+                  subtitle={stat.subtitle}
+                  icon={stat.icon}
+                  trend={stat.change > 0 ? 'up' : stat.change < 0 ? 'down' : null}
+                  trendValue={stat.change}
+                  onClick={() => navigate(`/dashboard?section=${stat.section}`)}
+                />
+              ))}
             </div>
           )}
 
-          {/* Layout 3 colonnes comme capture Shakuro : Tableau central (2/3) + Panneaux droite (1/3) */}
-          <div className="grid lg:grid-cols-3 gap-6">
+          {/* Layout 3 colonnes épuré : Contenu central (2/3) + Sidebar droite (1/3) */}
+          <div className="grid lg:grid-cols-3 gap-7">
             {/* COLONNE CENTRALE - Tableau principal (2/3 largeur) */}
             <div className="lg:col-span-2">
               
-              {/* VUE D'ENSEMBLE */}
+              {/* VUE D'ENSEMBLE - Design épuré */}
               {section === 'overview' && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-                  <div className="p-6 border-b border-gray-200">
-                    <h2 className="text-xl font-bold text-gray-900">Tableau de bord</h2>
-                  </div>
-                  <div className="p-6">
-                    {terrains.length === 0 ? (
-                      <div className="text-center py-16">
-                        <MapPin className="mx-auto text-gray-400 mb-4" size={64} />
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Aucun terrain enregistré</h3>
-                        <p className="text-gray-600 mb-6">Commencez par ajouter votre premier terrain</p>
-                        <button
-                          onClick={handleAddTerrain}
-                          className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-lg inline-flex items-center gap-2 transition-colors"
-                        >
-                          <Plus size={20} />
-                          Ajouter mon premier terrain
-                        </button>
+                <div className="space-y-6">
+                  {terrains.length === 0 ? (
+                    <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center hover:shadow-md transition-shadow">
+                      <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-50 rounded-2xl mb-6">
+                        <MapPin className="text-gray-400" size={40} strokeWidth={1.5} />
                       </div>
-                    ) : (
-                      <div className="space-y-4">
-                        <p className="text-gray-700">Aperçu rapide de vos terrains et réservations</p>
-                        {/* Statistiques globales - Cliquables */}
-                        <div className="grid grid-cols-2 gap-4 mt-4">
-                          {statCards.map((stat, index) => {
-                            const Icon = stat.icon;
-                            const colors = colorClasses[stat.color];
-                            return (
-                              <div 
-                                key={index} 
-                                onClick={() => navigate(`/dashboard?section=${stat.section}`)}
-                                className="bg-gray-50 hover:bg-white rounded-lg p-4 cursor-pointer hover:shadow-md transition-all border border-transparent hover:border-green-300"
-                              >
-                                <div className="flex items-center gap-3 mb-2">
-                                  <div className={`${colors.bg} p-2 rounded-lg`}>
-                                    <Icon className={colors.icon} size={20} />
-                                  </div>
-                                  <p className="text-sm font-semibold text-gray-900">{stat.title}</p>
-                                </div>
-                                <p className="text-xl font-bold text-gray-900">{stat.value}</p>
-                                <p className="text-xs text-gray-500 mt-1">{stat.subtitle}</p>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-3">Aucun terrain enregistré</h3>
+                      <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                        Commencez par ajouter votre premier terrain pour recevoir des réservations
+                      </p>
+                      <button
+                        onClick={handleAddTerrain}
+                        className="inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold px-8 py-3.5 rounded-xl transition-all hover:shadow-lg hover:-translate-y-0.5"
+                      >
+                        <Plus size={20} />
+                        Ajouter mon premier terrain
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      {/* Activité Récente */}
+                      <div className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md transition-shadow">
+                        <h3 className="text-lg font-bold text-gray-900 mb-5">Activité récente</h3>
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <CheckCircle className="text-green-600" size={18} />
                               </div>
-                            );
-                          })}
+                              <div>
+                                <p className="text-sm font-semibold text-gray-900">{stats.totalBookings} réservations</p>
+                                <p className="text-xs text-gray-500">Total sur vos terrains</p>
+                              </div>
+                            </div>
+                            <Badge variant="success">{stats.confirmedBookings} confirmées</Badge>
+                          </div>
+                          
+                          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <Eye className="text-blue-600" size={18} />
+                              </div>
+                              <div>
+                                <p className="text-sm font-semibold text-gray-900">{stats.totalViews} vues</p>
+                                <p className="text-xs text-gray-500">Sur tous vos terrains</p>
+                              </div>
+                            </div>
+                            <Badge variant="info">Ce mois</Badge>
+                          </div>
                         </div>
                       </div>
-                    )}
-                  </div>
+                    </>
+                  )}
                 </div>
               )}
 
-              {/* MES TERRAINS - Format tableau comme capture */}
+              {/* MES TERRAINS - Design moderne épuré */}
               {section === 'terrains' && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-                  <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+                <div className="bg-white rounded-2xl border border-gray-100 hover:shadow-md transition-shadow">
+                  <div className="p-6 border-b border-gray-50 flex items-center justify-between">
                     <h2 className="text-xl font-bold text-gray-900">Mes Terrains</h2>
                     <span className="text-sm text-gray-600">{terrains.length} terrain{terrains.length !== 1 ? 's' : ''}</span>
                   </div>
@@ -669,153 +663,145 @@ const OwnerDashboardModern = () => {
               {section === 'settings' && <SettingsSection />}
             </div>
 
-            {/* COLONNE DROITE - Panneaux fixes visibles sur toutes les sections */}
-            <div className="space-y-6">
-              {/* Graphique Revenus (Donut Chart) */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider mb-6">REVENUS</h3>
-                
-                <div className="flex items-center justify-center mb-6">
-                  <div className="relative w-40 h-40">
-                    <svg className="transform -rotate-90 w-40 h-40">
-                      <circle
-                        cx="80"
-                        cy="80"
-                        r="70"
-                        stroke="#e5e7eb"
-                        strokeWidth="12"
-                        fill="none"
-                      />
-                      <circle
-                        cx="80"
-                        cy="80"
-                        r="70"
-                        stroke="#10b981"
-                        strokeWidth="12"
-                        fill="none"
-                        strokeDasharray={`${(stats.totalRevenue / 5000000) * 440} 440`}
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <p className="text-2xl font-bold text-gray-900">
-                        {formatPrice(stats.totalRevenue / 1000)}k
-                      </p>
-                      <p className="text-xs text-gray-500">FCFA</p>
-                    </div>
-                  </div>
+            {/* COLONNE DROITE - Panneaux fixes épurés Shadcn UI */}
+            <div className="space-y-5">
+              {/* Graphique Revenus moderne avec Recharts */}
+              <RevenueChart 
+                totalRevenue={stats.totalRevenue}
+                monthlyRevenue={stats.monthlyRevenue}
+              />
+
+              {/* Statut Terrains - Design épuré */}
+              <div className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md transition-shadow">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider">
+                    Statut Terrains
+                  </h3>
+                  <Badge variant="default">
+                    {stats.totalTerrains} total
+                  </Badge>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      <span className="text-gray-700">Ce mois</span>
-                    </div>
-                    <span className="font-semibold text-gray-900">{formatPrice(stats.monthlyRevenue)} FCFA</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
-                      <span className="text-gray-700">Total</span>
-                    </div>
-                    <span className="font-semibold text-gray-900">{formatPrice(stats.totalRevenue)} FCFA</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Statut Terrains */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider mb-6">STATUT TERRAINS</h3>
-
-                <div className="space-y-4">
+                <div className="space-y-5">
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm text-gray-700">Approuvés</span>
-                      <span className="text-sm font-bold text-green-600">{stats.approvedTerrains}</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span className="text-sm font-medium text-gray-700">Approuvés</span>
+                      </div>
+                      <span className="text-sm font-bold text-gray-900">{stats.approvedTerrains}</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
                       <div 
-                        className="bg-green-500 h-2.5 rounded-full transition-all duration-500"
+                        className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full transition-all duration-700 ease-out"
                         style={{ width: stats.totalTerrains > 0 ? `${(stats.approvedTerrains / stats.totalTerrains) * 100}%` : '0%' }}
                       ></div>
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {stats.totalTerrains > 0 ? Math.round((stats.approvedTerrains / stats.totalTerrains) * 100) : 0}%
-                    </p>
                   </div>
 
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm text-gray-700">En attente</span>
-                      <span className="text-sm font-bold text-yellow-600">{stats.pendingTerrains}</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                        <span className="text-sm font-medium text-gray-700">En attente</span>
+                      </div>
+                      <span className="text-sm font-bold text-gray-900">{stats.pendingTerrains}</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
                       <div 
-                        className="bg-yellow-500 h-2.5 rounded-full transition-all duration-500"
+                        className="bg-gradient-to-r from-yellow-500 to-yellow-600 h-2 rounded-full transition-all duration-700 ease-out"
                         style={{ width: stats.totalTerrains > 0 ? `${(stats.pendingTerrains / stats.totalTerrains) * 100}%` : '0%' }}
                       ></div>
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {stats.totalTerrains > 0 ? Math.round((stats.pendingTerrains / stats.totalTerrains) * 100) : 0}%
-                    </p>
                   </div>
                 </div>
               </div>
 
-              {/* Aperçu Performance */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              {/* Aperçu Performance - Design épuré */}
+              <div className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider">APERÇU</h3>
-                  <select className="text-xs text-gray-600 bg-transparent border-none focus:outline-none cursor-pointer">
-                    <option>Ce mois</option>
-                    <option>Cette semaine</option>
-                    <option>Aujourd'hui</option>
-                  </select>
+                  <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider">
+                    Aperçu
+                  </h3>
+                  <Badge variant="info">Ce mois</Badge>
                 </div>
 
                 <div className="space-y-4">
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Revenu moyen/terrain</p>
-                    <p className="text-xl font-bold text-gray-900">
-                      {stats.totalTerrains > 0 ? formatPrice(Math.round(stats.totalRevenue / stats.totalTerrains)) : '0'} FCFA
+                  <div className="pb-4 border-b border-gray-50">
+                    <p className="text-xs font-medium text-gray-500 mb-1.5">Revenu moyen/terrain</p>
+                    <p className="text-lg font-bold text-gray-900">
+                      {stats.totalTerrains > 0 ? formatPrice(Math.round(stats.totalRevenue / stats.totalTerrains)) : '0'} 
+                      <span className="text-sm text-gray-500 font-normal ml-1">FCFA</span>
                     </p>
                   </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Total terrains</p>
-                    <p className="text-xl font-bold text-gray-900">{stats.totalTerrains}</p>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs font-medium text-gray-500 mb-1.5">Terrains</p>
+                      <p className="text-2xl font-bold text-gray-900">{stats.totalTerrains}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium text-gray-500 mb-1.5">Vues moy.</p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {stats.totalTerrains > 0 ? Math.round(stats.totalViews / stats.totalTerrains) : 0}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Vues moyennes</p>
-                    <p className="text-xl font-bold text-gray-900">
-                      {stats.totalTerrains > 0 ? Math.round(stats.totalViews / stats.totalTerrains) : 0}
-                    </p>
+
+                  <div className="pt-4 border-t border-gray-50">
+                    <p className="text-xs font-medium text-gray-500 mb-1.5">Taux de réservation</p>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+                        <div 
+                          className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full transition-all duration-700"
+                          style={{ width: `${Math.min(stats.reservationRate, 100)}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-sm font-bold text-green-600 min-w-[3rem] text-right">
+                        {stats.reservationRate}%
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Taux réservation</p>
-                    <p className="text-xl font-bold text-green-600">{stats.reservationRate}%</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Terrain populaire</p>
-                    <p className="text-sm font-semibold text-gray-900 truncate">
-                      {terrains[0]?.name || '-'}
-                    </p>
-                  </div>
+
+                  {terrains[0] && (
+                    <div className="pt-4 border-t border-gray-50">
+                      <p className="text-xs font-medium text-gray-500 mb-2">Terrain populaire</p>
+                      <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                        <p className="text-sm font-semibold text-gray-900 truncate">
+                          {terrains[0]?.name}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
-              {/* CTA Card */}
-              <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white">
-                <h3 className="text-lg font-bold mb-2">🚀 Conseil</h3>
-                <p className="text-green-100 text-sm mb-4">
-                  Ajoutez plus de terrains et optimisez vos disponibilités pour augmenter vos revenus
-                </p>
-                <button
-                  onClick={handleAddTerrain}
-                  className="w-full bg-white text-green-600 font-semibold px-4 py-2.5 rounded-lg text-sm hover:bg-green-50 transition-colors"
-                >
-                  Ajouter un terrain
-                </button>
+              {/* CTA Card - Design moderne */}
+              <div className="relative overflow-hidden bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 rounded-2xl p-6 text-white shadow-lg">
+                {/* Decorative circles */}
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
+                <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full"></div>
+                
+                <div className="relative z-10">
+                  <div className="inline-flex items-center justify-center w-10 h-10 bg-white/20 rounded-xl mb-4 backdrop-blur-sm">
+                    <TrendingUp className="text-white" size={20} />
+                  </div>
+                  
+                  <h3 className="text-base font-bold mb-2">
+                    Augmentez vos revenus
+                  </h3>
+                  <p className="text-green-50 text-xs mb-5 leading-relaxed">
+                    Ajoutez plus de terrains et optimisez vos disponibilités
+                  </p>
+                  
+                  <button
+                    onClick={handleAddTerrain}
+                    className="w-full bg-white text-green-600 font-semibold px-4 py-2.5 rounded-xl text-sm hover:bg-green-50 hover:shadow-md transition-all"
+                  >
+                    + Ajouter un terrain
+                  </button>
+                </div>
               </div>
             </div>
           </div>
