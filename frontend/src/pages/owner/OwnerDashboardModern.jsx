@@ -38,6 +38,7 @@ const OwnerDashboardModern = () => {
     totalRevenue: 0,
     monthlyRevenue: 0,
     totalViews: 0,
+    reservationRate: 0,
     revenueChange: 0
   });
 
@@ -84,6 +85,11 @@ const OwnerDashboardModern = () => {
         })
         .reduce((sum, r) => sum + (r.totalPrice || 0), 0);
 
+      // Calculer le taux de réservation
+      const reservationRate = totalViews > 0 
+        ? ((totalBookings / totalViews) * 100).toFixed(1)
+        : totalBookings > 0 ? 100 : 0;
+
       setStats({
         totalTerrains,
         approvedTerrains,
@@ -93,6 +99,7 @@ const OwnerDashboardModern = () => {
         totalRevenue,
         monthlyRevenue,
         totalViews,
+        reservationRate,
         revenueChange: 12.5
       });
     } catch (error) {
@@ -571,34 +578,34 @@ const OwnerDashboardModern = () => {
                       <div className="bg-green-50 rounded-lg p-6">
                         <div className="flex items-center gap-3 mb-3">
                           <div className="bg-green-500 p-3 rounded-lg">
-                            <DollarSign className="text-white" size={24} />
+                            <DollarSign className="text-white" size={20} />
                           </div>
                           <p className="text-sm font-semibold text-gray-700">Revenu Total</p>
                         </div>
-                        <p className="text-3xl font-bold text-gray-900">{formatPrice(stats.totalRevenue)} FCFA</p>
+                        <p className="text-2xl font-bold text-gray-900">{formatPrice(stats.totalRevenue)} <span className="text-base">FCFA</span></p>
                         <p className="text-xs text-gray-600 mt-2">Depuis le début</p>
                       </div>
                       
                       <div className="bg-blue-50 rounded-lg p-6">
                         <div className="flex items-center gap-3 mb-3">
                           <div className="bg-blue-500 p-3 rounded-lg">
-                            <Calendar className="text-white" size={24} />
+                            <Calendar className="text-white" size={20} />
                           </div>
                           <p className="text-sm font-semibold text-gray-700">Ce Mois</p>
                         </div>
-                        <p className="text-3xl font-bold text-gray-900">{formatPrice(stats.monthlyRevenue)} FCFA</p>
+                        <p className="text-2xl font-bold text-gray-900">{formatPrice(stats.monthlyRevenue)} <span className="text-base">FCFA</span></p>
                         <p className="text-xs text-gray-600 mt-2">{new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}</p>
                       </div>
                       
                       <div className="bg-purple-50 rounded-lg p-6">
                         <div className="flex items-center gap-3 mb-3">
                           <div className="bg-purple-500 p-3 rounded-lg">
-                            <TrendingUp className="text-white" size={24} />
+                            <TrendingUp className="text-white" size={20} />
                           </div>
                           <p className="text-sm font-semibold text-gray-700">Revenu Moyen/Terrain</p>
                         </div>
-                        <p className="text-3xl font-bold text-gray-900">
-                          {stats.totalTerrains > 0 ? formatPrice(Math.round(stats.totalRevenue / stats.totalTerrains)) : 0} FCFA
+                        <p className="text-2xl font-bold text-gray-900">
+                          {stats.totalTerrains > 0 ? formatPrice(Math.round(stats.totalRevenue / stats.totalTerrains)) : 0} <span className="text-base">FCFA</span>
                         </p>
                         <p className="text-xs text-gray-600 mt-2">Par terrain</p>
                       </div>
@@ -786,7 +793,7 @@ const OwnerDashboardModern = () => {
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Taux réservation</p>
-                    <p className="text-xl font-bold text-green-600">0%</p>
+                    <p className="text-xl font-bold text-green-600">{stats.reservationRate}%</p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Terrain populaire</p>
