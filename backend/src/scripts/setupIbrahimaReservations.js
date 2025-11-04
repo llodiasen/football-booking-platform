@@ -15,37 +15,22 @@ const setupIbrahimaReservations = async () => {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ Connecté à MongoDB');
 
-    // 1. Trouver Ibrahima
-    console.log('\n🔍 Recherche de l\'utilisateur Ibrahima...');
-    const ibrahima = await User.findOne({ 
-      $or: [
-        { email: /ibrahima/i },
-        { firstName: /ibrahima/i }
-      ]
-    });
+    // 1. Trouver le propriétaire par email
+    console.log('\n🔍 Recherche du propriétaire...');
+    let owner = await User.findOne({ email: 'soonoup93@gmail.com' });
 
-    if (!ibrahima) {
-      console.log('❌ Ibrahima non trouvé, création du compte...');
-      const newIbrahima = new User({
-        firstName: 'Ibrahima',
-        lastName: 'Diallo',
-        email: 'ibrahima@football-booking.sn',
-        password: 'password123',
-        phone: '77 123 45 67',
-        role: 'owner',
-        isVerified: true
-      });
-      await newIbrahima.save();
-      console.log('✅ Compte Ibrahima créé');
-      ibrahima = newIbrahima;
-    } else {
-      console.log(`✅ Ibrahima trouvé: ${ibrahima.firstName} ${ibrahima.lastName} (${ibrahima.email})`);
-      // S'assurer qu'il est propriétaire
-      if (ibrahima.role !== 'owner') {
-        ibrahima.role = 'owner';
-        await ibrahima.save();
-        console.log('✅ Rôle mis à jour en "owner"');
-      }
+    if (!owner) {
+      console.log('❌ Compte non trouvé avec cet email');
+      process.exit(1);
+    }
+
+    console.log(`✅ Propriétaire trouvé: ${owner.firstName} ${owner.lastName} (${owner.email})`);
+    
+    // S'assurer qu'il est propriétaire
+    if (owner.role !== 'owner') {
+      owner.role = 'owner';
+      await owner.save();
+      console.log('✅ Rôle mis à jour en "owner"');
     }
 
     // 2. Trouver le terrain BeSport
@@ -59,11 +44,11 @@ const setupIbrahimaReservations = async () => {
 
     console.log(`✅ BeSport trouvé: ${besport.name}`);
 
-    // 3. Assigner BeSport à Ibrahima
-    console.log('\n🔄 Attribution de BeSport à Ibrahima...');
-    besport.owner = ibrahima._id;
+    // 3. Assigner BeSport au propriétaire
+    console.log('\n🔄 Attribution de BeSport au propriétaire...');
+    besport.owner = owner._id;
     await besport.save();
-    console.log('✅ Ibrahima est maintenant propriétaire de BeSport');
+    console.log('✅ BeSport assigné au propriétaire');
 
     // 4. Trouver ou créer des clients pour les réservations
     console.log('\n👥 Recherche/Création de clients...');
@@ -214,15 +199,14 @@ const setupIbrahimaReservations = async () => {
 
     console.log('\n✅ CONFIGURATION TERMINÉE !');
     console.log('\n📊 RÉSUMÉ:');
-    console.log(`👤 Propriétaire: ${ibrahima.firstName} ${ibrahima.lastName} (${ibrahima.email})`);
+    console.log(`👤 Propriétaire: ${owner.firstName} ${owner.lastName} (${owner.email})`);
     console.log(`🏟️  Terrain: ${besport.name}`);
     console.log(`📅 Réservations créées: 7`);
     console.log(`   - En attente: 4`);
     console.log(`   - Confirmées: 2`);
     console.log(`   - Annulées: 1`);
     console.log('\n🔐 CONNEXION:');
-    console.log(`Email: ${ibrahima.email}`);
-    console.log(`Mot de passe: password123`);
+    console.log(`Email: ${owner.email}`);
 
   } catch (error) {
     console.error('❌ Erreur:', error.message);
