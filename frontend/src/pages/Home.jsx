@@ -279,10 +279,10 @@ const Home = () => {
 
         <div className="container-custom relative z-10 px-4">
           <div className="text-center mb-10 md:mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 md:mb-4">
               Comment ça marche ?
             </h2>
-            <p className="text-base md:text-lg text-gray-600">
+            <p className="text-sm md:text-base lg:text-lg text-gray-600">
               Réservez votre terrain en quelques clics
             </p>
           </div>
@@ -295,8 +295,8 @@ const Home = () => {
                   <div className="bg-green-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <SearchIcon className="text-green-600" size={32} />
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-gray-900">Recherchez</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                  <h3 className="text-base md:text-lg lg:text-xl font-bold mb-2 md:mb-3 text-gray-900">Recherchez</h3>
+                  <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
                     Trouvez le terrain parfait près de chez vous avec nos filtres avancés
                   </p>
                 </div>
@@ -314,8 +314,8 @@ const Home = () => {
                   <div className="bg-blue-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <Calendar className="text-blue-600" size={32} />
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-gray-900">Réservez</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                  <h3 className="text-base md:text-lg lg:text-xl font-bold mb-2 md:mb-3 text-gray-900">Réservez</h3>
+                  <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
                     Choisissez date et horaire, puis payez en ligne en toute sécurité
                   </p>
                 </div>
@@ -333,8 +333,8 @@ const Home = () => {
                   <div className="bg-yellow-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <Users className="text-yellow-600" size={32} />
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-gray-900">Jouez</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                  <h3 className="text-base md:text-lg lg:text-xl font-bold mb-2 md:mb-3 text-gray-900">Jouez</h3>
+                  <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
                     Présentez-vous 15 minutes avant et profitez de votre match !
                   </p>
                 </div>
@@ -357,10 +357,10 @@ const Home = () => {
       <div className="bg-gray-900 py-10 md:py-12">
         <div className="container-custom px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-3">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 md:mb-3">
               Vous êtes propriétaire ?
             </h2>
-            <p className="text-base md:text-lg text-gray-400 mb-6 md:mb-8">
+            <p className="text-sm md:text-base lg:text-lg text-gray-400 mb-6 md:mb-8">
               Rejoignez notre plateforme et augmentez votre visibilité
             </p>
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 md:gap-4">
@@ -384,10 +384,10 @@ const Home = () => {
         <div className="container-custom px-4">
           {/* En-tête */}
           <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 md:mb-3">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 md:mb-3">
               Actualités & Conseils
             </h2>
-            <p className="text-base md:text-lg text-gray-600">
+            <p className="text-sm md:text-base lg:text-lg text-gray-600">
               Restez informé des dernières nouveautés du football au Sénégal
             </p>
           </div>
@@ -415,11 +415,11 @@ const Home = () => {
                     <span>Il y a 2 jours</span>
                   </div>
                   
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition">
+                  <h3 className="text-base md:text-lg lg:text-xl font-bold text-gray-900 mb-2 md:mb-3 group-hover:text-primary-600 transition">
                     Nouveau terrain inauguré à Dakar
                   </h3>
                   
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                  <p className="text-gray-600 text-xs md:text-sm mb-3 md:mb-4 line-clamp-3">
                     Galaxy Arena vient d'ouvrir ses portes avec des installations de dernière génération. Terrains synthétiques, éclairage LED et vestiaires premium.
                   </p>
                   
@@ -451,11 +451,11 @@ const Home = () => {
                     <span>Il y a 5 jours</span>
                   </div>
                   
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition">
+                  <h3 className="text-base md:text-lg lg:text-xl font-bold text-gray-900 mb-2 md:mb-3 group-hover:text-primary-600 transition">
                     5 conseils pour organiser un tournoi
                   </h3>
                   
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                  <p className="text-gray-600 text-xs md:text-sm mb-3 md:mb-4 line-clamp-3">
                     Découvrez nos meilleurs conseils pour organiser un tournoi de football réussi avec vos amis ou votre entreprise.
                   </p>
                   
@@ -487,11 +487,11 @@ const Home = () => {
                     <span>Il y a 1 semaine</span>
                   </div>
                   
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition">
+                  <h3 className="text-base md:text-lg lg:text-xl font-bold text-gray-900 mb-2 md:mb-3 group-hover:text-primary-600 transition">
                     Offre spéciale : -20% sur longue durée
                   </h3>
                   
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                  <p className="text-gray-600 text-xs md:text-sm mb-3 md:mb-4 line-clamp-3">
                     Réservez 3 heures ou plus et bénéficiez de 20% de réduction sur plusieurs terrains partenaires. Offre limitée !
                   </p>
                   
