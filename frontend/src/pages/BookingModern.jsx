@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { ChevronLeft, Calendar as CalendarIcon, Clock, CreditCard, CheckCircle, MapPin, Star, Phone, Mail, User as UserIcon } from 'lucide-react';
+import { ChevronLeft, Calendar as CalendarIcon, Clock, CreditCard, CheckCircle, MapPin, Star, Phone, Mail, User as UserIcon, Shield } from 'lucide-react';
 import { terrainAPI, reservationAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
