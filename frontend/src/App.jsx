@@ -9,8 +9,7 @@ import CookieBanner from './components/ui/CookieBanner';
 
 // Pages
 import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
+import Auth from './pages/Auth';
 import Search from './pages/Search';
 import TerrainDetails from './pages/TerrainDetails';
 import Dashboard from './pages/Dashboard';
@@ -98,8 +97,9 @@ function App() {
             <Routes>
               {/* Routes publiques */}
               <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/login" element={<Auth />} />
+              <Route path="/register" element={<Auth />} />
               <Route path="/terrains" element={<Search />} />
               <Route path="/terrains/:id" element={<TerrainDetails />} />
               <Route path="/teams" element={<Teams />} />
