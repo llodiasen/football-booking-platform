@@ -89,10 +89,29 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
-      <div className="w-full max-w-md">
-        {/* Card */}
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+    <div className="min-h-screen relative flex items-center justify-center py-12 px-4 overflow-hidden">
+      {/* Background Image avec overlay */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2940&auto=format&fit=crop"
+          alt="Football background"
+          className="w-full h-full object-cover"
+        />
+        {/* Overlay gradient pour lisibilité */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/95 via-gray-900/90 to-green-900/85"></div>
+        
+        {/* Effet de particules/grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      </div>
+
+      {/* Floating shapes decoratifs animés */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-green-600/20 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-green-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-emerald-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+
+      <div className="w-full max-w-md relative z-10">
+        {/* Card avec effet glassmorphism subtle */}
+        <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 overflow-hidden">
           
           {/* Tabs Header */}
           <div className="flex border-b border-gray-100">
@@ -100,7 +119,7 @@ const Auth = () => {
               onClick={() => setActiveTab('login')}
               className={`flex-1 py-4 text-sm font-semibold transition-all ${
                 activeTab === 'login'
-                  ? 'text-gray-900 border-b-2 border-gray-900 bg-white'
+                  ? 'text-green-600 border-b-2 border-green-600 bg-white'
                   : 'text-gray-500 hover:text-gray-700 bg-gray-50'
               }`}
             >
@@ -110,7 +129,7 @@ const Auth = () => {
               onClick={() => setActiveTab('register')}
               className={`flex-1 py-4 text-sm font-semibold transition-all ${
                 activeTab === 'register'
-                  ? 'text-gray-900 border-b-2 border-gray-900 bg-white'
+                  ? 'text-green-600 border-b-2 border-green-600 bg-white'
                   : 'text-gray-500 hover:text-gray-700 bg-gray-50'
               }`}
             >
@@ -148,7 +167,7 @@ const Auth = () => {
                       onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
                       required
                       placeholder="m@exemple.com"
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
+                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all text-sm"
                     />
                   </div>
 
@@ -172,7 +191,7 @@ const Auth = () => {
                       onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
                       required
                       placeholder="••••••••"
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
+                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all text-sm"
                     />
                   </div>
 
@@ -180,7 +199,7 @@ const Auth = () => {
                   <button
                     type="submit"
                     disabled={loginLoading}
-                    className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 rounded-xl transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loginLoading ? 'Connexion...' : 'Se connecter'}
                   </button>
@@ -251,7 +270,7 @@ const Auth = () => {
                         onChange={(e) => setRegisterData({ ...registerData, [e.target.name]: e.target.value })}
                         required
                         placeholder="Ali"
-                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
+                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all text-sm"
                       />
                     </div>
                     
@@ -267,7 +286,7 @@ const Auth = () => {
                         onChange={(e) => setRegisterData({ ...registerData, [e.target.name]: e.target.value })}
                         required
                         placeholder="Ndiaye"
-                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
+                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all text-sm"
                       />
                     </div>
                   </div>
@@ -285,7 +304,7 @@ const Auth = () => {
                       onChange={(e) => setRegisterData({ ...registerData, [e.target.name]: e.target.value })}
                       required
                       placeholder="m@exemple.com"
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
+                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all text-sm"
                     />
                   </div>
 
@@ -302,7 +321,7 @@ const Auth = () => {
                       onChange={(e) => setRegisterData({ ...registerData, [e.target.name]: e.target.value })}
                       required
                       placeholder="77 123 45 67"
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
+                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all text-sm"
                     />
                   </div>
 
@@ -320,7 +339,7 @@ const Auth = () => {
                       required
                       minLength={6}
                       placeholder="••••••••"
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
+                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all text-sm"
                     />
                     <p className="text-xs text-gray-500">Minimum 6 caractères</p>
                   </div>
@@ -335,7 +354,7 @@ const Auth = () => {
                       name="role"
                       value={registerData.role}
                       onChange={(e) => setRegisterData({ ...registerData, [e.target.name]: e.target.value })}
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
+                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all text-sm"
                     >
                       <option value="client">🎮 Client / Joueur</option>
                       <option value="owner">🏟️ Propriétaire de terrain</option>
@@ -357,7 +376,7 @@ const Auth = () => {
                         onChange={(e) => setRegisterData({ ...registerData, [e.target.name]: e.target.value })}
                         required
                         placeholder="Ex: Galaxy Arena"
-                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
+                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all text-sm"
                       />
                     </div>
                   )}
@@ -366,7 +385,7 @@ const Auth = () => {
                   <button
                     type="submit"
                     disabled={registerLoading}
-                    className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 rounded-xl transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+                    className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed mt-6"
                   >
                     {registerLoading ? 'Inscription...' : 'S\'inscrire'}
                   </button>
@@ -377,13 +396,13 @@ const Auth = () => {
         </div>
 
         {/* Footer Info */}
-        <p className="text-center text-xs text-gray-500 mt-6">
+        <p className="text-center text-xs text-white/70 mt-6 backdrop-blur-sm bg-white/5 py-3 px-4 rounded-xl border border-white/10">
           En vous connectant, vous acceptez nos{' '}
-          <a href="/terms" className="underline hover:text-gray-700">
+          <a href="/terms" className="underline hover:text-white transition-colors">
             Conditions d'utilisation
           </a>
           {' '}et notre{' '}
-          <a href="/privacy" className="underline hover:text-gray-700">
+          <a href="/privacy" className="underline hover:text-white transition-colors">
             Politique de confidentialité
           </a>
         </p>
