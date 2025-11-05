@@ -2,9 +2,6 @@ import { useState } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Mail, Lock, User, Phone } from 'lucide-react';
-import Button from '../components/ui/Button';
-import Input from '../components/ui/Input';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -71,109 +68,165 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Inscription</h2>
-          <p className="mt-2 text-gray-600">Créez votre compte gratuitement</p>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
+      <div className="w-full max-w-md">
+        {/* Card */}
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+          
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Créer un compte
+            </h1>
+            <p className="text-sm text-gray-600">
+              Inscrivez-vous gratuitement
+            </p>
+          </div>
 
-        <div className="bg-white shadow-lg rounded-lg p-8">
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <Input
-                label="Prénom"
-                type="text"
-                name="firstName"
-                icon={User}
-                value={formData.firstName}
+            {/* Nom et Prénom */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <label htmlFor="firstName" className="text-sm font-medium text-gray-900">
+                  Prénom
+                </label>
+                <input
+                  id="firstName"
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                  placeholder="Ali"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <label htmlFor="lastName" className="text-sm font-medium text-gray-900">
+                  Nom
+                </label>
+                <input
+                  id="lastName"
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                  placeholder="Ndiaye"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
+                />
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium text-gray-900">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 required
-              />
-              <Input
-                label="Nom"
-                type="text"
-                name="lastName"
-                icon={User}
-                value={formData.lastName}
-                onChange={handleChange}
-                required
+                placeholder="m@exemple.com"
+                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
               />
             </div>
 
-            <Input
-              label="Email"
-              type="email"
-              name="email"
-              icon={Mail}
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
+            {/* Téléphone */}
+            <div className="space-y-2">
+              <label htmlFor="phone" className="text-sm font-medium text-gray-900">
+                Téléphone
+              </label>
+              <input
+                id="phone"
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+                placeholder="77 123 45 67"
+                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
+              />
+            </div>
 
-            <Input
-              label="Téléphone"
-              type="tel"
-              name="phone"
-              icon={Phone}
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="+221771234567"
-              required
-            />
+            {/* Mot de passe */}
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-sm font-medium text-gray-900">
+                Mot de passe
+              </label>
+              <input
+                id="password"
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                minLength={6}
+                placeholder="••••••••"
+                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
+              />
+              <p className="text-xs text-gray-500">Minimum 6 caractères</p>
+            </div>
 
-            <Input
-              label="Mot de passe"
-              type="password"
-              name="password"
-              icon={Lock}
-              value={formData.password}
-              onChange={handleChange}
-              required
-              minLength={6}
-            />
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+            {/* Type de compte */}
+            <div className="space-y-2">
+              <label htmlFor="role" className="text-sm font-medium text-gray-900">
                 Type de compte
               </label>
               <select
+                id="role"
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
               >
-                <option value="client">Client / Joueur</option>
-                <option value="owner">Propriétaire de terrain</option>
-                <option value="team">Capitaine d'équipe</option>
+                <option value="client">🎮 Client / Joueur</option>
+                <option value="owner">🏟️ Propriétaire de terrain</option>
+                <option value="team">⚽ Capitaine d'équipe</option>
               </select>
             </div>
 
-            {/* Champ conditionnel pour les propriétaires */}
+            {/* Nom entreprise pour propriétaires */}
             {formData.role === 'owner' && (
-              <Input
-                label="Nom de l'entreprise"
-                type="text"
-                name="businessName"
-                icon={User}
-                value={formData.businessName}
-                onChange={handleChange}
-                placeholder="Ex: Galaxy Arena, Le Temple du Foot..."
-                required
-              />
+              <div className="space-y-2">
+                <label htmlFor="businessName" className="text-sm font-medium text-gray-900">
+                  Nom de l'entreprise
+                </label>
+                <input
+                  id="businessName"
+                  type="text"
+                  name="businessName"
+                  value={formData.businessName}
+                  onChange={handleChange}
+                  required
+                  placeholder="Ex: Galaxy Arena"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm"
+                />
+              </div>
             )}
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 rounded-xl transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+            >
               {loading ? 'Inscription...' : 'S\'inscrire'}
-            </Button>
+            </button>
           </form>
 
-          <div className="mt-6 text-center">
+          {/* Footer */}
+          <div className="mt-8 text-center">
             <p className="text-sm text-gray-600">
               Déjà un compte ?{' '}
               <Link 
                 to={redirectUrl ? `/login?redirect=${encodeURIComponent(redirectUrl)}` : '/login'} 
-                className="text-primary-600 hover:underline font-medium"
+                className="text-gray-900 hover:underline font-semibold"
               >
                 Se connecter
               </Link>
