@@ -21,8 +21,8 @@ const BookingModern = () => {
   
   const [formData, setFormData] = useState({
     date: searchParams.get('date') || '',
-    startTime: '',
-    endTime: '',
+    startTime: searchParams.get('startTime') || '',
+    endTime: searchParams.get('endTime') || '',
     paymentMethod: 'wave',
     notes: ''
   });
@@ -225,20 +225,10 @@ const BookingModern = () => {
                 2. Date et créneau horaire
               </h2>
 
-              {/* Sélection de date */}
-              {!formData.date && (
-                <div className="mb-6">
-                  <AvailabilityCalendar
-                    terrainId={terrainId}
-                    onDateSelect={(date) => setFormData({ ...formData, date })}
-                    selectedDate={formData.date}
-                  />
-                </div>
-              )}
-
-              {/* Date sélectionnée */}
-              {formData.date && (
-                <div className="mb-6">
+              {/* Si date ET créneau déjà sélectionnés (depuis page terrain) */}
+              {formData.date && formData.startTime && formData.endTime ? (
+                <div className="space-y-4">
+                  {/* Date sélectionnée */}
                   <div className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-xl">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
@@ -256,26 +246,90 @@ const BookingModern = () => {
                         </p>
                       </div>
                     </div>
-                    <button
-                      onClick={() => setFormData({ ...formData, date: '', startTime: '', endTime: '' })}
+                    <Link
+                      to={`/terrains/${terrainId}`}
                       className="text-sm text-green-600 hover:text-green-700 font-medium"
                     >
                       Modifier
-                    </button>
+                    </Link>
+                  </div>
+
+                  {/* Créneau sélectionné */}
+                  <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <Clock className="text-white" size={20} />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-600 font-medium">Créneau horaire</p>
+                        <p className="text-sm font-bold text-gray-900">
+                          {formData.startTime} - {formData.endTime}
+                        </p>
+                      </div>
+                    </div>
+                    <Link
+                      to={`/terrains/${terrainId}`}
+                      className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                    >
+                      Modifier
+                    </Link>
                   </div>
                 </div>
-              )}
+              ) : (
+                <>
+                  {/* Sélection de date */}
+                  {!formData.date && (
+                    <div className="mb-6">
+                      <AvailabilityCalendar
+                        terrainId={terrainId}
+                        onDateSelect={(date) => setFormData({ ...formData, date })}
+                        selectedDate={formData.date}
+                      />
+                    </div>
+                  )}
 
-              {/* Sélection de créneau */}
-              {formData.date && (
-                <div>
-                  <TimeSlotPicker
-                    terrain={terrain}
-                    selectedDate={formData.date}
-                    onSelectSlot={handleTimeSelect}
-                    selectedSlot={formData.startTime ? { startTime: formData.startTime, endTime: formData.endTime } : null}
-                  />
-                </div>
+                  {/* Date sélectionnée */}
+                  {formData.date && (
+                    <div className="mb-6">
+                      <div className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-xl">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
+                            <CalendarIcon className="text-white" size={20} />
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-600 font-medium">Date sélectionnée</p>
+                            <p className="text-sm font-bold text-gray-900">
+                              {new Date(formData.date).toLocaleDateString('fr-FR', { 
+                                weekday: 'long', 
+                                day: 'numeric', 
+                                month: 'long', 
+                                year: 'numeric' 
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => setFormData({ ...formData, date: '', startTime: '', endTime: '' })}
+                          className="text-sm text-green-600 hover:text-green-700 font-medium"
+                        >
+                          Modifier
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Sélection de créneau */}
+                  {formData.date && (
+                    <div>
+                      <TimeSlotPicker
+                        terrain={terrain}
+                        selectedDate={formData.date}
+                        onSelectSlot={handleTimeSelect}
+                        selectedSlot={formData.startTime ? { startTime: formData.startTime, endTime: formData.endTime } : null}
+                      />
+                    </div>
+                  )}
+                </>
               )}
             </div>
 

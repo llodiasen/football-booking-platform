@@ -3,11 +3,13 @@ import { Star, Flag, Calendar as CalendarIcon, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
 import AvailabilityCalendar from './AvailabilityCalendar';
+import TimeSlotPicker from '../reservation/TimeSlotPicker';
 
 const BookingCard = ({ terrain }) => {
   const navigate = useNavigate();
   const [bookingType, setBookingType] = useState('single'); // 'single' ou 'subscription'
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null); // { startTime, endTime }
   const [showCalendar, setShowCalendar] = useState(false);
   const calendarRef = useRef(null);
 
@@ -46,8 +48,12 @@ const BookingCard = ({ terrain }) => {
       bookingUrl = `/booking/${terrain._id}?type=subscription`;
     } else {
       // Réservation ponctuelle
-      if (selectedDate) {
-        bookingUrl = `/booking/${terrain._id}?type=single&date=${selectedDate}`;
+      if (selectedDate && selectedTimeSlot) {
+        // Date ET créneau sélectionnés
+        bookingUrl = `/booking/${terrain._id}?type=single&date=${selectedDate}&startTime=${selectedTimeSlot.startTime}&endTime=${selectedTimeSlot.endTime}`;
+      } else if (selectedDate) {
+        // Seulement la date sélectionnée (on reste sur la page pour choisir le créneau)
+        return; // Ne pas rediriger encore
       } else {
         bookingUrl = `/booking/${terrain._id}?type=single`;
       }
@@ -263,9 +269,18 @@ const BookingCard = ({ terrain }) => {
       {/* Bouton réserver */}
       <Button
         onClick={handleReserve}
-        className="w-full bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white font-semibold py-3.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+        disabled={bookingType === 'single' && selectedDate && !selectedTimeSlot}
+        className={`w-full bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white font-semibold py-3.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 ${
+          bookingType === 'single' && selectedDate && !selectedTimeSlot 
+            ? 'opacity-50 cursor-not-allowed' 
+            : ''
+        }`}
       >
-        Réserver
+        {bookingType === 'single' && selectedDate && selectedTimeSlot 
+          ? 'Continuer la réservation →' 
+          : bookingType === 'single' && selectedDate 
+          ? 'Sélectionnez un créneau' 
+          : 'Réserver'}
       </Button>
 
       {/* Note de paiement */}
@@ -273,17 +288,29 @@ const BookingCard = ({ terrain }) => {
         Aucun montant ne vous sera débité pour le moment
       </p>
 
-      {/* Information date sélectionnée */}
-      {selectedDate && (
+      {/* TimeSlotPicker si date sélectionnée */}
+      {selectedDate && bookingType === 'single' && (
         <>
           <div className="border-t border-gray-200 my-6"></div>
           
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <CalendarIcon size={16} className="text-green-600" />
-              <span className="text-sm font-semibold text-green-900">
-                Date sélectionnée
-              </span>
+          {/* Date sélectionnée */}
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <CalendarIcon size={16} className="text-green-600" />
+                <span className="text-sm font-semibold text-green-900">
+                  Date sélectionnée
+                </span>
+              </div>
+              <button
+                onClick={() => {
+                  setSelectedDate(null);
+                  setSelectedTimeSlot(null);
+                }}
+                className="text-xs text-green-700 hover:text-green-900 underline"
+              >
+                Modifier
+              </button>
             </div>
             <p className="text-sm text-green-800">
               {new Date(selectedDate).toLocaleDateString('fr-FR', { 
@@ -293,9 +320,21 @@ const BookingCard = ({ terrain }) => {
                 year: 'numeric' 
               })}
             </p>
-            <p className="text-xs text-green-700 mt-2">
-              Vous pourrez choisir vos créneaux horaires à l'étape suivante
-            </p>
+          </div>
+
+          {/* TimeSlotPicker */}
+          <div className="mb-4">
+            <label className="block text-xs font-semibold text-gray-900 mb-3">
+              CHOISIR UN CRÉNEAU HORAIRE
+            </label>
+            <TimeSlotPicker
+              terrain={terrain}
+              selectedDate={selectedDate}
+              onTimeSlotSelect={(startTime, endTime) => {
+                setSelectedTimeSlot({ startTime, endTime });
+              }}
+              selectedTimeSlot={selectedTimeSlot}
+            />
           </div>
         </>
       )}
