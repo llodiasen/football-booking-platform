@@ -48,20 +48,30 @@ const TimeSlotPicker = ({ terrain, selectedDate, onTimeSelect, selectedStartTime
     const [openHour, openMin] = hours.open.split(':').map(Number);
     const [closeHour, closeMin] = hours.close.split(':').map(Number);
     
-    const openMinutes = openHour * 60 + openMin;
-    const closeMinutes = closeHour * 60 + closeMin;
+    let openMinutes = openHour * 60 + openMin;
+    let closeMinutes = closeHour * 60 + closeMin;
+    
+    // Si l'heure de fermeture est inférieure à l'heure d'ouverture, on passe minuit
+    // Ex: ouverture 20:00, fermeture 02:00 → on ajoute 24h à la fermeture
+    if (closeMinutes <= openMinutes) {
+      closeMinutes += 24 * 60; // Ajouter 24 heures (1440 minutes)
+    }
     
     // Durée minimum de réservation (par défaut 1h = 60 min)
     const minDuration = (availabilityData.terrain.bookingRules?.minDuration || 1) * 60;
 
     for (let minutes = openMinutes; minutes + minDuration <= closeMinutes; minutes += minDuration) {
-      const hour = Math.floor(minutes / 60);
-      const min = minutes % 60;
+      // Calculer l'heure de début (gérer le passage à minuit)
+      const actualMinutes = minutes % (24 * 60);
+      const hour = Math.floor(actualMinutes / 60);
+      const min = actualMinutes % 60;
       const startTime = `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
       
+      // Calculer l'heure de fin (gérer le passage à minuit)
       const endMinutes = minutes + minDuration;
-      const endHour = Math.floor(endMinutes / 60);
-      const endMin = endMinutes % 60;
+      const actualEndMinutes = endMinutes % (24 * 60);
+      const endHour = Math.floor(actualEndMinutes / 60);
+      const endMin = actualEndMinutes % 60;
       const endTime = `${endHour.toString().padStart(2, '0')}:${endMin.toString().padStart(2, '0')}`;
 
       // Vérifier si ce créneau est disponible (réservations + blocages manuels)

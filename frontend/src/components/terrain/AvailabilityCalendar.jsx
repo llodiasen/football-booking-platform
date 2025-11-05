@@ -43,8 +43,16 @@ const AvailabilityCalendar = ({ terrainId, onDateSelect, selectedDate }) => {
         const hours = terrain.openingHours[dayName];
         
         if (hours && !hours.closed) {
-          const openMinutes = parseInt(hours.open.split(':')[0]) * 60;
-          const closeMinutes = parseInt(hours.close.split(':')[0]) * 60;
+          const [openHour, openMin] = hours.open.split(':').map(Number);
+          const [closeHour, closeMin] = hours.close.split(':').map(Number);
+          
+          let openMinutes = openHour * 60 + openMin;
+          let closeMinutes = closeHour * 60 + closeMin;
+          
+          // Si l'heure de fermeture est inférieure à l'heure d'ouverture, on passe minuit
+          if (closeMinutes <= openMinutes) {
+            closeMinutes += 24 * 60; // Ajouter 24 heures
+          }
           
           // Utiliser la durée min de réservation (par défaut 1h = 60 min)
           const slotDuration = (terrain.bookingRules?.minDuration || 1) * 60;
