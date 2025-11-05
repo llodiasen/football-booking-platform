@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { ChevronLeft, Calendar as CalendarIcon, Clock, CreditCard, CheckCircle, MapPin, Star, Phone, Mail, User as UserIcon, Shield } from 'lucide-react';
-import { terrainAPI, reservationAPI, paytechAPI } from '../services/api';
+import { terrainAPI, reservationAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import TimeSlotPicker from '../components/reservation/TimeSlotPicker';
 import AvailabilityCalendar from '../components/terrain/AvailabilityCalendar';
+import QRCodePayment from '../components/payment/QRCodePayment';
 
 const BookingModern = () => {
   const { terrainId } = useParams();
@@ -28,6 +29,8 @@ const BookingModern = () => {
   });
 
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
+  const [pendingReservation, setPendingReservation] = useState(null);
 
   useEffect(() => {
     loadTerrain();
@@ -103,7 +106,7 @@ const BookingModern = () => {
         return;
       }
 
-      // 1. Créer la réservation
+      // Créer la réservation avec statut "pending"
       const reservationData = {
         terrain: terrainId,
         date: formData.date,
@@ -119,49 +122,23 @@ const BookingModern = () => {
       const reservationResponse = await reservationAPI.create(reservationData);
       const reservation = reservationResponse.data.data;
 
-      // 2. En développement local, on confirme directement
-      // En production, on utilisera PayTech avec HTTPS
-      const isDevelopment = window.location.hostname === 'localhost';
+      // Sauvegarder la réservation et ouvrir le modal QR
+      setPendingReservation(reservation);
+      setShowQRModal(true);
+      setSubmitting(false);
 
-      if (isDevelopment) {
-        // MODE DEV : Confirmation directe sans PayTech (pour tester)
-        showSuccess('✅ Réservation créée avec succès ! (Mode développement)');
-        setTimeout(() => {
-          navigate('/dashboard?section=reservations');
-        }, 1500);
-      } else {
-        // MODE PRODUCTION : Paiement obligatoire avec PayTech
-        showSuccess('Réservation en cours... Redirection vers le paiement PayTech');
-        
-        try {
-          const paymentResponse = await paytechAPI.initiatePayment(reservation._id);
-          
-          if (paymentResponse.data.success && paymentResponse.data.data.redirect_url) {
-            // Rediriger vers PayTech pour le paiement
-            setTimeout(() => {
-              window.location.href = paymentResponse.data.data.redirect_url;
-            }, 1000);
-          } else {
-            throw new Error('URL de paiement PayTech non reçue');
-          }
-        } catch (paymentError) {
-          console.error('❌ Erreur initiation paiement PayTech:', paymentError);
-          
-          // Annuler la réservation si le paiement échoue
-          try {
-            await reservationAPI.cancel(reservation._id, 'Erreur initiation paiement');
-          } catch (cancelError) {
-            console.error('Erreur annulation réservation:', cancelError);
-          }
-          
-          showError('Impossible d\'initier le paiement. La réservation a été annulée. Veuillez réessayer.');
-          setSubmitting(false);
-        }
-      }
     } catch (error) {
       showError(error.response?.data?.message || 'Erreur lors de la réservation');
       setSubmitting(false);
     }
+  };
+
+  const handlePaymentConfirmed = () => {
+    setShowQRModal(false);
+    showSuccess('✅ Réservation enregistrée ! En attente de validation du propriétaire.');
+    setTimeout(() => {
+      navigate('/dashboard?section=reservations');
+    }, 1500);
   };
 
   const formatPrice = (price) => {
@@ -600,6 +577,19 @@ const BookingModern = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal QR Code Paiement */}
+      <QRCodePayment
+        isOpen={showQRModal}
+        onClose={() => {
+          setShowQRModal(false);
+          setPendingReservation(null);
+        }}
+        onConfirm={handlePaymentConfirmed}
+        terrain={terrain}
+        paymentMethod={formData.paymentMethod}
+        amount={priceCalc?.total || 0}
+      />
     </div>
   );
 };

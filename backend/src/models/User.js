@@ -66,6 +66,36 @@ const userSchema = new mongoose.Schema({
     approvedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
+    },
+    // Informations de paiement
+    paymentInfo: {
+      waveNumber: {
+        type: String,
+        trim: true,
+        default: null
+      },
+      orangeMoneyNumber: {
+        type: String,
+        trim: true,
+        default: null
+      },
+      freeMoneyNumber: {
+        type: String,
+        trim: true,
+        default: null
+      },
+      waveQRCode: {
+        type: String, // URL ou base64 de l'image QR code
+        default: null
+      },
+      orangeMoneyQRCode: {
+        type: String,
+        default: null
+      },
+      freeMoneyQRCode: {
+        type: String,
+        default: null
+      }
     }
   },
   createdAt: {
