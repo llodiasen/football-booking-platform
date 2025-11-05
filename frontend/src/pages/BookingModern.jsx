@@ -113,29 +113,38 @@ const BookingModern = () => {
       const isDevelopment = window.location.hostname === 'localhost';
 
       if (isDevelopment) {
-        // MODE DEV : Confirmation directe sans PayTech
-        showSuccess('Réservation créée avec succès ! (Mode développement - paiement simulé)');
+        // MODE DEV : Confirmation directe sans PayTech (pour tester)
+        showSuccess('✅ Réservation créée avec succès ! (Mode développement)');
         setTimeout(() => {
           navigate('/dashboard?section=reservations');
         }, 1500);
       } else {
-        // MODE PRODUCTION : Utiliser PayTech
+        // MODE PRODUCTION : Paiement obligatoire avec PayTech
+        showSuccess('Réservation en cours... Redirection vers le paiement PayTech');
+        
         try {
-          showSuccess('Réservation créée ! Redirection vers le paiement...');
           const paymentResponse = await paytechAPI.initiatePayment(reservation._id);
           
           if (paymentResponse.data.success && paymentResponse.data.data.redirect_url) {
             // Rediriger vers PayTech pour le paiement
-            window.location.href = paymentResponse.data.data.redirect_url;
+            setTimeout(() => {
+              window.location.href = paymentResponse.data.data.redirect_url;
+            }, 1000);
           } else {
-            throw new Error('URL de paiement non reçue');
+            throw new Error('URL de paiement PayTech non reçue');
           }
         } catch (paymentError) {
-          console.error('Erreur initiation paiement:', paymentError);
-          showError('Réservation créée mais erreur lors du paiement. Vous pouvez payer plus tard depuis votre tableau de bord.');
-          setTimeout(() => {
-            navigate('/dashboard?section=reservations');
-          }, 2000);
+          console.error('❌ Erreur initiation paiement PayTech:', paymentError);
+          
+          // Annuler la réservation si le paiement échoue
+          try {
+            await reservationAPI.cancel(reservation._id, 'Erreur initiation paiement');
+          } catch (cancelError) {
+            console.error('Erreur annulation réservation:', cancelError);
+          }
+          
+          showError('Impossible d\'initier le paiement. La réservation a été annulée. Veuillez réessayer.');
+          setSubmitting(false);
         }
       }
     } catch (error) {
@@ -370,7 +379,7 @@ const BookingModern = () => {
                 3. Mode de paiement
               </h2>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {/* Wave */}
                 <button
                   onClick={() => setFormData({ ...formData, paymentMethod: 'wave' })}
@@ -443,31 +452,6 @@ const BookingModern = () => {
                   {formData.paymentMethod === 'free_money' && (
                     <div className="absolute top-2 right-2">
                       <CheckCircle className="text-[#E3000F]" size={20} />
-                    </div>
-                  )}
-                </button>
-
-                {/* Espèces */}
-                <button
-                  onClick={() => setFormData({ ...formData, paymentMethod: 'cash' })}
-                  className={`group relative p-5 border-2 rounded-xl transition-all hover:shadow-md ${
-                    formData.paymentMethod === 'cash'
-                      ? 'border-green-600 bg-gradient-to-br from-green-50 to-green-25 shadow-md'
-                      : 'border-gray-200 hover:border-gray-300 bg-white'
-                  }`}
-                >
-                  <div className="mb-3 flex items-center justify-center">
-                    <div className="relative w-12 h-12">
-                      <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
-                        <span className="text-white font-black text-2xl">💵</span>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-sm font-bold text-gray-900">Espèces</p>
-                  <p className="text-xs text-gray-500 mt-1">Paiement direct</p>
-                  {formData.paymentMethod === 'cash' && (
-                    <div className="absolute top-2 right-2">
-                      <CheckCircle className="text-green-600" size={20} />
                     </div>
                   )}
                 </button>
