@@ -115,8 +115,14 @@ const reservationSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index unique pour éviter les réservations en double
-reservationSchema.index({ terrain: 1, date: 1, startTime: 1 }, { unique: true });
+// Index unique pour éviter les réservations en double (seulement pour les réservations actives)
+reservationSchema.index(
+  { terrain: 1, date: 1, startTime: 1 }, 
+  { 
+    unique: true,
+    partialFilterExpression: { status: { $in: ['pending', 'confirmed', 'completed'] } }
+  }
+);
 
 // Index pour les requêtes fréquentes
 reservationSchema.index({ client: 1, status: 1 });
