@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { ChevronLeft, Calendar as CalendarIcon, Clock, CreditCard, CheckCircle, MapPin, Star, Phone, Mail, User as UserIcon, Shield } from 'lucide-react';
-import { terrainAPI, reservationAPI } from '../services/api';
+import { terrainAPI, reservationAPI, paytechAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import TimeSlotPicker from '../components/reservation/TimeSlotPicker';
@@ -95,6 +95,7 @@ const BookingModern = () => {
     setSubmitting(true);
 
     try {
+      // 1. Créer la réservation
       const reservationData = {
         terrain: terrainId,
         date: formData.date,
@@ -104,14 +105,33 @@ const BookingModern = () => {
         notes: formData.notes
       };
 
-      const response = await reservationAPI.create(reservationData);
-      showSuccess('Réservation effectuée avec succès !');
-      navigate('/dashboard?section=reservations');
+      const reservationResponse = await reservationAPI.create(reservationData);
+      const reservation = reservationResponse.data.data;
+
+      showSuccess('Réservation créée ! Redirection vers le paiement...');
+
+      // 2. Initier le paiement avec PayTech
+      try {
+        const paymentResponse = await paytechAPI.initiatePayment(reservation._id);
+        
+        if (paymentResponse.data.success && paymentResponse.data.data.redirect_url) {
+          // Rediriger vers PayTech pour le paiement
+          window.location.href = paymentResponse.data.data.redirect_url;
+        } else {
+          throw new Error('URL de paiement non reçue');
+        }
+      } catch (paymentError) {
+        console.error('Erreur initiation paiement:', paymentError);
+        showError('Réservation créée mais erreur lors du paiement. Vous pouvez payer plus tard depuis votre tableau de bord.');
+        setTimeout(() => {
+          navigate('/dashboard?section=reservations');
+        }, 2000);
+      }
     } catch (error) {
       showError(error.response?.data?.message || 'Erreur lors de la réservation');
-    } finally {
       setSubmitting(false);
     }
+    // Note: Ne pas mettre setSubmitting(false) ici car on redirige vers PayTech
   };
 
   const formatPrice = (price) => {

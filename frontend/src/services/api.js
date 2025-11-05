@@ -91,5 +91,11 @@ export const teamAPI = {
   subscribe: (id, terrainId, plan) => api.post(`/teams/${id}/subscribe`, { terrainId, plan })
 };
 
+// PayTech API
+export const paytechAPI = {
+  initiatePayment: (reservationId) => api.post('/paytech/initiate', { reservationId }),
+  checkPaymentStatus: (token) => api.get(`/paytech/status/${token}`)
+};
+
 export default api;
 

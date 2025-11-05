@@ -20,6 +20,8 @@ import Teams from './pages/Teams';
 import TeamDetail from './pages/TeamDetail';
 import CreateTerrain from './pages/CreateTerrain';
 import BookingModern from './pages/BookingModern';
+import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentCancel from './pages/PaymentCancel';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -140,6 +142,10 @@ function App() {
                   </PrivateRoute>
                 } 
               />
+
+              {/* Payment Routes */}
+              <Route path="/payment/success" element={<PaymentSuccess />} />
+              <Route path="/payment/cancel" element={<PaymentCancel />} />
 
               {/* 404 */}
               <Route path="*" element={

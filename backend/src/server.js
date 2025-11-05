@@ -14,6 +14,7 @@ const terrainRoutes = require('./routes/terrains');
 const reservationRoutes = require('./routes/reservations');
 const paymentRoutes = require('./routes/payments');
 const teamRoutes = require('./routes/teams');
+const paytechRoutes = require('./routes/paytech');
 
 const app = express();
 
@@ -78,6 +79,7 @@ app.use('/api/reservations', reservationRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/paytech', paytechRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
