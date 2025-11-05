@@ -6,6 +6,7 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Toast from './components/ui/Toast';
 import CookieBanner from './components/ui/CookieBanner';
+import HelpCenter from './components/ui/HelpCenter';
 
 // Pages
 import Home from './pages/Home';
@@ -18,7 +19,7 @@ import MyReservations from './pages/MyReservations';
 import Teams from './pages/Teams';
 import TeamDetail from './pages/TeamDetail';
 import CreateTerrain from './pages/CreateTerrain';
-import Booking from './pages/Booking';
+import BookingModern from './pages/BookingModern';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -60,6 +61,7 @@ function App() {
     <div className="flex flex-col min-h-screen">
       <Toast />
       <CookieBanner />
+      <HelpCenter />
       
       {/* Routes Admin/Owner Dashboard sans Navbar/Footer */}
       {(isAdminRoute || isDashboardRoute) ? (
@@ -126,7 +128,7 @@ function App() {
                 path="/booking/:terrainId" 
                 element={
                   <PrivateRoute>
-                    <Booking />
+                    <BookingModern />
                   </PrivateRoute>
                 } 
               />
