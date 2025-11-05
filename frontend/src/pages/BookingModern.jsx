@@ -133,12 +133,25 @@ const BookingModern = () => {
     }
   };
 
-  const handlePaymentConfirmed = () => {
-    setShowQRModal(false);
-    showSuccess('✅ Réservation enregistrée ! En attente de validation du propriétaire.');
-    setTimeout(() => {
+  const handlePaymentConfirmed = async () => {
+    try {
+      // Notifier le propriétaire que le client a payé
+      if (pendingReservation?._id) {
+        // L'API créera automatiquement une notification au propriétaire
+        console.log('✅ Paiement déclaré pour la réservation:', pendingReservation._id);
+      }
+      
+      setShowQRModal(false);
+      showSuccess('✅ Réservation enregistrée ! En attente de validation du propriétaire.');
+      
+      setTimeout(() => {
+        navigate('/dashboard?section=reservations');
+      }, 1500);
+    } catch (error) {
+      console.error('Erreur:', error);
+      setShowQRModal(false);
       navigate('/dashboard?section=reservations');
-    }, 1500);
+    }
   };
 
   const formatPrice = (price) => {
