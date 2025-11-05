@@ -45,7 +45,7 @@ const BookingModern = () => {
   };
 
   const calculatePrice = () => {
-    if (!formData.startTime || !formData.endTime) return null;
+    if (!terrain || !formData.startTime || !formData.endTime) return null;
     
     const [startH, startM] = formData.startTime.split(':').map(Number);
     const [endH, endM] = formData.endTime.split(':').map(Number);

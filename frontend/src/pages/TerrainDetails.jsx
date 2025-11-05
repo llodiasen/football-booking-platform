@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   MapPin, Star, Share2, Heart, 
@@ -26,6 +26,7 @@ const TerrainDetails = () => {
   const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const mapSectionRef = useRef(null);
 
   useEffect(() => {
     loadTerrain();
@@ -91,6 +92,15 @@ const TerrainDetails = () => {
   const handleFavorite = () => {
     setIsFavorite(!isFavorite);
     showSuccess(isFavorite ? 'Retiré des favoris' : 'Ajouté aux favoris');
+  };
+
+  const scrollToMap = () => {
+    if (mapSectionRef.current) {
+      mapSectionRef.current.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+      });
+    }
   };
 
   if (loading) {
@@ -159,7 +169,10 @@ const TerrainDetails = () => {
               )}
               <div className="flex items-center gap-1.5">
                 <MapPin size={16} className="text-gray-600" />
-                <button className="font-semibold text-gray-900 underline hover:bg-gray-100 px-1 rounded">
+                <button 
+                  onClick={scrollToMap}
+                  className="font-semibold text-gray-900 underline hover:bg-gray-100 px-1 rounded transition-colors"
+                >
                   {terrain.address.city}, {terrain.address.region}, Sénégal
                 </button>
               </div>
@@ -352,7 +365,7 @@ const TerrainDetails = () => {
         </section>
 
         {/* Carte - CENTRÉE (même taille que les autres sections) */}
-        <section className="mt-4 pb-8 border-b border-gray-200">
+        <section ref={mapSectionRef} className="mt-4 pb-8 border-b border-gray-200">
           <h3 className="text-2xl font-bold text-gray-900 mb-2">
             Où se situe le terrain
           </h3>
