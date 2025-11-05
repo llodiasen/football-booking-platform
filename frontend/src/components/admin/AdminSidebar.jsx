@@ -3,30 +3,30 @@ import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Calendar, 
-  MapPin, 
-  CreditCard, 
+  MessageCircle,
+  BarChart3, 
   Users, 
-  Bell, 
-  HelpCircle, 
   Settings,
-  ChevronLeft,
-  ChevronRight,
-  Search
+  HelpCircle,
+  MoreVertical
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
-const AdminSidebar = ({ collapsed, setCollapsed }) => {
+const AdminSidebar = () => {
   const location = useLocation();
-  const [notifications] = useState(7);
+  const { user } = useAuth();
 
-  const menuItems = [
+  const mainMenuItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/admin' },
-    { icon: Calendar, label: 'Réservations', path: '/admin/reservations', badge: null },
-    { icon: MapPin, label: 'Terrains', path: '/admin/terrains' },
-    { icon: CreditCard, label: 'Paiements', path: '/admin/payments' },
-    { icon: Users, label: 'Clients', path: '/admin/customers' },
-    { icon: Bell, label: 'Notifications', path: '/admin/notifications', badge: notifications },
-    { icon: HelpCircle, label: 'Aide & Support', path: '/admin/support' },
-    { icon: Settings, label: 'Paramètres', path: '/admin/settings' }
+    { icon: Calendar, label: 'Orders', path: '/admin/reservations' },
+    { icon: MessageCircle, label: 'Chat', path: '/admin/chat' },
+    { icon: BarChart3, label: 'Analytics', path: '/admin/analytics' },
+    { icon: Users, label: 'Customers', path: '/admin/customers' }
+  ];
+
+  const preferencesItems = [
+    { icon: Settings, label: 'Settings', path: '/admin/settings' },
+    { icon: HelpCircle, label: 'Help', path: '/admin/help' }
   ];
 
   const isActive = (path) => {
@@ -37,96 +37,89 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
   };
 
   return (
-    <div className={`${collapsed ? 'w-20' : 'w-64'} bg-gray-900 min-h-screen text-white transition-all duration-300 flex flex-col fixed left-0 top-0 z-40`}>
+    <div className="w-72 bg-gray-50 min-h-screen flex flex-col fixed left-0 top-0 z-40 border-r border-gray-200">
       {/* Header Logo */}
-      <div className="p-6 flex items-center justify-between border-b border-gray-800">
-        {!collapsed && (
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">221</span>
-            </div>
-            <span className="font-bold text-lg">221FOOT Admin</span>
-          </div>
-        )}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
-        >
-          {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-        </button>
+      <div className="p-8 pb-6">
+        <h1 className="text-2xl font-bold text-purple-900">
+          221<span className="text-purple-600">FOOT</span>
+        </h1>
       </div>
 
-      {/* Search Bar */}
-      {!collapsed && (
-        <div className="p-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-            <input
-              type="text"
-              placeholder="Rechercher..."
-              className="w-full bg-gray-800 text-white pl-10 pr-4 py-2.5 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-            <kbd className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-0.5 bg-gray-700 text-gray-400 text-xs rounded">
-              F
-            </kbd>
+      {/* Main Menu */}
+      <nav className="flex-1 px-4">
+        <div className="mb-6">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-4">
+            MAIN MENU
+          </p>
+          <div className="space-y-1">
+            {mainMenuItems.map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.path);
+              
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                    active
+                      ? 'bg-purple-900 text-white shadow-lg'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <Icon size={20} />
+                  <span className="font-medium text-sm">{item.label}</span>
+                </Link>
+              );
+            })}
           </div>
         </div>
-      )}
 
-      {/* Navigation Menu */}
-      <nav className="flex-1 p-4 space-y-1">
-        {menuItems.map((item) => {
-          const Icon = item.icon;
-          const active = isActive(item.path);
-          
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all group relative ${
-                active
-                  ? 'bg-gray-800 text-white'
-                  : 'text-gray-400 hover:bg-gray-800 hover:text-white'
-              }`}
-              title={collapsed ? item.label : ''}
-            >
-              <Icon size={20} className={active ? 'text-green-500' : ''} />
-              {!collapsed && (
-                <>
-                  <span className="font-medium text-sm">{item.label}</span>
-                  {item.badge && (
-                    <span className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
-                      {item.badge}
-                    </span>
-                  )}
-                </>
-              )}
+        {/* Preferences */}
+        <div>
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-4">
+            PREFERENCES
+          </p>
+          <div className="space-y-1">
+            {preferencesItems.map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.path);
               
-              {/* Badge quand collapsed */}
-              {collapsed && item.badge && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
-                  {item.badge}
-                </span>
-              )}
-            </Link>
-          );
-        })}
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                    active
+                      ? 'bg-purple-900 text-white shadow-lg'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <Icon size={20} />
+                  <span className="font-medium text-sm">{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
       </nav>
 
-      {/* Footer User Info */}
-      {!collapsed && (
-        <div className="p-4 border-t border-gray-800">
-          <div className="flex items-center gap-3 px-3 py-2">
-            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center font-bold">
-              A
+      {/* Footer User Profile Card */}
+      <div className="p-4">
+        <div className="bg-white rounded-2xl p-4 shadow-sm relative">
+          <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+            <MoreVertical size={18} />
+          </button>
+          <div className="flex flex-col items-center text-center">
+            <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center font-bold text-white text-xl mb-3">
+              {user?.firstName?.charAt(0) || 'A'}
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-sm truncate">Admin 221FOOT</p>
-              <p className="text-xs text-gray-400 truncate">admin@221foot.sn</p>
-            </div>
+            <p className="font-bold text-gray-900 text-sm">
+              {user?.firstName || 'Admin'} {user?.lastName || 'User'}
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">Admin</p>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
