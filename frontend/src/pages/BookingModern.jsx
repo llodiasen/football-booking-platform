@@ -108,30 +108,40 @@ const BookingModern = () => {
       const reservationResponse = await reservationAPI.create(reservationData);
       const reservation = reservationResponse.data.data;
 
-      showSuccess('Réservation créée ! Redirection vers le paiement...');
+      // 2. En développement local, on confirme directement
+      // En production, on utilisera PayTech avec HTTPS
+      const isDevelopment = window.location.hostname === 'localhost';
 
-      // 2. Initier le paiement avec PayTech
-      try {
-        const paymentResponse = await paytechAPI.initiatePayment(reservation._id);
-        
-        if (paymentResponse.data.success && paymentResponse.data.data.redirect_url) {
-          // Rediriger vers PayTech pour le paiement
-          window.location.href = paymentResponse.data.data.redirect_url;
-        } else {
-          throw new Error('URL de paiement non reçue');
-        }
-      } catch (paymentError) {
-        console.error('Erreur initiation paiement:', paymentError);
-        showError('Réservation créée mais erreur lors du paiement. Vous pouvez payer plus tard depuis votre tableau de bord.');
+      if (isDevelopment) {
+        // MODE DEV : Confirmation directe sans PayTech
+        showSuccess('Réservation créée avec succès ! (Mode développement - paiement simulé)');
         setTimeout(() => {
           navigate('/dashboard?section=reservations');
-        }, 2000);
+        }, 1500);
+      } else {
+        // MODE PRODUCTION : Utiliser PayTech
+        try {
+          showSuccess('Réservation créée ! Redirection vers le paiement...');
+          const paymentResponse = await paytechAPI.initiatePayment(reservation._id);
+          
+          if (paymentResponse.data.success && paymentResponse.data.data.redirect_url) {
+            // Rediriger vers PayTech pour le paiement
+            window.location.href = paymentResponse.data.data.redirect_url;
+          } else {
+            throw new Error('URL de paiement non reçue');
+          }
+        } catch (paymentError) {
+          console.error('Erreur initiation paiement:', paymentError);
+          showError('Réservation créée mais erreur lors du paiement. Vous pouvez payer plus tard depuis votre tableau de bord.');
+          setTimeout(() => {
+            navigate('/dashboard?section=reservations');
+          }, 2000);
+        }
       }
     } catch (error) {
       showError(error.response?.data?.message || 'Erreur lors de la réservation');
       setSubmitting(false);
     }
-    // Note: Ne pas mettre setSubmitting(false) ici car on redirige vers PayTech
   };
 
   const formatPrice = (price) => {
