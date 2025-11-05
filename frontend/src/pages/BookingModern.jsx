@@ -360,26 +360,107 @@ const BookingModern = () => {
                 3. Mode de paiement
               </h2>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {[
-                  { value: 'wave', label: 'Wave', icon: '📱' },
-                  { value: 'orange_money', label: 'Orange Money', icon: '🍊' },
-                  { value: 'free_money', label: 'Free Money', icon: '💳' },
-                  { value: 'cash', label: 'Espèces', icon: '💵' }
-                ].map((method) => (
-                  <button
-                    key={method.value}
-                    onClick={() => setFormData({ ...formData, paymentMethod: method.value })}
-                    className={`p-4 border-2 rounded-xl transition-all ${
-                      formData.paymentMethod === method.value
-                        ? 'border-green-600 bg-green-50'
-                        : 'border-gray-200 hover:border-gray-300 bg-white'
-                    }`}
-                  >
-                    <div className="text-2xl mb-2">{method.icon}</div>
-                    <p className="text-sm font-semibold text-gray-900">{method.label}</p>
-                  </button>
-                ))}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {/* Wave */}
+                <button
+                  onClick={() => setFormData({ ...formData, paymentMethod: 'wave' })}
+                  className={`group relative p-5 border-2 rounded-xl transition-all hover:shadow-md ${
+                    formData.paymentMethod === 'wave'
+                      ? 'border-[#00D9E1] bg-gradient-to-br from-[#00D9E1]/10 to-[#00D9E1]/5 shadow-md'
+                      : 'border-gray-200 hover:border-gray-300 bg-white'
+                  }`}
+                >
+                  {/* Logo Wave stylisé */}
+                  <div className="mb-3 flex items-center justify-center">
+                    <div className="relative w-12 h-12">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#00D9E1] to-[#00B4BC] rounded-lg flex items-center justify-center">
+                        <span className="text-white font-black text-xl">W</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-sm font-bold text-gray-900">Wave</p>
+                  <p className="text-xs text-gray-500 mt-1">Mobile Money</p>
+                  {formData.paymentMethod === 'wave' && (
+                    <div className="absolute top-2 right-2">
+                      <CheckCircle className="text-[#00D9E1]" size={20} />
+                    </div>
+                  )}
+                </button>
+
+                {/* Orange Money */}
+                <button
+                  onClick={() => setFormData({ ...formData, paymentMethod: 'orange_money' })}
+                  className={`group relative p-5 border-2 rounded-xl transition-all hover:shadow-md ${
+                    formData.paymentMethod === 'orange_money'
+                      ? 'border-[#FF6600] bg-gradient-to-br from-[#FF6600]/10 to-[#FF6600]/5 shadow-md'
+                      : 'border-gray-200 hover:border-gray-300 bg-white'
+                  }`}
+                >
+                  <div className="mb-3 flex items-center justify-center">
+                    <div className="relative w-12 h-12">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#FF6600] to-[#FF8533] rounded-lg flex items-center justify-center">
+                        <span className="text-white font-black text-xl">OM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-sm font-bold text-gray-900">Orange Money</p>
+                  <p className="text-xs text-gray-500 mt-1">Mobile Money</p>
+                  {formData.paymentMethod === 'orange_money' && (
+                    <div className="absolute top-2 right-2">
+                      <CheckCircle className="text-[#FF6600]" size={20} />
+                    </div>
+                  )}
+                </button>
+
+                {/* Free Money */}
+                <button
+                  onClick={() => setFormData({ ...formData, paymentMethod: 'free_money' })}
+                  className={`group relative p-5 border-2 rounded-xl transition-all hover:shadow-md ${
+                    formData.paymentMethod === 'free_money'
+                      ? 'border-[#E3000F] bg-gradient-to-br from-[#E3000F]/10 to-[#E3000F]/5 shadow-md'
+                      : 'border-gray-200 hover:border-gray-300 bg-white'
+                  }`}
+                >
+                  <div className="mb-3 flex items-center justify-center">
+                    <div className="relative w-12 h-12">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#E3000F] to-[#FF1A2B] rounded-lg flex items-center justify-center">
+                        <span className="text-white font-black text-xl">FM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-sm font-bold text-gray-900">Free Money</p>
+                  <p className="text-xs text-gray-500 mt-1">Mobile Money</p>
+                  {formData.paymentMethod === 'free_money' && (
+                    <div className="absolute top-2 right-2">
+                      <CheckCircle className="text-[#E3000F]" size={20} />
+                    </div>
+                  )}
+                </button>
+
+                {/* Espèces */}
+                <button
+                  onClick={() => setFormData({ ...formData, paymentMethod: 'cash' })}
+                  className={`group relative p-5 border-2 rounded-xl transition-all hover:shadow-md ${
+                    formData.paymentMethod === 'cash'
+                      ? 'border-green-600 bg-gradient-to-br from-green-50 to-green-25 shadow-md'
+                      : 'border-gray-200 hover:border-gray-300 bg-white'
+                  }`}
+                >
+                  <div className="mb-3 flex items-center justify-center">
+                    <div className="relative w-12 h-12">
+                      <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                        <span className="text-white font-black text-2xl">💵</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-sm font-bold text-gray-900">Espèces</p>
+                  <p className="text-xs text-gray-500 mt-1">Paiement direct</p>
+                  {formData.paymentMethod === 'cash' && (
+                    <div className="absolute top-2 right-2">
+                      <CheckCircle className="text-green-600" size={20} />
+                    </div>
+                  )}
+                </button>
               </div>
 
               {/* Notes optionnelles */}
