@@ -25,8 +25,8 @@ const QRCodePayment = ({ isOpen, onClose, onConfirm, terrain, paymentMethod, amo
           icon: 'W',
           instructions: [
             'Ouvrez votre application Wave',
-            'Scannez le QR code ci-dessous OU envoyez au numéro affiché',
-            'Entrez le montant exact',
+            'Scannez le QR code ci-dessus',
+            'Entrez le montant exact : ' + amount + ' FCFA',
             'Validez le paiement',
             'Cliquez sur "J\'ai effectué le paiement" ci-dessous'
           ]
@@ -42,8 +42,8 @@ const QRCodePayment = ({ isOpen, onClose, onConfirm, terrain, paymentMethod, amo
           icon: 'OM',
           instructions: [
             'Ouvrez votre application Orange Money',
-            'Scannez le QR code ci-dessous OU envoyez au numéro affiché',
-            'Entrez le montant exact',
+            'Scannez le QR code ci-dessus',
+            'Entrez le montant exact : ' + amount + ' FCFA',
             'Validez le paiement',
             'Cliquez sur "J\'ai effectué le paiement" ci-dessous'
           ]
@@ -59,8 +59,8 @@ const QRCodePayment = ({ isOpen, onClose, onConfirm, terrain, paymentMethod, amo
           icon: 'FM',
           instructions: [
             'Ouvrez votre application Free Money',
-            'Scannez le QR code ci-dessous OU envoyez au numéro affiché',
-            'Entrez le montant exact',
+            'Scannez le QR code ci-dessus',
+            'Entrez le montant exact : ' + amount + ' FCFA',
             'Validez le paiement',
             'Cliquez sur "J\'ai effectué le paiement" ci-dessous'
           ]
@@ -131,45 +131,43 @@ const QRCodePayment = ({ isOpen, onClose, onConfirm, terrain, paymentMethod, amo
                 </p>
               </div>
 
-              {/* QR Code OU Numéro */}
+              {/* QR Code SEULEMENT (pas de numéro pour protéger le propriétaire) */}
               {details.qrCode ? (
                 <div className="mb-6">
                   <p className="text-sm font-semibold text-gray-700 mb-3 text-center">
-                    Scannez ce QR code
+                    Scannez ce QR code pour payer
                   </p>
                   <div className="flex justify-center">
                     <img 
                       src={details.qrCode} 
                       alt={`QR Code ${details.name}`}
-                      className="w-64 h-64 border-4 border-gray-200 rounded-2xl shadow-lg"
+                      className="w-72 h-72 border-4 border-gray-200 rounded-2xl shadow-lg"
                     />
                   </div>
+                  <p className="text-xs text-gray-500 text-center mt-3">
+                    📱 Utilisez votre app {details.name} pour scanner ce code
+                  </p>
                 </div>
               ) : (
-                <div className="mb-6">
-                  <p className="text-sm font-semibold text-gray-700 mb-3 text-center">
-                    Ou envoyez au numéro
-                  </p>
-                  <div className={`flex items-center justify-between p-4 border-2 ${details.borderColor} rounded-xl bg-gray-50`}>
-                    <span className="text-2xl font-bold text-gray-900 tracking-wide">
-                      {details.number}
-                    </span>
-                    <button
-                      onClick={handleCopyNumber}
-                      className={`flex items-center gap-2 px-4 py-2 ${details.bgColor} text-white rounded-lg hover:opacity-90 transition-opacity`}
-                    >
-                      {copied ? (
-                        <>
-                          <CheckCircle size={18} />
-                          Copié !
-                        </>
-                      ) : (
-                        <>
-                          <Copy size={18} />
-                          Copier
-                        </>
-                      )}
-                    </button>
+                <div className="mb-6 bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6">
+                  <div className="text-center">
+                    <AlertCircle className="text-yellow-600 mx-auto mb-3" size={48} />
+                    <p className="font-semibold text-yellow-900 mb-2">
+                      QR Code non configuré
+                    </p>
+                    <p className="text-sm text-yellow-700 mb-4">
+                      Le propriétaire n'a pas encore configuré son QR code {details.name}.
+                    </p>
+                    <div className="bg-white rounded-lg p-4 text-left">
+                      <p className="text-xs font-semibold text-gray-700 mb-2">
+                        🔒 Pour des raisons de sécurité :
+                      </p>
+                      <ul className="text-xs text-gray-600 space-y-1">
+                        <li>• Les numéros de téléphone ne sont pas affichés</li>
+                        <li>• Le propriétaire doit configurer son QR code</li>
+                        <li>• Cela protège sa vie privée</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               )}
@@ -213,16 +211,23 @@ const QRCodePayment = ({ isOpen, onClose, onConfirm, terrain, paymentMethod, amo
                 </button>
                 <button
                   onClick={onConfirm}
-                  className={`flex-1 px-6 py-3 ${details.bgColor} text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg`}
+                  disabled={!details.qrCode}
+                  className={`flex-1 px-6 py-3 ${details.bgColor} text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   J'ai effectué le paiement ✓
                 </button>
               </div>
 
               {/* Warning */}
-              <p className="text-xs text-gray-500 text-center mt-4">
-                ⚠️ Votre réservation sera confirmée après vérification du paiement par le propriétaire
-              </p>
+              {details.qrCode ? (
+                <p className="text-xs text-gray-500 text-center mt-4">
+                  ⚠️ Votre réservation sera confirmée après vérification du paiement par le propriétaire
+                </p>
+              ) : (
+                <p className="text-xs text-yellow-700 text-center mt-4">
+                  ⚠️ Vous ne pouvez pas continuer sans QR code. Contactez le propriétaire ou choisissez un autre terrain.
+                </p>
+              )}
             </div>
           </div>
         </div>
