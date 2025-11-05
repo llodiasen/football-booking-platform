@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search as SearchIcon, MapPin, Users, Calendar, Clock, Shield, Zap } from 'lucide-react';
 import Button from '../components/ui/Button';
-import HeroSlider from '../components/ui/HeroSlider';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -50,44 +49,40 @@ const Home = () => {
 
   return (
     <div>
-      {/* Hero Section - Responsive Mobile */}
-      <div className="relative min-h-[500px] md:min-h-[550px] flex items-center justify-center overflow-hidden">
-        {/* Image Slider Background */}
-        <HeroSlider
-          images={[
-            {
-              url: '/images/football-hero.webp',
-              alt: 'Terrain de football avec ballon',
-              fallbackColor: 'from-green-600 to-green-800'
-            },
-            {
-              url: '/images/terrain-5x5.jpg',
-              alt: 'Terrain de football 5x5',
-              fallbackColor: 'from-green-700 to-green-900'
-            },
-            {
-              url: '/images/terrain-7x7.webp',
-              alt: 'Terrain de football 7x7',
-              fallbackColor: 'from-green-600 to-green-800'
-            },
-            {
-              url: '/images/terrain-11x11.webp',
-              alt: 'Terrain de football 11x11',
-              fallbackColor: 'from-green-700 to-green-900'
-            }
-          ]}
-          autoPlayInterval={5000}
-        />
+      {/* Hero Section - Image fixe haute qualité */}
+      <div className="relative min-h-[450px] md:min-h-[550px] flex items-center justify-center overflow-hidden">
+        {/* Background Image HD avec overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1459865264687-595d652de67e?q=80&w=2940&auto=format&fit=crop"
+            alt="Terrain de football professionnel"
+            className="w-full h-full object-cover scale-105"
+          />
+          {/* Overlay gradient pour assombrir et contraste */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-green-900/70"></div>
+          
+          {/* Effet de grille subtile */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+        </div>
+
+        {/* Floating shapes */}
+        <div className="absolute top-20 left-10 w-96 h-96 bg-green-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-green-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
 
         {/* Content */}
-        <div className="container-custom relative z-10 py-8 px-4">
+        <div className="container-custom relative z-10 py-12 md:py-20 px-4">
           <div className="max-w-5xl mx-auto text-center">
-            {/* Main Title - Responsive */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3 md:mb-4 tracking-tight leading-tight drop-shadow-lg">
-              Réservez Votre Terrain
+            {/* Main Title - Font élégante */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 tracking-tight leading-[1.1] drop-shadow-2xl">
+              <span className="block bg-gradient-to-r from-white via-white to-green-200 bg-clip-text text-transparent">
+                Réservez Votre
+              </span>
+              <span className="block bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent mt-2">
+                Terrain de Foot
+              </span>
             </h1>
-            <p className="text-white/90 text-base md:text-lg lg:text-xl mb-6 md:mb-8 drop-shadow-md">
-              Des terrains de football partout au Sénégal 🇸🇳
+            <p className="text-white/90 text-sm md:text-base lg:text-lg mb-6 md:mb-8 drop-shadow-lg font-medium max-w-2xl mx-auto leading-relaxed">
+              Trouvez et réservez les meilleurs terrains de football partout au Sénégal 🇸🇳
             </p>
 
             {/* Search Bar - Responsive Mobile */}
@@ -126,7 +121,7 @@ const Home = () => {
                 {/* Bouton Rechercher - Full width sur mobile */}
                 <button
                   type="submit"
-                  className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 md:px-8 py-3 rounded-full transition-all shadow-md hover:shadow-lg text-sm md:text-base"
+                  className="bg-green-600 hover:bg-green-700 text-white font-semibold h-10 px-6 md:px-8 rounded-full transition-all shadow-md hover:shadow-lg text-sm"
                 >
                   Rechercher
                 </button>
@@ -164,13 +159,13 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Nos Terrains - Responsive Mobile */}
+      {/* Nos Terrains - Full Width Stretched */}
       <div className="py-8 md:py-12">
-        <div className="container-custom px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <div className="w-full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
             
             {/* Terrain 5x5 - Responsive */}
-            <Link to="/terrains?size=5x5" className="group cursor-pointer relative overflow-hidden rounded-xl h-[280px] md:h-[380px]">
+            <Link to="/terrains?size=5x5" className="group cursor-pointer relative overflow-hidden h-[280px] md:h-[400px]">
               {/* Image de fond */}
               <div className="absolute inset-0 bg-[url('/images/terrain-5x5.jpg')] bg-cover bg-center transform group-hover:scale-110 transition-transform duration-700"></div>
               
@@ -203,7 +198,7 @@ const Home = () => {
             </Link>
 
             {/* Terrain 7x7 - Responsive */}
-            <Link to="/terrains?size=7x7" className="group cursor-pointer relative overflow-hidden rounded-xl h-[280px] md:h-[380px]">
+            <Link to="/terrains?size=7x7" className="group cursor-pointer relative overflow-hidden h-[280px] md:h-[400px]">
               {/* Image de fond */}
               <div className="absolute inset-0 bg-[url('/images/terrain-7x7.webp')] bg-cover bg-center transform group-hover:scale-110 transition-transform duration-700"></div>
               
@@ -236,7 +231,7 @@ const Home = () => {
             </Link>
 
             {/* Terrain 11x11 - Responsive */}
-            <Link to="/terrains?size=11x11" className="group cursor-pointer relative overflow-hidden rounded-xl h-[280px] md:h-[380px]">
+            <Link to="/terrains?size=11x11" className="group cursor-pointer relative overflow-hidden h-[280px] md:h-[400px]">
               {/* Image de fond */}
               <div className="absolute inset-0 bg-[url('/images/terrain-11x11.webp')] bg-cover bg-center transform group-hover:scale-110 transition-transform duration-700"></div>
               
@@ -353,26 +348,38 @@ const Home = () => {
         </div>
       </div>
 
-      {/* CTA Propriétaires - Responsive */}
-      <div className="bg-gray-900 py-10 md:py-12">
-        <div className="container-custom px-4">
+      {/* CTA Propriétaires - Avec image HD */}
+      <div className="relative overflow-hidden py-16 md:py-20">
+        {/* Background Image HD */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1556056504-5c7696c4c28d?q=80&w=2940&auto=format&fit=crop"
+            alt="Terrain de football professionnel"
+            className="w-full h-full object-cover"
+          />
+          {/* Overlay sombre pour contraste */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/70 to-green-900/70"></div>
+        </div>
+
+        {/* Content */}
+        <div className="container-custom px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 md:mb-3">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
               Vous êtes propriétaire ?
             </h2>
-            <p className="text-sm md:text-base lg:text-lg text-gray-400 mb-6 md:mb-8">
+            <p className="text-lg md:text-xl text-white/90 mb-10 leading-relaxed">
               Rejoignez notre plateforme et augmentez votre visibilité
             </p>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 md:gap-4">
-              <Link to="/register" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full sm:w-auto bg-primary-600 hover:bg-primary-700">
-                  Inscrire Mon Terrain
-                </Button>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4">
+              <Link to="/register?role=owner" className="w-full sm:w-auto">
+                <button className="w-full sm:w-auto h-12 px-8 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl text-base" style={{ backgroundColor: '#15803d' }}>
+                  Inscrire mon terrain
+                </button>
               </Link>
               <Link to="/terrains" className="w-full sm:w-auto">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto border-gray-600 text-gray-300 hover:bg-gray-800">
+                <button className="w-full sm:w-auto h-12 px-8 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-semibold rounded-xl transition-all border border-white/30 text-base">
                   En savoir plus
-                </Button>
+                </button>
               </Link>
             </div>
           </div>

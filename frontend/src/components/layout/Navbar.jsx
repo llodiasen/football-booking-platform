@@ -67,12 +67,13 @@ const Navbar = () => {
 
             {/* Right Side */}
             <div className="flex items-center gap-6">
-              {/* Devenir propriétaire */}
+              {/* Louer mon terrain */}
               <Link 
                 to="/register?role=owner"
-                className="hidden md:block text-sm font-semibold text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-full transition-colors"
+                className="hidden md:flex items-center gap-2 text-sm font-semibold bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded-full transition-all shadow-sm hover:shadow-md"
+                style={{ backgroundColor: '#15803d' }}
               >
-                Devenir propriétaire
+                Louer mon terrain
               </Link>
 
               {/* Globe */}
@@ -141,7 +142,7 @@ const Navbar = () => {
                       </>
                     ) : (
                       <>
-                        {/* Devenir propriétaire (mis en avant) */}
+                        {/* Louer mon terrain (mis en avant) */}
                         <Link
                           to="/register?role=owner"
                           className="block px-4 py-3 hover:bg-gray-50 transition-colors"
@@ -150,7 +151,7 @@ const Navbar = () => {
                           <div className="flex items-start gap-3">
                             <div className="flex-1">
                               <div className="font-semibold text-gray-900 mb-1">
-                                Devenir propriétaire
+                                Louer mon terrain
                               </div>
                               <div className="text-xs text-gray-600">
                                 Ajoutez votre terrain et gagnez des revenus supplémentaires, c'est facile.

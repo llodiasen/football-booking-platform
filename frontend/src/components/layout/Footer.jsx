@@ -4,7 +4,7 @@ import Logo from '../ui/Logo';
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-300">
+    <footer className="bg-[#15803d] text-gray-100" style={{ backgroundColor: '#15803d' }}>
       <div className="container-custom py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Logo & Contact */}
@@ -12,20 +12,20 @@ const Footer = () => {
             <div className="mb-4">
               <Logo variant="white" />
             </div>
-            <p className="text-sm mb-4 text-gray-400">
+            <p className="text-sm mb-4 text-white/80">
               Plateforme de réservation de terrains de football au Sénégal 🇸🇳
             </p>
             <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2">
-                <Clock size={16} className="text-green-400" />
+              <div className="flex items-center gap-2 text-white">
+                <Clock size={16} className="text-white/70" />
                 <span>Lun-Dim: 24h/24</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Phone size={16} className="text-green-400" />
+              <div className="flex items-center gap-2 text-white">
+                <Phone size={16} className="text-white/70" />
                 <span>+221 77 XXX XX XX</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Mail size={16} className="text-green-400" />
+              <div className="flex items-center gap-2 text-white">
+                <Mail size={16} className="text-white/70" />
                 <span>contact@221foot.sn</span>
               </div>
             </div>
@@ -34,7 +34,7 @@ const Footer = () => {
           {/* Navigation */}
           <div>
             <h3 className="text-white font-bold text-base mb-4 uppercase tracking-wide">Navigation</h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-sm text-white/90">
               <li>
                 <Link to="/" className="hover:text-green-400 transition">
                   Accueil
