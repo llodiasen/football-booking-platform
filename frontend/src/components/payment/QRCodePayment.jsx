@@ -11,6 +11,12 @@ const QRCodePayment = ({ isOpen, onClose, onConfirm, terrain, paymentMethod, amo
   const owner = terrain?.owner;
   const paymentInfo = owner?.ownerProfile?.paymentInfo;
 
+  // Debug: Afficher les données reçues
+  console.log('🔍 QRCodePayment - Owner:', owner);
+  console.log('🔍 QRCodePayment - OwnerProfile:', owner?.ownerProfile);
+  console.log('🔍 QRCodePayment - PaymentInfo:', paymentInfo);
+  console.log('🔍 QRCodePayment - Wave QR Code:', paymentInfo?.waveQRCode ? 'EXISTE (longueur: ' + paymentInfo.waveQRCode.length + ')' : 'NON TROUVÉ');
+
   // Déterminer les infos de paiement selon la méthode
   const getPaymentDetails = () => {
     switch (paymentMethod) {
