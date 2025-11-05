@@ -82,7 +82,10 @@ const HelpCenter = () => {
 
       {/* Modal Popup */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+          onClick={() => setIsOpen(false)}
+        >
           <div 
             className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
@@ -100,10 +103,14 @@ const HelpCenter = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => setIsOpen(false)}
-                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsOpen(false);
+                  }}
+                  className="p-2 hover:bg-white/20 rounded-lg transition-colors flex-shrink-0"
+                  title="Fermer"
                 >
-                  <X size={24} />
+                  <X size={24} className="text-white" />
                 </button>
               </div>
 
