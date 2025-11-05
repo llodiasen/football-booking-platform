@@ -135,17 +135,36 @@ exports.createReservation = async (req, res) => {
     }
 
     // Vérifier qu'il n'y a pas de conflit horaire
-    const existingReservation = await Reservation.findOne({
+    // 1. Vérifier si l'utilisateur actuel a déjà une réservation pending sur ce créneau
+    const userPendingReservation = await Reservation.findOne({
       terrain,
       date: reservationDate,
       startTime,
+      client: req.user.id,
+      status: 'pending'
+    });
+
+    // Si l'utilisateur a déjà une réservation pending, on l'annule et on en crée une nouvelle
+    if (userPendingReservation) {
+      console.log('🔄 Réservation pending existante trouvée, annulation...');
+      userPendingReservation.status = 'cancelled';
+      userPendingReservation.cancellationReason = 'Nouvelle tentative de réservation';
+      await userPendingReservation.save();
+    }
+
+    // 2. Vérifier les conflits avec d'autres utilisateurs
+    const conflictingReservation = await Reservation.findOne({
+      terrain,
+      date: reservationDate,
+      startTime,
+      client: { $ne: req.user.id }, // Pas le même utilisateur
       status: { $in: ['pending', 'confirmed'] }
     });
 
-    if (existingReservation) {
+    if (conflictingReservation) {
       return res.status(400).json({
         success: false,
-        message: 'Ce créneau horaire est déjà réservé'
+        message: 'Ce créneau horaire est déjà réservé par un autre client'
       });
     }
 
