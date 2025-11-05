@@ -51,8 +51,8 @@ const TimeSlotPicker = ({ terrain, selectedDate, onTimeSelect, selectedStartTime
     const openMinutes = openHour * 60 + openMin;
     const closeMinutes = closeHour * 60 + closeMin;
     
-    // Durée minimum de réservation (par défaut 2h = 120 min)
-    const minDuration = (availabilityData.terrain.bookingRules?.minDuration || 2) * 60;
+    // Durée minimum de réservation (par défaut 1h = 60 min)
+    const minDuration = (availabilityData.terrain.bookingRules?.minDuration || 1) * 60;
 
     for (let minutes = openMinutes; minutes + minDuration <= closeMinutes; minutes += minDuration) {
       const hour = Math.floor(minutes / 60);

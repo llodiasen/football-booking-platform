@@ -46,8 +46,8 @@ const AvailabilityCalendar = ({ terrainId, onDateSelect, selectedDate }) => {
           const openMinutes = parseInt(hours.open.split(':')[0]) * 60;
           const closeMinutes = parseInt(hours.close.split(':')[0]) * 60;
           
-          // Utiliser la durée min de réservation (par défaut 2h = 120 min)
-          const slotDuration = (terrain.bookingRules?.minDuration || 2) * 60;
+          // Utiliser la durée min de réservation (par défaut 1h = 60 min)
+          const slotDuration = (terrain.bookingRules?.minDuration || 1) * 60;
           const totalSlots = Math.floor((closeMinutes - openMinutes) / slotDuration);
           
           const reservedSlots = reservationsByDate[dateString]?.length || 0;
