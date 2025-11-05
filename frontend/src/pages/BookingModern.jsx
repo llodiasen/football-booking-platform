@@ -324,8 +324,9 @@ const BookingModern = () => {
                       <TimeSlotPicker
                         terrain={terrain}
                         selectedDate={formData.date}
-                        onSelectSlot={handleTimeSelect}
-                        selectedSlot={formData.startTime ? { startTime: formData.startTime, endTime: formData.endTime } : null}
+                        onTimeSelect={handleTimeSelect}
+                        selectedStartTime={formData.startTime}
+                        selectedEndTime={formData.endTime}
                       />
                     </div>
                   )}
