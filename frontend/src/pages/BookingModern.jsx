@@ -118,18 +118,13 @@ const BookingModern = () => {
     return new Intl.NumberFormat('fr-FR').format(price);
   };
 
-  if (loading) {
+  if (loading || !terrain) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600"></div>
-      </div>
-    );
-  }
-
-  if (!terrain) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-600">Terrain introuvable</p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Chargement...</p>
+        </div>
       </div>
     );
   }
@@ -167,9 +162,9 @@ const BookingModern = () => {
                     <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                     <input
                       type="text"
-                      value={user?.firstName || ''}
+                      value={user?.firstName || 'Chargement...'}
                       disabled
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm"
+                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900"
                     />
                   </div>
                 </div>
@@ -182,9 +177,9 @@ const BookingModern = () => {
                     <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                     <input
                       type="text"
-                      value={user?.lastName || ''}
+                      value={user?.lastName || 'Chargement...'}
                       disabled
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm"
+                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900"
                     />
                   </div>
                 </div>
@@ -201,9 +196,9 @@ const BookingModern = () => {
                       type="tel"
                       value={user?.phone || ''}
                       disabled
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm"
+                      className="w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900"
                     />
-                    <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600" size={18} />
+                    {user?.phone && <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600" size={18} />}
                   </div>
                 </div>
                 
@@ -217,7 +212,7 @@ const BookingModern = () => {
                       type="email"
                       value={user?.email || ''}
                       disabled
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm"
+                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900"
                     />
                   </div>
                 </div>
