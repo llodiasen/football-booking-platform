@@ -246,12 +246,12 @@ const BookingModern = () => {
                         </p>
                       </div>
                     </div>
-                    <Link
-                      to={`/terrains/${terrainId}`}
-                      className="text-sm text-green-600 hover:text-green-700 font-medium"
+                    <button
+                      onClick={() => setFormData({ ...formData, date: '', startTime: '', endTime: '' })}
+                      className="text-sm text-green-600 hover:text-green-700 font-medium underline"
                     >
                       Modifier
-                    </Link>
+                    </button>
                   </div>
 
                   {/* Créneau sélectionné */}
@@ -267,12 +267,12 @@ const BookingModern = () => {
                         </p>
                       </div>
                     </div>
-                    <Link
-                      to={`/terrains/${terrainId}`}
-                      className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                    <button
+                      onClick={() => setFormData({ ...formData, startTime: '', endTime: '' })}
+                      className="text-sm text-blue-600 hover:text-blue-700 font-medium underline"
                     >
                       Modifier
-                    </Link>
+                    </button>
                   </div>
                 </div>
               ) : (
