@@ -144,7 +144,13 @@ const BookingModern = () => {
       setShowQRModal(false);
       showSuccess('✅ Réservation enregistrée ! En attente de validation du propriétaire.');
       
+      // Vérifier que le user est bien authentifié
+      const token = localStorage.getItem('token');
+      console.log('🔍 Token présent:', !!token);
+      console.log('🔍 User:', user);
+      
       setTimeout(() => {
+        console.log('🔄 Redirection vers /dashboard?section=reservations');
         navigate('/dashboard?section=reservations');
       }, 1500);
     } catch (error) {
