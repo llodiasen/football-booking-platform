@@ -2,6 +2,27 @@ const Notification = require('../models/Notification');
 
 class NotificationService {
   
+  // Créer une notification générique
+  async createNotification({ recipientId, type, title, message, link, relatedEntity }) {
+    try {
+      const notification = new Notification({
+        recipient: recipientId,
+        type: type || 'system_message',
+        title,
+        message,
+        link: link || '/dashboard',
+        relatedEntity: relatedEntity || null
+      });
+
+      await notification.save();
+      console.log('✅ Notification créée:', title);
+      return notification;
+    } catch (error) {
+      console.error('❌ Erreur création notification:', error);
+      return null;
+    }
+  }
+  
   // Créer une notification pour une nouvelle réservation
   async createReservationNotification(reservation) {
     try {

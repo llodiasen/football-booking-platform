@@ -366,6 +366,40 @@ exports.cancelReservation = async (req, res) => {
 
     await reservation.save();
 
+    // Populer les données pour la notification
+    await reservation.populate('terrain', 'name');
+    await reservation.populate('client', 'firstName lastName');
+
+    // Si c'est le PROPRIÉTAIRE qui annule, notifier le CLIENT
+    if (isOwner && !isClient) {
+      await notificationService.createNotification({
+        recipientId: reservation.client._id,
+        type: 'reservation_cancelled',
+        title: '❌ Réservation annulée',
+        message: `Votre réservation pour ${reservation.terrain.name} le ${new Date(reservation.date).toLocaleDateString('fr-FR')} de ${reservation.startTime} à ${reservation.endTime} a été annulée par le propriétaire.`,
+        link: '/dashboard?section=reservations',
+        relatedEntity: {
+          id: reservation._id,
+          type: 'Reservation'
+        }
+      });
+    }
+
+    // Si c'est le CLIENT qui annule, notifier le PROPRIÉTAIRE
+    if (isClient && !isOwner) {
+      await notificationService.createNotification({
+        recipientId: terrain.owner,
+        type: 'reservation_cancelled',
+        title: '❌ Réservation annulée',
+        message: `${reservation.client.firstName} ${reservation.client.lastName} a annulé sa réservation pour ${reservation.terrain.name} le ${new Date(reservation.date).toLocaleDateString('fr-FR')}.`,
+        link: '/dashboard?section=reservations',
+        relatedEntity: {
+          id: reservation._id,
+          type: 'Reservation'
+        }
+      });
+    }
+
     res.json({
       success: true,
       message: 'Réservation annulée avec succès',
@@ -415,6 +449,23 @@ exports.confirmReservation = async (req, res) => {
     reservation.confirmedAt = new Date();
     reservation.confirmedBy = req.user.id;
     await reservation.save();
+
+    // Populer les données pour la notification
+    await reservation.populate('terrain', 'name');
+    await reservation.populate('client', 'firstName lastName');
+
+    // Créer une notification pour le client
+    await notificationService.createNotification({
+      recipientId: reservation.client._id,
+      type: 'reservation_confirmed',
+      title: '✅ Réservation confirmée !',
+      message: `Votre réservation pour ${reservation.terrain.name} le ${new Date(reservation.date).toLocaleDateString('fr-FR')} de ${reservation.startTime} à ${reservation.endTime} a été confirmée par le propriétaire.`,
+      link: '/dashboard?section=reservations',
+      relatedEntity: {
+        id: reservation._id,
+        type: 'Reservation'
+      }
+    });
 
     res.json({
       success: true,
