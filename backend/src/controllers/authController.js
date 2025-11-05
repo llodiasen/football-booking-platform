@@ -176,9 +176,35 @@ exports.updateProfile = async (req, res) => {
       }
     });
 
-    // Si propriétaire, permettre la mise à jour du businessName
-    if (req.user.role === 'owner' && req.body.ownerProfile?.businessName) {
-      updates['ownerProfile.businessName'] = req.body.ownerProfile.businessName;
+    // Si propriétaire, permettre la mise à jour du businessName et paymentInfo
+    if (req.user.role === 'owner') {
+      if (req.body.ownerProfile?.businessName) {
+        updates['ownerProfile.businessName'] = req.body.ownerProfile.businessName;
+      }
+      
+      // Mise à jour des informations de paiement
+      if (req.body.ownerProfile?.paymentInfo) {
+        const paymentInfo = req.body.ownerProfile.paymentInfo;
+        
+        if (paymentInfo.waveNumber !== undefined) {
+          updates['ownerProfile.paymentInfo.waveNumber'] = paymentInfo.waveNumber;
+        }
+        if (paymentInfo.orangeMoneyNumber !== undefined) {
+          updates['ownerProfile.paymentInfo.orangeMoneyNumber'] = paymentInfo.orangeMoneyNumber;
+        }
+        if (paymentInfo.freeMoneyNumber !== undefined) {
+          updates['ownerProfile.paymentInfo.freeMoneyNumber'] = paymentInfo.freeMoneyNumber;
+        }
+        if (paymentInfo.waveQRCode !== undefined) {
+          updates['ownerProfile.paymentInfo.waveQRCode'] = paymentInfo.waveQRCode;
+        }
+        if (paymentInfo.orangeMoneyQRCode !== undefined) {
+          updates['ownerProfile.paymentInfo.orangeMoneyQRCode'] = paymentInfo.orangeMoneyQRCode;
+        }
+        if (paymentInfo.freeMoneyQRCode !== undefined) {
+          updates['ownerProfile.paymentInfo.freeMoneyQRCode'] = paymentInfo.freeMoneyQRCode;
+        }
+      }
     }
 
     const user = await User.findByIdAndUpdate(
