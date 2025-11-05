@@ -8,7 +8,7 @@ class PayTechService {
     this.mode = process.env.PAYTECH_MODE || 'test';
     this.successUrl = process.env.PAYTECH_SUCCESS_URL || 'http://localhost:5173/payment/success';
     this.cancelUrl = process.env.PAYTECH_CANCEL_URL || 'http://localhost:5173/payment/cancel';
-    this.ipnUrl = process.env.PAYTECH_IPN_URL || 'http://localhost:5000/api/payments/paytech/callback';
+    this.ipnUrl = process.env.PAYTECH_IPN_URL || 'http://localhost:5000/api/paytech/callback';
   }
 
   /**
