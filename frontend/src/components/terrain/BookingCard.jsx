@@ -11,6 +11,7 @@ const BookingCard = ({ terrain }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null); // { startTime, endTime }
   const [showCalendar, setShowCalendar] = useState(false);
+  const [showTimeSlotModal, setShowTimeSlotModal] = useState(false);
   const calendarRef = useRef(null);
 
   // Fermer le calendrier si clic en dehors
@@ -52,14 +53,35 @@ const BookingCard = ({ terrain }) => {
         // Date ET créneau sélectionnés
         bookingUrl = `/booking/${terrain._id}?type=single&date=${selectedDate}&startTime=${selectedTimeSlot.startTime}&endTime=${selectedTimeSlot.endTime}`;
       } else if (selectedDate) {
-        // Seulement la date sélectionnée (on reste sur la page pour choisir le créneau)
-        return; // Ne pas rediriger encore
+        // Seulement la date sélectionnée (ouvrir modal pour choisir le créneau)
+        setShowTimeSlotModal(true);
+        return;
       } else {
         bookingUrl = `/booking/${terrain._id}?type=single`;
       }
     }
 
     // Si non connecté, rediriger vers login avec URL de retour
+    if (!token) {
+      navigate(`/login?redirect=${encodeURIComponent(bookingUrl)}`);
+    } else {
+      navigate(bookingUrl);
+    }
+  };
+
+  const handleTimeSlotSelect = (timeSlot) => {
+    setSelectedTimeSlot(timeSlot);
+  };
+
+  const handleConfirmTimeSlot = () => {
+    if (!selectedTimeSlot) return;
+    
+    setShowTimeSlotModal(false);
+    
+    // Vérifier si l'utilisateur est connecté
+    const token = localStorage.getItem('token');
+    const bookingUrl = `/booking/${terrain._id}?type=single&date=${selectedDate}&startTime=${selectedTimeSlot.startTime}&endTime=${selectedTimeSlot.endTime}`;
+    
     if (!token) {
       navigate(`/login?redirect=${encodeURIComponent(bookingUrl)}`);
     } else {
@@ -269,18 +291,9 @@ const BookingCard = ({ terrain }) => {
       {/* Bouton réserver */}
       <Button
         onClick={handleReserve}
-        disabled={bookingType === 'single' && selectedDate && !selectedTimeSlot}
-        className={`w-full bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white font-semibold py-3.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 ${
-          bookingType === 'single' && selectedDate && !selectedTimeSlot 
-            ? 'opacity-50 cursor-not-allowed' 
-            : ''
-        }`}
+        className="w-full bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white font-semibold py-3.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
       >
-        {bookingType === 'single' && selectedDate && selectedTimeSlot 
-          ? 'Continuer la réservation →' 
-          : bookingType === 'single' && selectedDate 
-          ? 'Sélectionnez un créneau' 
-          : 'Réserver'}
+        Réserver
       </Button>
 
       {/* Note de paiement */}
@@ -288,62 +301,89 @@ const BookingCard = ({ terrain }) => {
         Aucun montant ne vous sera débité pour le moment
       </p>
 
-      {/* TimeSlotPicker si date sélectionnée */}
-      {selectedDate && bookingType === 'single' && (
-        <>
-          <div className="border-t border-gray-200 my-6"></div>
-          
-          {/* Date sélectionnée */}
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <CalendarIcon size={16} className="text-green-600" />
-                <span className="text-sm font-semibold text-green-900">
-                  Date sélectionnée
-                </span>
-              </div>
-              <button
-                onClick={() => {
-                  setSelectedDate(null);
-                  setSelectedTimeSlot(null);
-                }}
-                className="text-xs text-green-700 hover:text-green-900 underline"
-              >
-                Modifier
-              </button>
-            </div>
-            <p className="text-sm text-green-800">
-              {new Date(selectedDate).toLocaleDateString('fr-FR', { 
-                weekday: 'long',
-                day: 'numeric', 
-                month: 'long', 
-                year: 'numeric' 
-              })}
-            </p>
-          </div>
-
-          {/* TimeSlotPicker */}
-          <div className="mb-4">
-            <label className="block text-xs font-semibold text-gray-900 mb-3">
-              CHOISIR UN CRÉNEAU HORAIRE
-            </label>
-            <TimeSlotPicker
-              terrain={terrain}
-              selectedDate={selectedDate}
-              onTimeSlotSelect={(startTime, endTime) => {
-                setSelectedTimeSlot({ startTime, endTime });
-              }}
-              selectedTimeSlot={selectedTimeSlot}
-            />
-          </div>
-        </>
-      )}
-
       {/* Signaler */}
       <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm mt-6 mx-auto transition-colors">
         <Flag size={16} />
         Signaler cette annonce
       </button>
+
+      {/* Modal TimeSlotPicker */}
+      {showTimeSlotModal && (
+        <>
+          {/* Overlay */}
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 z-50 backdrop-blur-sm"
+            onClick={() => setShowTimeSlotModal(false)}
+          />
+          
+          {/* Modal */}
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4">
+              <div 
+                className="relative bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Header */}
+                <div className="sticky top-0 bg-white border-b border-gray-200 px-8 py-6 z-10">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900">Choisir un créneau horaire</h2>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {selectedDate && new Date(selectedDate).toLocaleDateString('fr-FR', { 
+                          weekday: 'long',
+                          day: 'numeric', 
+                          month: 'long', 
+                          year: 'numeric' 
+                        })}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setShowTimeSlotModal(false)}
+                      className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    >
+                      <X size={24} className="text-gray-600" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-8 overflow-y-auto max-h-[calc(90vh-200px)]">
+                  <TimeSlotPicker
+                    terrain={terrain}
+                    selectedDate={selectedDate}
+                    onTimeSelect={handleTimeSlotSelect}
+                    selectedStartTime={selectedTimeSlot?.startTime}
+                    selectedEndTime={selectedTimeSlot?.endTime}
+                  />
+                </div>
+
+                {/* Footer */}
+                <div className="sticky bottom-0 bg-white border-t border-gray-200 px-8 py-6">
+                  <div className="flex items-center justify-between">
+                    <button
+                      onClick={() => setShowTimeSlotModal(false)}
+                      className="px-6 py-3 text-gray-700 font-medium rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      onClick={handleConfirmTimeSlot}
+                      disabled={!selectedTimeSlot}
+                      className={`px-8 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white font-semibold rounded-lg shadow-lg transition-all ${
+                        selectedTimeSlot 
+                          ? 'hover:from-pink-600 hover:to-red-600 hover:shadow-xl' 
+                          : 'opacity-50 cursor-not-allowed'
+                      }`}
+                    >
+                      Continuer la réservation →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
