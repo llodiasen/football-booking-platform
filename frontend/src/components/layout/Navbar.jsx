@@ -76,10 +76,25 @@ const Navbar = () => {
                 Louer mon terrain
               </Link>
 
-              {/* Globe */}
-              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                <Globe size={18} className="text-gray-700" />
-              </button>
+              {/* Sélecteur de langue avec drapeaux */}
+              <div className="relative group">
+                <button className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 rounded-full transition-colors">
+                  <span className="text-xl">🇫🇷</span>
+                  <span className="hidden md:inline text-sm font-medium text-gray-700">FR</span>
+                </button>
+                
+                {/* Dropdown */}
+                <div className="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-100 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                  <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors">
+                    <span className="text-xl">🇫🇷</span>
+                    <span className="text-sm font-medium text-gray-900">Français</span>
+                  </button>
+                  <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors">
+                    <span className="text-xl">🇬🇧</span>
+                    <span className="text-sm font-medium text-gray-900">English</span>
+                  </button>
+                </div>
+              </div>
 
               {/* User Menu Button (Hamburger + Profile) */}
               <div className="relative" ref={menuRef}>

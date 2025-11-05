@@ -70,8 +70,8 @@ const Home = () => {
         <div className="absolute bottom-20 right-10 w-80 h-80 bg-green-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
 
         {/* Content */}
-        <div className="container-custom relative z-10 py-12 md:py-20 px-4">
-          <div className="max-w-5xl mx-auto text-center">
+        <div className="relative z-10 py-12 md:py-20 px-4">
+          <div className="max-w-6xl mx-auto text-center">
             {/* Main Title - Font élégante */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 tracking-tight leading-[1.1] drop-shadow-2xl">
               <span className="block bg-gradient-to-r from-white via-white to-green-200 bg-clip-text text-transparent">
@@ -160,7 +160,7 @@ const Home = () => {
       </div>
 
       {/* Nos Terrains - Full Width Stretched */}
-      <div className="py-8 md:py-12">
+      <div className="pb-8 md:pb-12">
         <div className="w-full">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
             
@@ -272,7 +272,7 @@ const Home = () => {
         {/* Ligne décorative */}
         <div className="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-green-200 to-transparent"></div>
 
-        <div className="container-custom relative z-10 px-4">
+        <div className="relative z-10 px-4 md:px-8 lg:px-12">
           <div className="text-center mb-10 md:mb-16">
             <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 md:mb-4">
               Comment ça marche ?
@@ -282,57 +282,68 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
             {/* Étape 1 */}
-            <div className="relative">
-              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
-                <div className="text-center">
-                  <div className="bg-green-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <SearchIcon className="text-green-600" size={32} />
-                  </div>
-                  <h3 className="text-base md:text-lg lg:text-xl font-bold mb-2 md:mb-3 text-gray-900">Recherchez</h3>
-                  <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
-                    Trouvez le terrain parfait près de chez vous avec nos filtres avancés
-                  </p>
+            <div className="relative bg-white border-r border-gray-100 p-8 hover:bg-gray-50 transition-all group">
+              <div className="text-center">
+                <div className="bg-green-50 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <SearchIcon className="text-green-600" size={28} />
                 </div>
-              </div>
-              {/* Flèche */}
-              <div className="hidden md:block absolute top-1/2 -right-6 text-primary-300 text-3xl font-bold">
-                →
+                <div className="mb-4">
+                  <span className="text-xs font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full">ÉTAPE 1</span>
+                </div>
+                <h3 className="text-lg font-bold mb-3 text-gray-900">Recherchez</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  Trouvez le terrain parfait près de chez vous
+                </p>
               </div>
             </div>
 
             {/* Étape 2 */}
-            <div className="relative">
-              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
-                <div className="text-center">
-                  <div className="bg-blue-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Calendar className="text-blue-600" size={32} />
-                  </div>
-                  <h3 className="text-base md:text-lg lg:text-xl font-bold mb-2 md:mb-3 text-gray-900">Réservez</h3>
-                  <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
-                    Choisissez date et horaire, puis payez en ligne en toute sécurité
-                  </p>
+            <div className="relative bg-white border-r border-gray-100 p-8 hover:bg-gray-50 transition-all group">
+              <div className="text-center">
+                <div className="bg-blue-50 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <Calendar className="text-blue-600" size={28} />
                 </div>
-              </div>
-              {/* Flèche */}
-              <div className="hidden md:block absolute top-1/2 -right-6 text-primary-300 text-3xl font-bold">
-                →
+                <div className="mb-4">
+                  <span className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">ÉTAPE 2</span>
+                </div>
+                <h3 className="text-lg font-bold mb-3 text-gray-900">Choisissez</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  Sélectionnez votre date et créneau horaire
+                </p>
               </div>
             </div>
 
             {/* Étape 3 */}
-            <div>
-              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
-                <div className="text-center">
-                  <div className="bg-yellow-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Users className="text-yellow-600" size={32} />
-                  </div>
-                  <h3 className="text-base md:text-lg lg:text-xl font-bold mb-2 md:mb-3 text-gray-900">Jouez</h3>
-                  <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
-                    Présentez-vous 15 minutes avant et profitez de votre match !
-                  </p>
+            <div className="relative bg-white border-r border-gray-100 p-8 hover:bg-gray-50 transition-all group">
+              <div className="text-center">
+                <div className="bg-purple-50 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <Shield className="text-purple-600" size={28} />
                 </div>
+                <div className="mb-4">
+                  <span className="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">ÉTAPE 3</span>
+                </div>
+                <h3 className="text-lg font-bold mb-3 text-gray-900">Payez</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  Réglez en ligne en toute sécurité
+                </p>
+              </div>
+            </div>
+
+            {/* Étape 4 */}
+            <div className="relative bg-white p-8 hover:bg-gray-50 transition-all group">
+              <div className="text-center">
+                <div className="bg-yellow-50 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <Users className="text-yellow-600" size={28} />
+                </div>
+                <div className="mb-4">
+                  <span className="text-xs font-bold text-yellow-600 bg-yellow-50 px-3 py-1 rounded-full">ÉTAPE 4</span>
+                </div>
+                <h3 className="text-lg font-bold mb-3 text-gray-900">Jouez !</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  Présentez-vous et profitez de votre match
+                </p>
               </div>
             </div>
           </div>
