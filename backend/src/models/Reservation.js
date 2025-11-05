@@ -62,7 +62,7 @@ const reservationSchema = new mongoose.Schema({
   },
   paymentMethod: {
     type: String,
-    enum: ['wave', 'orange_money', 'free_money', 'cash'],
+    enum: ['wave', 'orange_money', 'free_money'],
     required: [true, 'Méthode de paiement requise']
   },
   paymentId: {
@@ -94,6 +94,15 @@ const reservationSchema = new mongoose.Schema({
     ref: 'User'
   },
   completedAt: Date,
+  paymentReference: {
+    type: String,
+    default: null
+  },
+  paytechToken: {
+    type: String,
+    default: null
+  },
+  paidAt: Date,
   createdAt: {
     type: Date,
     default: Date.now

@@ -95,12 +95,23 @@ const BookingModern = () => {
     setSubmitting(true);
 
     try {
+      // Calculer la durée et le prix
+      const price = calculatePrice();
+      if (!price) {
+        showError('Erreur de calcul du prix');
+        setSubmitting(false);
+        return;
+      }
+
       // 1. Créer la réservation
       const reservationData = {
         terrain: terrainId,
         date: formData.date,
         startTime: formData.startTime,
         endTime: formData.endTime,
+        duration: price.durationHours,
+        totalPrice: price.total,
+        finalPrice: price.total,
         paymentMethod: formData.paymentMethod,
         notes: formData.notes
       };
