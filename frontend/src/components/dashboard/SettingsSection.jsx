@@ -12,6 +12,7 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react';
+import PaymentSettings from '../owner/PaymentSettings';
 
 const SettingsSection = () => {
   const { user, updateUser } = useAuth();
@@ -398,8 +399,15 @@ const SettingsSection = () => {
         </div>
       </div>
 
+      {/* Informations de paiement (Propriétaires uniquement) */}
+      {user?.role === 'owner' && (
+        <div className="mt-8">
+          <PaymentSettings user={user} onUpdate={updateUser} />
+        </div>
+      )}
+
       {/* Danger Zone */}
-      <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6">
+      <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6 mt-8">
         <h3 className="text-lg font-bold text-red-900 mb-2">⚠️ Zone Dangereuse</h3>
         <p className="text-sm text-red-700 mb-4">
           Les actions ci-dessous sont irréversibles. Procédez avec prudence.
