@@ -11,7 +11,8 @@ import {
   Search,
   Users,
   Bell,
-  MessageCircle
+  MessageCircle,
+  X
 } from 'lucide-react';
 import { messageAPI } from '../../services/api';
 

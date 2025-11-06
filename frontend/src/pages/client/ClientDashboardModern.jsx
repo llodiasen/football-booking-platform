@@ -157,7 +157,13 @@ const ClientDashboardModern = () => {
   if (loading) {
     return (
       <div className="flex h-screen">
-        <ClientSidebar collapsed={collapsed} setCollapsed={setCollapsed} user={user} />
+        <ClientSidebar 
+          collapsed={collapsed} 
+          setCollapsed={setCollapsed} 
+          user={user}
+          mobileMenuOpen={mobileMenuOpen}
+          setMobileMenuOpen={setMobileMenuOpen}
+        />
         <div className={`flex-1 ${collapsed ? 'md:ml-20' : 'md:ml-64'} flex items-center justify-center bg-gray-50`}>
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600"></div>
         </div>
