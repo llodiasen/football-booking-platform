@@ -191,18 +191,18 @@ const ClientDashboardModern = () => {
         {/* Header - Mobile optimisé */}
         <div className="bg-white border-b border-gray-200 sticky top-0 z-30">
           <div className="px-3 sm:px-6 lg:px-8 py-3 sm:py-4">
-            {/* Version Mobile : Une seule ligne compacte */}
-            <div className="flex items-center justify-between gap-2 md:hidden">
-              {/* Gauche : Menu */}
+            {/* Version Mobile : Une seule ligne ultra-compacte */}
+            <div className="flex items-center justify-between md:hidden">
+              {/* Gauche : Menu hamburger */}
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
               >
-                <Menu size={24} className="text-gray-700" />
+                <Menu size={22} className="text-gray-700" />
               </button>
 
-              {/* Droite : Actions */}
-              <div className="flex items-center gap-2">
+              {/* Droite : Actions - Tous les éléments sur la même ligne */}
+              <div className="flex items-center gap-1.5">
                 {/* Bouton Créer */}
                 <div className="relative create-menu-container">
                   <button
@@ -381,6 +381,20 @@ const ClientDashboardModern = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Titre de section - Mobile seulement (en dessous du header) */}
+        <div className="md:hidden bg-white px-4 py-3 border-b border-gray-100">
+          <h1 className="text-lg font-bold text-gray-900">
+            {section === 'overview' && 'Vue d\'ensemble'}
+            {section === 'reservations' && 'Mes Réservations'}
+            {section === 'favorites' && 'Mes Favoris'}
+            {section === 'notifications' && 'Notifications'}
+            {section === 'messages' && 'Messages'}
+            {section === 'teams' && 'Mes Équipes'}
+            {section === 'profile' && 'Mon Profil'}
+            {section === 'settings' && 'Paramètres'}
+          </h1>
         </div>
 
         {/* Content */}
