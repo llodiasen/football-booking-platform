@@ -79,10 +79,14 @@ const ClientSidebar = ({ collapsed, setCollapsed, user, mobileMenuOpen = false, 
           </div>
         )}
         <button
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={() => {
+            setMobileMenuOpen(false); // Fermer sur mobile
+            setCollapsed(!collapsed); // Toggle sur desktop
+          }}
           className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
         >
-          {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+          <span className="md:hidden"><X size={20} /></span>
+          <span className="hidden md:inline">{collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}</span>
         </button>
       </div>
 
