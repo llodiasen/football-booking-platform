@@ -1,8 +1,41 @@
+import { useState } from 'react';
 import { Shield, MessageCircle, Clock, Star } from 'lucide-react';
 import Button from '../ui/Button';
+import MessageModal from '../messages/MessageModal';
+import { messageAPI } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
-const OwnerProfile = ({ owner }) => {
+const OwnerProfile = ({ owner, terrain }) => {
+  const { isAuthenticated, user } = useAuth();
+  const navigate = useNavigate();
+  const [showMessageModal, setShowMessageModal] = useState(false);
+
   if (!owner) return null;
+
+  const handleSendMessage = async (messageData) => {
+    await messageAPI.send({
+      recipientId: owner._id,
+      terrainId: terrain?._id,
+      subject: messageData.subject,
+      message: messageData.message
+    });
+  };
+
+  const handleMessageClick = () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
+    // Ne pas pouvoir s'envoyer un message à soi-même
+    if (user?._id === owner._id) {
+      alert('Vous ne pouvez pas vous envoyer un message à vous-même');
+      return;
+    }
+
+    setShowMessageModal(true);
+  };
 
   const yearsActive = owner.createdAt 
     ? new Date().getFullYear() - new Date(owner.createdAt).getFullYear()
@@ -67,7 +100,9 @@ const OwnerProfile = ({ owner }) => {
             <Button
               variant="outline"
               className="w-full border-2 border-gray-900 text-gray-900 font-semibold hover:bg-gray-50"
+              onClick={handleMessageClick}
             >
+              <MessageCircle size={18} className="mr-2" />
               Envoyer un message
             </Button>
           </div>
@@ -138,6 +173,15 @@ const OwnerProfile = ({ owner }) => {
           </div>
         </div>
       </div>
+
+      {/* Modal de message */}
+      {showMessageModal && (
+        <MessageModal
+          terrain={{ ...terrain, owner }}
+          onClose={() => setShowMessageModal(false)}
+          onSend={handleSendMessage}
+        />
+      )}
     </section>
   );
 };

@@ -78,6 +78,42 @@ const MyReservations = () => {
     );
   };
 
+  // Vérifier si une réservation peut être annulée (non passée et plus de 2h avant le début)
+  const canCancelReservation = (reservation) => {
+    // Vérifier le statut
+    if (reservation.status !== 'pending' && reservation.status !== 'confirmed') {
+      return false;
+    }
+
+    // Vérifier si la date est passée ou moins de 2h avant le début
+    const reservationDateTime = new Date(reservation.date);
+    const [startHour, startMin] = reservation.startTime.split(':').map(Number);
+    reservationDateTime.setHours(startHour, startMin, 0, 0);
+    
+    const now = new Date();
+    const hoursUntilReservation = (reservationDateTime - now) / (1000 * 60 * 60);
+    
+    // Peut annuler seulement si plus de 2 heures avant le début
+    return hoursUntilReservation > 2;
+  };
+
+  // Obtenir le message d'impossibilité d'annulation
+  const getCancellationMessage = (reservation) => {
+    const reservationDateTime = new Date(reservation.date);
+    const [startHour, startMin] = reservation.startTime.split(':').map(Number);
+    reservationDateTime.setHours(startHour, startMin, 0, 0);
+    
+    const now = new Date();
+    const hoursUntilReservation = (reservationDateTime - now) / (1000 * 60 * 60);
+    
+    if (hoursUntilReservation <= 0) {
+      return "Cette réservation est terminée";
+    } else if (hoursUntilReservation <= 2) {
+      return "Annulation impossible (moins de 2h avant le début)";
+    }
+    return null;
+  };
+
   const filteredReservations = reservations.filter(res => {
     if (filter === 'all') return true;
     if (filter === 'upcoming') return res.status === 'confirmed' || res.status === 'pending';
@@ -95,19 +131,19 @@ const MyReservations = () => {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen py-12">
-      <div className="container-custom">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+    <div className="bg-gray-50 min-h-screen py-6 sm:py-12">
+      <div className="container-custom px-4 sm:px-6">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             Mes Réservations
           </h1>
-          <p className="text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600">
             Gérez et consultez toutes vos réservations
           </p>
         </div>
 
         {/* Filtres */}
-        <div className="flex gap-3 mb-8">
+        <div className="flex gap-2 sm:gap-3 mb-6 sm:mb-8 overflow-x-auto pb-2">
           {[
             { key: 'all', label: 'Toutes' },
             { key: 'upcoming', label: 'À venir' },
@@ -117,7 +153,7 @@ const MyReservations = () => {
             <button
               key={key}
               onClick={() => setFilter(key)}
-              className={`px-4 py-2 rounded-lg font-medium transition ${
+              className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition whitespace-nowrap text-sm ${
                 filter === key
                   ? 'bg-primary-600 text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -145,10 +181,10 @@ const MyReservations = () => {
         ) : (
           <div className="space-y-4">
             {filteredReservations.map((reservation) => (
-              <Card key={reservation._id} className="p-6">
-                <div className="flex items-start gap-4">
+              <Card key={reservation._id} className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row items-start gap-4">
                   {/* Image Terrain */}
-                  <div className="w-32 h-32 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden">
+                  <div className="w-full sm:w-32 h-32 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden">
                     {reservation.terrain?.images?.[0]?.url ? (
                       <img
                         src={reservation.terrain.images[0].url}
@@ -163,24 +199,24 @@ const MyReservations = () => {
                   </div>
 
                   {/* Infos */}
-                  <div className="flex-1">
+                  <div className="flex-1 w-full">
                     <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-1">
+                      <div className="flex-1">
+                        <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1">
                           {reservation.terrain?.name}
                         </h3>
                         <p className="text-sm text-gray-600">
                           {reservation.terrain?.address.city}
                         </p>
                       </div>
-                      <div>
+                      <div className="ml-2">
                         {getStatusBadge(reservation.status)}
                       </div>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-4 mt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-4">
                       <div className="flex items-center gap-2 text-sm text-gray-700">
-                        <Calendar size={16} />
+                        <Calendar size={16} className="flex-shrink-0" />
                         <span>
                           {new Date(reservation.date).toLocaleDateString('fr-FR', {
                             day: 'numeric',
@@ -191,41 +227,51 @@ const MyReservations = () => {
                       </div>
 
                       <div className="flex items-center gap-2 text-sm text-gray-700">
-                        <Clock size={16} />
+                        <Clock size={16} className="flex-shrink-0" />
                         <span>{reservation.startTime} - {reservation.endTime}</span>
                       </div>
 
                       <div className="flex items-center gap-2 text-sm text-gray-700">
-                        <DollarSign size={16} />
+                        <DollarSign size={16} className="flex-shrink-0" />
                         <span className="font-semibold">{reservation.finalPrice.toLocaleString()} FCFA</span>
                       </div>
                     </div>
 
                     {/* Actions */}
-                    <div className="flex gap-3 mt-6">
-                      <Link to={`/terrains/${reservation.terrain._id}`}>
-                        <Button variant="outline" size="sm">
-                          <Eye size={16} className="mr-2" />
-                          Voir le terrain
-                        </Button>
-                      </Link>
+                    <div className="mt-4 sm:mt-6">
+                      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-start">
+                        <Link to={`/terrains/${reservation.terrain._id}`} className="flex-1 sm:flex-initial">
+                          <Button variant="outline" size="sm" className="w-full sm:w-auto">
+                            <Eye size={16} className="mr-2" />
+                            Voir le terrain
+                          </Button>
+                        </Link>
 
-                      {(reservation.status === 'pending' || reservation.status === 'confirmed') && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleCancelReservation(reservation._id)}
-                          className="text-red-600 border-red-200 hover:bg-red-50"
-                        >
-                          <X size={16} className="mr-2" />
-                          Annuler
-                        </Button>
-                      )}
+                        {canCancelReservation(reservation) ? (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleCancelReservation(reservation._id)}
+                            className="text-red-600 border-red-200 hover:bg-red-50 w-full sm:w-auto"
+                          >
+                            <X size={16} className="mr-2" />
+                            Annuler
+                          </Button>
+                        ) : (
+                          (reservation.status === 'confirmed' || reservation.status === 'pending') && 
+                          getCancellationMessage(reservation) && (
+                            <p className="text-xs text-gray-500 italic flex items-center w-full sm:w-auto sm:ml-2">
+                              <AlertCircle size={14} className="mr-1 flex-shrink-0" />
+                              {getCancellationMessage(reservation)}
+                            </p>
+                          )
+                        )}
+                      </div>
                     </div>
 
                     {/* Contact Propriétaire */}
                     {(reservation.status === 'confirmed' && reservation.paymentStatus === 'paid') && (
-                      <div className="mt-6">
+                      <div className="mt-4 sm:mt-6">
                         <OwnerContact reservation={reservation} />
                       </div>
                     )}

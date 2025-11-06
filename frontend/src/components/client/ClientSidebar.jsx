@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, 
   Calendar,
@@ -7,19 +8,45 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
-  Search
+  Search,
+  Users,
+  Bell,
+  MessageCircle
 } from 'lucide-react';
+import { messageAPI } from '../../services/api';
 
 const ClientSidebar = ({ collapsed, setCollapsed, user }) => {
   const location = useLocation();
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
   const menuItems = [
     { icon: LayoutDashboard, label: 'Vue d\'ensemble', path: '/dashboard', section: 'overview' },
     { icon: Calendar, label: 'Mes Réservations', path: '/dashboard', section: 'reservations' },
+    { icon: Users, label: 'Mes Équipes', path: '/dashboard', section: 'teams' },
+    { icon: MessageCircle, label: 'Messages', path: '/dashboard', section: 'messages' },
     { icon: Heart, label: 'Favoris', path: '/dashboard', section: 'favorites' },
+    { icon: Bell, label: 'Notifications', path: '/dashboard', section: 'notifications' },
     { icon: User, label: 'Mon Profil', path: '/dashboard', section: 'profile' },
     { icon: Settings, label: 'Paramètres', path: '/dashboard', section: 'settings' }
   ];
+
+  useEffect(() => {
+    // Charger le nombre de messages non lus
+    const loadUnreadCount = async () => {
+      try {
+        const response = await messageAPI.getUnreadCount();
+        setUnreadMessages(response.data.data?.unreadCount || 0);
+      } catch (error) {
+        console.error('Erreur chargement messages non lus:', error);
+      }
+    };
+
+    loadUnreadCount();
+    
+    // Rafraîchir toutes les 10 secondes
+    const interval = setInterval(loadUnreadCount, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   const isActive = (section) => {
     const params = new URLSearchParams(location.search);
@@ -78,9 +105,23 @@ const ClientSidebar = ({ collapsed, setCollapsed, user }) => {
               }`}
               title={collapsed ? item.label : ''}
             >
-              <Icon size={20} className={active ? 'text-green-500' : ''} />
+              <div className="relative">
+                <Icon size={20} className={active ? 'text-green-500' : ''} />
+                {/* Badge de messages non lus */}
+                {item.section === 'messages' && unreadMessages > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center animate-pulse">
+                    {unreadMessages > 9 ? '9+' : unreadMessages}
+                  </span>
+                )}
+              </div>
               {!collapsed && (
-                <span className="font-medium text-sm">{item.label}</span>
+                <span className="font-medium text-sm flex-1">{item.label}</span>
+              )}
+              {/* Badge à droite si sidebar ouverte */}
+              {!collapsed && item.section === 'messages' && unreadMessages > 0 && (
+                <span className="bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5">
+                  {unreadMessages}
+                </span>
               )}
             </Link>
           );

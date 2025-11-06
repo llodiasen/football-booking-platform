@@ -105,7 +105,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/reservations" className="hover:text-green-400 transition">
+                <Link to="/dashboard?section=reservations" className="hover:text-green-400 transition">
                   Mes réservations
                 </Link>
               </li>

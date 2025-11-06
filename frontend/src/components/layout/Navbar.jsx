@@ -114,7 +114,7 @@ const Navbar = () => {
                     {isAuthenticated ? (
                       <>
                         <Link
-                          to="/reservations"
+                          to="/dashboard?section=reservations"
                           className="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors font-medium"
                           onClick={() => setUserMenuOpen(false)}
                         >

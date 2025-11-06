@@ -57,7 +57,7 @@ function App() {
   const location = useLocation();
   const { user } = useAuth();
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const isDashboardRoute = location.pathname === '/dashboard' && (user?.role === 'owner' || user?.role === 'admin');
+  const isDashboardRoute = location.pathname === '/dashboard';
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -122,7 +122,7 @@ function App() {
                 path="/reservations" 
                 element={
                   <PrivateRoute>
-                    <MyReservations />
+                    <Navigate to="/dashboard?section=reservations" replace />
                   </PrivateRoute>
                 } 
               />

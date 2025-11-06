@@ -36,7 +36,7 @@ exports.getReservations = async (req, res) => {
       .populate('terrain', 'name address images pricePerHour')
       .populate('client', 'firstName lastName phone email')
       .populate('team', 'name logo')
-      .sort('-date -startTime')
+      .sort('-createdAt') // Trier par date de création (nouvelles commandes en premier)
       .lean();
 
     res.json({

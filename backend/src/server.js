@@ -79,6 +79,7 @@ app.use('/api/reservations', reservationRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/messages', require('./routes/messages'));
 app.use('/api/paytech', paytechRoutes);
 
 // Health check

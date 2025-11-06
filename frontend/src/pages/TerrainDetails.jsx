@@ -429,7 +429,7 @@ const TerrainDetails = () => {
         {/* Propriétaire - FULL WIDTH */}
         <section className="mt-4 -mx-6 sm:-mx-10 lg:-mx-20">
           <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 py-12">
-            <OwnerProfile owner={terrain.owner} />
+            <OwnerProfile owner={terrain.owner} terrain={terrain} />
           </div>
         </section>
 

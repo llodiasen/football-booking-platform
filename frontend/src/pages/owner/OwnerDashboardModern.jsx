@@ -12,6 +12,10 @@ import OwnerSidebar from '../../components/owner/OwnerSidebar';
 import TerrainFormModal from '../../components/owner/TerrainFormModal';
 import AvailabilityManager from '../../components/owner/AvailabilityManager';
 import SettingsSection from '../../components/dashboard/SettingsSection';
+import NotificationsPanel from '../../components/notifications/NotificationsPanel';
+import NotificationDropdown from '../../components/notifications/NotificationDropdown';
+import MessagesPanel from '../../components/messages/MessagesPanel';
+import StatisticsSection from '../../components/dashboard/StatisticsSection';
 import ReservationsTable from '../../components/owner/ReservationsTable';
 import StatCard from '../../components/dashboard/StatCard';
 import RevenueChart from '../../components/dashboard/RevenueChart';
@@ -32,6 +36,8 @@ const OwnerDashboardModern = () => {
   const [terrains, setTerrains] = useState([]);
   const [selectedTerrainForAvailability, setSelectedTerrainForAvailability] = useState(null);
   
+  const [timePeriod, setTimePeriod] = useState('month'); // 'today', 'week', 'month', 'year', 'all'
+  
   const [stats, setStats] = useState({
     totalTerrains: 0,
     approvedTerrains: 0,
@@ -49,7 +55,35 @@ const OwnerDashboardModern = () => {
 
   useEffect(() => {
     loadDashboardData();
-  }, []);
+  }, [timePeriod]); // Recharger quand la période change
+
+  // Fonction pour filtrer par période
+  const filterByPeriod = (reservations) => {
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+
+    return reservations.filter(r => {
+      const resDate = new Date(r.date);
+      
+      switch(timePeriod) {
+        case 'today':
+          return resDate >= startOfToday;
+        case 'week':
+          return resDate >= startOfWeek;
+        case 'month':
+          return resDate >= startOfMonth;
+        case 'year':
+          return resDate >= startOfYear;
+        case 'all':
+        default:
+          return true;
+      }
+    });
+  };
 
   const loadDashboardData = async () => {
     setLoading(true);
@@ -70,9 +104,12 @@ const OwnerDashboardModern = () => {
       
       // Filtrer seulement les réservations des terrains du propriétaire
       const terrainIds = myTerrains.map(t => t._id);
-      const myReservations = allReservations.filter(r => 
+      let myReservations = allReservations.filter(r => 
         terrainIds.includes(r.terrain?._id)
       );
+
+      // Appliquer le filtre de période
+      myReservations = filterByPeriod(myReservations);
 
       const totalBookings = myReservations.length;
       const confirmedBookings = myReservations.filter(r => r.status === 'confirmed').length;
@@ -93,10 +130,19 @@ const OwnerDashboardModern = () => {
         })
         .reduce((sum, r) => sum + (r.totalPrice || 0), 0);
 
-      // Calculer le taux de réservation
-      const reservationRate = totalViews > 0 
-        ? ((totalBookings / totalViews) * 100).toFixed(1)
-        : totalBookings > 0 ? 100 : 0;
+      // Calculer le taux de réservation (basé sur l'occupation des créneaux)
+      // Pour chaque terrain, calculer le nombre de créneaux disponibles vs réservés
+      // Supposons 10h d'ouverture/jour * 30 jours = 300 créneaux potentiels par mois par terrain
+      const slotsPerMonthPerTerrain = 10 * 30; // 10h/jour * 30 jours
+      const totalPotentialSlots = totalTerrains * slotsPerMonthPerTerrain;
+      const reservationRate = totalPotentialSlots > 0 
+        ? Math.min(((totalBookings / totalPotentialSlots) * 100), 100).toFixed(1)
+        : 0;
+
+      // Calculer le revenu moyen par terrain (uniquement pour ce mois)
+      const averageRevenuePerTerrain = totalTerrains > 0 
+        ? Math.round(monthlyRevenue / totalTerrains) 
+        : 0;
 
       setStats({
         totalTerrains,
@@ -108,6 +154,7 @@ const OwnerDashboardModern = () => {
         cancelledBookings,
         totalRevenue,
         monthlyRevenue,
+        averageRevenuePerTerrain,
         totalViews,
         reservationRate,
         revenueChange: 12.5
@@ -155,6 +202,17 @@ const OwnerDashboardModern = () => {
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('fr-FR').format(price);
+  };
+
+  const getPeriodLabel = () => {
+    const labels = {
+      'today': "Aujourd'hui",
+      'week': 'Cette semaine',
+      'month': 'Ce mois',
+      'year': 'Cette année',
+      'all': 'Toutes périodes'
+    };
+    return labels[timePeriod] || 'Ce mois';
   };
 
   const statCards = [
@@ -243,6 +301,8 @@ const OwnerDashboardModern = () => {
                   {section === 'availability' && 'Disponibilités'}
                   {section === 'revenue' && 'Revenus'}
                   {section === 'stats' && 'Statistiques'}
+                  {section === 'messages' && 'Messages'}
+                  {section === 'notifications' && 'Notifications'}
                   {section === 'settings' && 'Paramètres'}
                 </h1>
               </div>
@@ -268,11 +328,8 @@ const OwnerDashboardModern = () => {
                 <span className="hidden sm:inline">Ajouter</span>
               </button>
 
-              {/* Notifications */}
-              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors relative">
-                <Bell size={20} />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </button>
+              {/* Notifications Dropdown */}
+              <NotificationDropdown />
 
               {/* Menu Profil */}
               <div className="relative">
@@ -351,10 +408,10 @@ const OwnerDashboardModern = () => {
             </div>
           )}
 
-          {/* Layout 3 colonnes épuré : Contenu central (2/3) + Sidebar droite (1/3) */}
-          <div className="grid lg:grid-cols-3 gap-7">
-            {/* COLONNE CENTRALE - Tableau principal (2/3 largeur) */}
-            <div className="lg:col-span-2">
+          {/* Layout dynamique : 3 colonnes si sidebar droite visible, sinon full-width */}
+          <div className={`grid ${(section === 'overview' || section === 'revenue') ? 'lg:grid-cols-3' : 'grid-cols-1'} gap-7`}>
+            {/* COLONNE CENTRALE - Tableau principal (2/3 si sidebar, 100% sinon) */}
+            <div className={(section === 'overview' || section === 'revenue') ? 'lg:col-span-2' : 'col-span-1'}>
               
               {/* VUE D'ENSEMBLE - Design épuré */}
               {section === 'overview' && (
@@ -380,33 +437,99 @@ const OwnerDashboardModern = () => {
                     <>
                       {/* Activité Récente */}
                       <div className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md transition-shadow">
-                        <h3 className="text-lg font-bold text-gray-900 mb-5">Activité récente</h3>
-                        <div className="space-y-4">
-                          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                                <CheckCircle className="text-green-600" size={18} />
-                              </div>
-                              <div>
-                                <p className="text-sm font-semibold text-gray-900">{stats.totalBookings} réservations</p>
-                                <p className="text-xs text-gray-500">Total sur vos terrains</p>
-                              </div>
-                            </div>
-                            <Badge variant="success">{stats.confirmedBookings} confirmées</Badge>
+                        <div className="mb-5">
+                          <div className="flex items-center justify-between mb-3">
+                            <h3 className="text-lg font-bold text-gray-900">Activité récente</h3>
+                            <Badge variant="default">{stats.totalBookings} réservations</Badge>
                           </div>
                           
-                          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                          {/* Filtres de période */}
+                          <div className="flex flex-wrap gap-2">
+                            {[
+                              { value: 'today', label: "Aujourd'hui" },
+                              { value: 'week', label: 'Cette semaine' },
+                              { value: 'month', label: 'Ce mois' },
+                              { value: 'year', label: 'Cette année' },
+                              { value: 'all', label: 'Tout' }
+                            ].map(period => (
+                              <button
+                                key={period.value}
+                                onClick={() => setTimePeriod(period.value)}
+                                className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
+                                  timePeriod === period.value
+                                    ? 'bg-green-600 text-white shadow-sm'
+                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                }`}
+                              >
+                                {period.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-3">
+                          {/* Confirmées */}
+                          <div className="flex items-center justify-between p-4 bg-green-50 rounded-xl border border-green-100 hover:bg-green-100 transition-colors">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                <Eye className="text-blue-600" size={18} />
+                              <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                <CheckCircle className="text-white" size={18} />
                               </div>
                               <div>
-                                <p className="text-sm font-semibold text-gray-900">{stats.totalViews} vues</p>
-                                <p className="text-xs text-gray-500">Sur tous vos terrains</p>
+                                <p className="text-sm font-bold text-gray-900">Confirmées</p>
+                                <p className="text-xs text-gray-600">Réservations validées</p>
                               </div>
                             </div>
-                            <Badge variant="info">Ce mois</Badge>
+                            <span className="text-2xl font-bold text-green-600">{stats.confirmedBookings}</span>
                           </div>
+
+                          {/* En attente */}
+                          <div className="flex items-center justify-between p-4 bg-yellow-50 rounded-xl border border-yellow-100 hover:bg-yellow-100 transition-colors">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
+                                <Clock className="text-white" size={18} />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-gray-900">En attente</p>
+                                <p className="text-xs text-gray-600">À confirmer ou refuser</p>
+                              </div>
+                            </div>
+                            <span className="text-2xl font-bold text-yellow-600">{stats.pendingBookings}</span>
+                          </div>
+
+                          {/* Annulées */}
+                          <div className="flex items-center justify-between p-4 bg-red-50 rounded-xl border border-red-100 hover:bg-red-100 transition-colors">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+                                <XCircle className="text-white" size={18} />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-gray-900">Annulées</p>
+                                <p className="text-xs text-gray-600">Réservations annulées</p>
+                              </div>
+                            </div>
+                            <span className="text-2xl font-bold text-red-600">{stats.cancelledBookings || 0}</span>
+                          </div>
+
+                          {/* Vues totales */}
+                          <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl border border-blue-100 hover:bg-blue-100 transition-colors mt-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                                <Eye className="text-white" size={18} />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-gray-900">Vues totales</p>
+                                <p className="text-xs text-gray-600">Sur tous vos terrains</p>
+                              </div>
+                            </div>
+                            <span className="text-2xl font-bold text-blue-600">{stats.totalViews}</span>
+                          </div>
+                        </div>
+
+                        {/* Indicateur de période */}
+                        <div className="mt-4 pt-4 border-t border-gray-100">
+                          <p className="text-xs text-center text-gray-500">
+                            📊 Données filtrées : <span className="font-semibold text-gray-700">{getPeriodLabel()}</span>
+                          </p>
                         </div>
                       </div>
                     </>
@@ -629,9 +752,9 @@ const OwnerDashboardModern = () => {
                         <div className="flex justify-between items-center py-3 border-b border-gray-200">
                           <div>
                             <p className="font-semibold text-gray-900">Réservations En Attente</p>
-                            <p className="text-sm text-gray-600">{stats.totalBookings - stats.confirmedBookings} réservation{stats.totalBookings - stats.confirmedBookings > 1 ? 's' : ''}</p>
+                            <p className="text-sm text-gray-600">{stats.pendingBookings} réservation{stats.pendingBookings > 1 ? 's' : ''}</p>
                           </div>
-                          <p className="text-lg font-bold text-yellow-600">En attente</p>
+                          <p className="text-lg font-bold text-yellow-600">{stats.pendingBookings > 0 ? `${stats.pendingBookings} en attente` : 'Aucune'}</p>
                         </div>
                         
                         <div className="flex justify-between items-center py-3 bg-gray-50 rounded-lg px-4">
@@ -654,24 +777,26 @@ const OwnerDashboardModern = () => {
 
               {/* STATISTIQUES */}
               {section === 'stats' && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-                  <div className="p-6 border-b border-gray-200">
-                    <h2 className="text-xl font-bold text-gray-900">Statistiques</h2>
-                  </div>
-                  <div className="p-12 text-center">
-                    <BarChart3 className="mx-auto text-gray-400 mb-4" size={64} />
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Statistiques détaillées</h3>
-                    <p className="text-gray-600">Graphiques et analyses de performance à venir</p>
-                  </div>
-                </div>
+                <StatisticsSection 
+                  terrains={terrains}
+                  reservations={reservations}
+                  stats={stats}
+                />
               )}
+
+              {/* NOTIFICATIONS */}
+              {section === 'notifications' && <NotificationsPanel />}
+
+              {/* MESSAGES */}
+              {section === 'messages' && <MessagesPanel />}
 
               {/* PARAMÈTRES */}
               {section === 'settings' && <SettingsSection />}
             </div>
 
-            {/* COLONNE DROITE - Panneaux fixes épurés Shadcn UI */}
-            <div className="space-y-5 sticky top-6 self-start">
+            {/* COLONNE DROITE - Panneaux fixes épurés Shadcn UI (visible uniquement sur overview et revenue) */}
+            {(section === 'overview' || section === 'revenue') && (
+              <div className="space-y-5 sticky top-6 self-start">
               {/* Graphique Revenus moderne avec Recharts */}
               <RevenueChart 
                 totalRevenue={stats.totalRevenue}
@@ -725,6 +850,24 @@ const OwnerDashboardModern = () => {
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span className="text-sm font-medium text-gray-700">Terminées</span>
+                      </div>
+                      <span className="text-sm font-bold text-gray-900">
+                        {stats.totalBookings - stats.confirmedBookings - stats.pendingBookings - (stats.cancelledBookings || 0)}
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                      <div 
+                        className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-700 ease-out"
+                        style={{ width: stats.totalBookings > 0 ? `${((stats.totalBookings - stats.confirmedBookings - stats.pendingBookings - (stats.cancelledBookings || 0)) / stats.totalBookings) * 100}%` : '0%' }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
                         <div className="w-2 h-2 bg-red-500 rounded-full"></div>
                         <span className="text-sm font-medium text-gray-700">Annulées</span>
                       </div>
@@ -753,9 +896,10 @@ const OwnerDashboardModern = () => {
                   <div className="pb-4 border-b border-gray-50">
                     <p className="text-xs font-medium text-gray-500 mb-1.5">Revenu moyen/terrain</p>
                     <p className="text-lg font-bold text-gray-900">
-                      {stats.totalTerrains > 0 ? formatPrice(Math.round(stats.totalRevenue / stats.totalTerrains)) : '0'} 
+                      {formatPrice(stats.averageRevenuePerTerrain || 0)} 
                       <span className="text-sm text-gray-500 font-normal ml-1">FCFA</span>
                     </p>
+                    <p className="text-xs text-gray-500 mt-1">Ce mois</p>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
@@ -826,7 +970,8 @@ const OwnerDashboardModern = () => {
                   </button>
                 </div>
               </div>
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -845,4 +990,5 @@ const OwnerDashboardModern = () => {
 };
 
 export default OwnerDashboardModern;
+
 

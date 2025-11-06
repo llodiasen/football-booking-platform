@@ -97,5 +97,21 @@ export const paytechAPI = {
   checkPaymentStatus: (token) => api.get(`/paytech/status/${token}`)
 };
 
+// Notifications API
+export const notificationAPI = {
+  getAll: () => api.get('/notifications'),
+  markAsRead: (id) => api.put(`/notifications/${id}/read`),
+  markAllAsRead: () => api.put('/notifications/read-all'),
+  delete: (id) => api.delete(`/notifications/${id}`)
+};
+
+// Messages API
+export const messageAPI = {
+  send: (data) => api.post('/messages', data),
+  getConversations: () => api.get('/messages/conversations'),
+  getConversation: (userId) => api.get(`/messages/conversation/${userId}`),
+  getUnreadCount: () => api.get('/messages/unread-count')
+};
+
 export default api;
 

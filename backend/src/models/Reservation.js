@@ -129,6 +129,7 @@ reservationSchema.index({ client: 1, status: 1 });
 reservationSchema.index({ terrain: 1, date: 1 });
 reservationSchema.index({ status: 1, date: 1 });
 reservationSchema.index({ paymentStatus: 1 });
+reservationSchema.index({ createdAt: -1 }); // Index pour trier par date de création (nouvelles commandes en premier)
 
 // Méthode pour vérifier si la réservation peut être annulée
 reservationSchema.methods.canBeCancelled = function() {

@@ -39,7 +39,12 @@ const ReservationsTable = ({ terrains }) => {
         terrainIds.includes(r.terrain?._id)
       );
       
-      setReservations(myReservations);
+      // Trier par date de création (plus récentes en premier)
+      const sortedReservations = myReservations.sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+      
+      setReservations(sortedReservations);
     } catch (error) {
       console.error('Erreur chargement réservations:', error);
       showError('Erreur lors du chargement des réservations');
