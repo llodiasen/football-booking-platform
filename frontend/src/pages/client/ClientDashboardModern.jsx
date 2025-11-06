@@ -4,7 +4,7 @@ import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { 
   Calendar, Heart, User as UserIcon, Settings as SettingsIcon,
   MapPin, Clock, TrendingUp, ArrowUpRight, CheckCircle, Eye, X,
-  Home, Users, Plus, Menu
+  Home, Users, Plus, Menu, LogOut
 } from 'lucide-react';
 import ClientSidebar from '../../components/client/ClientSidebar';
 import SettingsSection from '../../components/dashboard/SettingsSection';
@@ -17,7 +17,7 @@ import { useToast } from '../../context/ToastContext';
 import Button from '../../components/ui/Button';
 
 const ClientDashboardModern = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { success: showSuccess, error: showError } = useToast();
   const [searchParams] = useSearchParams();
@@ -29,6 +29,7 @@ const ClientDashboardModern = () => {
   const [reservations, setReservations] = useState([]);
   const [showTeamModal, setShowTeamModal] = useState(false);
   const [showCreateMenu, setShowCreateMenu] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   
   const [stats, setStats] = useState({
     totalReservations: 0,
@@ -42,17 +43,20 @@ const ClientDashboardModern = () => {
     loadDashboardData();
   }, [section]);
 
-  // Fermer le menu "Créer" quand on clique en dehors
+  // Fermer les menus quand on clique en dehors
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (showCreateMenu && !event.target.closest('.create-menu-container')) {
         setShowCreateMenu(false);
       }
+      if (showProfileMenu && !event.target.closest('.profile-menu-container')) {
+        setShowProfileMenu(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showCreateMenu]);
+  }, [showCreateMenu, showProfileMenu]);
 
   const loadDashboardData = async () => {
     setLoading(true);
@@ -267,9 +271,64 @@ const ClientDashboardModern = () => {
                 {/* Notification Dropdown */}
                 <NotificationDropdown />
 
-                {/* Avatar */}
-                <div className="w-9 h-9 bg-green-600 rounded-full flex items-center justify-center font-bold text-white text-sm">
-                  {user?.firstName?.charAt(0).toUpperCase() || 'U'}
+                {/* Avatar avec menu profil */}
+                <div className="relative profile-menu-container">
+                  <button
+                    onClick={() => setShowProfileMenu(!showProfileMenu)}
+                    className="w-9 h-9 bg-green-600 rounded-full flex items-center justify-center font-bold text-white text-sm hover:bg-green-700 transition-colors"
+                  >
+                    {user?.firstName?.charAt(0).toUpperCase() || 'U'}
+                  </button>
+
+                  {/* Overlay pour fermer */}
+                  {showProfileMenu && (
+                    <div 
+                      className="sm:hidden fixed inset-0 bg-black/30 z-40"
+                      onClick={() => setShowProfileMenu(false)}
+                    />
+                  )}
+
+                  {/* Menu profil dropdown */}
+                  {showProfileMenu && (
+                    <div className="fixed sm:absolute left-2 right-2 sm:left-auto sm:right-0 top-16 sm:top-auto sm:mt-2 w-auto sm:w-64 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-50 animate-fadeIn">
+                      {/* Profil Info */}
+                      <div className="px-4 py-3 border-b border-gray-100">
+                        <p className="font-bold text-gray-900">{user?.firstName} {user?.lastName}</p>
+                        <p className="text-xs text-gray-500 mt-0.5">{user?.email}</p>
+                      </div>
+
+                      {/* Menu Items */}
+                      <Link
+                        to="/"
+                        onClick={() => setShowProfileMenu(false)}
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+                      >
+                        <Home size={18} className="text-gray-600" />
+                        <span className="text-sm text-gray-900">Retour à l'accueil</span>
+                      </Link>
+
+                      <Link
+                        to="/dashboard?section=settings"
+                        onClick={() => setShowProfileMenu(false)}
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+                      >
+                        <SettingsIcon size={18} className="text-gray-600" />
+                        <span className="text-sm text-gray-900">Paramètres</span>
+                      </Link>
+
+                      <button
+                        onClick={() => {
+                          setShowProfileMenu(false);
+                          logout();
+                          navigate('/');
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-colors border-t border-gray-100 mt-1"
+                      >
+                        <LogOut size={18} className="text-red-600" />
+                        <span className="text-sm text-red-600 font-medium">Déconnexion</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
