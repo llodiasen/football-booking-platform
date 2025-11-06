@@ -221,8 +221,8 @@ const ClientDashboardModern = () => {
                         onClick={() => setShowCreateMenu(false)}
                       />
                       
-                      {/* Menu aligné à droite, largeur auto */}
-                      <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-200 py-2 z-50 animate-fadeIn">
+                      {/* Menu aligné à droite, responsive */}
+                      <div className="absolute left-auto right-0 top-full mt-2 w-[min(calc(100vw-16px),16rem)] bg-white rounded-2xl shadow-2xl border border-gray-200 py-2 z-50 animate-fadeIn">
                       <button
                         onClick={() => {
                           setShowCreateMenu(false);
@@ -290,8 +290,8 @@ const ClientDashboardModern = () => {
                         onClick={() => setShowProfileMenu(false)}
                       />
                       
-                      {/* Menu compact aligné à droite */}
-                      <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-2xl shadow-2xl border border-gray-200 py-2 z-50 animate-fadeIn">
+                      {/* Menu compact aligné à droite, responsive */}
+                      <div className="absolute left-auto right-0 top-full mt-2 w-[min(calc(100vw-16px),18rem)] bg-white rounded-2xl shadow-2xl border border-gray-200 py-2 z-50 animate-fadeIn">
                       {/* Profil Info */}
                       <div className="px-4 py-3 border-b border-gray-100">
                         <p className="font-bold text-gray-900">{user?.firstName} {user?.lastName}</p>

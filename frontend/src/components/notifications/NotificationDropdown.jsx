@@ -185,9 +185,9 @@ const NotificationDropdown = () => {
         )}
       </button>
 
-      {/* Dropdown - Compact et élégant */}
+      {/* Dropdown - Responsive et adaptatif */}
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 overflow-hidden max-h-[80vh]">
+        <div className="absolute left-auto right-0 sm:right-0 top-full mt-2 w-[min(calc(100vw-16px),24rem)] bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 overflow-hidden max-h-[80vh]">
           {/* Header */}
           <div className="bg-gradient-to-r from-primary-600 to-primary-700 px-4 py-3">
             <div className="flex items-center justify-between">
