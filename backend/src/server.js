@@ -97,12 +97,15 @@ app.get('/', (req, res) => {
   res.json({
     message: 'API Plateforme de Réservation de Terrains de Football - Sénégal',
     version: '1.0.0',
+    status: 'Backend is running',
     endpoints: {
       auth: '/api/auth',
       terrains: '/api/terrains',
       reservations: '/api/reservations',
       payments: '/api/payments',
-      teams: '/api/teams'
+      teams: '/api/teams',
+      notifications: '/api/notifications',
+      messages: '/api/messages'
     }
   });
 });
