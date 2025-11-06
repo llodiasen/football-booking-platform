@@ -173,9 +173,8 @@ const MyReservations = () => {
                           {reservation.terrain?.address.city}
                         </p>
                       </div>
-                      <div className="flex gap-2">
+                      <div>
                         {getStatusBadge(reservation.status)}
-                        {getPaymentBadge(reservation.paymentStatus)}
                       </div>
                     </div>
 
