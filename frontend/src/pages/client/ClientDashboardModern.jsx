@@ -4,7 +4,7 @@ import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { 
   Calendar, Heart, User as UserIcon, Settings as SettingsIcon,
   MapPin, Clock, TrendingUp, ArrowUpRight, CheckCircle, Eye, X,
-  Home, Users, Plus
+  Home, Users, Plus, Menu
 } from 'lucide-react';
 import ClientSidebar from '../../components/client/ClientSidebar';
 import SettingsSection from '../../components/dashboard/SettingsSection';
@@ -24,6 +24,7 @@ const ClientDashboardModern = () => {
   const section = searchParams.get('section') || 'overview';
   
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [reservations, setReservations] = useState([]);
   const [showTeamModal, setShowTeamModal] = useState(false);
@@ -157,7 +158,7 @@ const ClientDashboardModern = () => {
     return (
       <div className="flex h-screen">
         <ClientSidebar collapsed={collapsed} setCollapsed={setCollapsed} user={user} />
-        <div className={`flex-1 ${collapsed ? 'ml-20' : 'ml-64'} flex items-center justify-center bg-gray-50`}>
+        <div className={`flex-1 ${collapsed ? 'md:ml-20' : 'md:ml-64'} flex items-center justify-center bg-gray-50`}>
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600"></div>
         </div>
       </div>
@@ -166,17 +167,31 @@ const ClientDashboardModern = () => {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
-      <ClientSidebar collapsed={collapsed} setCollapsed={setCollapsed} user={user} />
+      {/* Sidebar - Overlay sur mobile */}
+      <ClientSidebar 
+        collapsed={collapsed} 
+        setCollapsed={setCollapsed} 
+        user={user}
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
+      />
 
-      {/* Main Content */}
-      <div className={`flex-1 ${collapsed ? 'ml-20' : 'ml-64'} transition-all duration-300 overflow-auto`}>
+      {/* Main Content - Pas de margin sur mobile */}
+      <div className={`flex-1 ${collapsed ? 'md:ml-20' : 'md:ml-64'} transition-all duration-300 overflow-auto`}>
         {/* Header */}
         <div className="bg-white border-b border-gray-200 sticky top-0 z-30">
           <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               {/* Logo et Titre */}
               <div className="flex items-center gap-3">
+                {/* Bouton Menu Mobile */}
+                <button
+                  onClick={() => setMobileMenuOpen(true)}
+                  className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <Menu size={24} className="text-gray-700" />
+                </button>
+
                 <div className="bg-green-600 text-white px-3 py-1.5 rounded-lg font-bold text-sm sm:text-base">
                   221
                 </div>

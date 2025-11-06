@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { messageAPI } from '../../services/api';
 
-const ClientSidebar = ({ collapsed, setCollapsed, user }) => {
+const ClientSidebar = ({ collapsed, setCollapsed, user, mobileMenuOpen = false, setMobileMenuOpen = () => {} }) => {
   const location = useLocation();
   const [unreadMessages, setUnreadMessages] = useState(0);
 
@@ -55,7 +55,19 @@ const ClientSidebar = ({ collapsed, setCollapsed, user }) => {
   };
 
   return (
-    <div className={`${collapsed ? 'w-20' : 'w-64'} bg-gray-900 min-h-screen text-white transition-all duration-300 flex flex-col fixed left-0 top-0 z-40`}>
+    <>
+      {/* Overlay mobile */}
+      {mobileMenuOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div className={`${collapsed ? 'w-20' : 'w-64'} bg-gray-900 min-h-screen text-white transition-all duration-300 flex flex-col fixed left-0 top-0 z-50 ${
+        mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+      }`}>
       {/* Header Logo */}
       <div className="p-6 flex items-center justify-between border-b border-gray-800">
         {!collapsed && (
@@ -98,6 +110,7 @@ const ClientSidebar = ({ collapsed, setCollapsed, user }) => {
             <Link
               key={item.section}
               to={`${item.path}?section=${item.section}`}
+              onClick={() => setMobileMenuOpen(false)}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all group relative ${
                 active
                   ? 'bg-gray-800 text-white'
@@ -145,6 +158,7 @@ const ClientSidebar = ({ collapsed, setCollapsed, user }) => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
