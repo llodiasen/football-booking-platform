@@ -87,26 +87,26 @@ const NotificationDetailModal = ({ notification, onClose, onActionComplete }) =>
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-2 sm:p-4" onClick={onClose}>
       <div 
-        className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
+        className="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4">
+        <div className="bg-gradient-to-r from-primary-600 to-primary-700 px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-white">Détails de la notification</h2>
+            <h2 className="text-base sm:text-xl font-bold text-white">Détails de la notification</h2>
             <button
               onClick={onClose}
-              className="text-white hover:bg-white/20 p-2 rounded-lg transition-colors"
+              className="text-white hover:bg-white/20 p-1.5 sm:p-2 rounded-lg transition-colors"
             >
-              <X size={20} />
+              <X size={18} className="sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
+        <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(95vh-60px)] sm:max-h-[calc(90vh-80px)]">
           {/* Notification Info */}
           <div className="mb-6">
             <div className="flex items-start gap-3 mb-3">
@@ -210,41 +210,41 @@ const NotificationDetailModal = ({ notification, onClose, onActionComplete }) =>
             </div>
           )}
 
-          {/* Actions */}
-          <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-200">
-            {/* Boutons d'action propriétaire (à gauche) */}
+          {/* Actions - Responsive */}
+          <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200">
+            {/* Boutons d'action propriétaire - Stack sur mobile */}
             {isOwner && reservation && reservation.status === 'pending' && (
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-3">
                 <button
                   onClick={() => handleStatusChange('confirmed')}
                   disabled={actionLoading}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white font-medium rounded-lg transition-colors text-sm"
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white font-medium rounded-lg transition-colors text-sm w-full sm:w-auto"
                   title="Confirmer la réservation"
                 >
-                  <CheckCircle size={18} />
+                  <CheckCircle size={16} />
                   {actionLoading ? 'Traitement...' : 'Confirmer'}
                 </button>
                 <button
                   onClick={() => handleStatusChange('cancelled')}
                   disabled={actionLoading}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white font-medium rounded-lg transition-colors text-sm"
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white font-medium rounded-lg transition-colors text-sm w-full sm:w-auto"
                   title="Annuler la réservation"
                 >
-                  <XCircle size={18} />
+                  <XCircle size={16} />
                   {actionLoading ? 'Traitement...' : 'Refuser'}
                 </button>
               </div>
             )}
             
-            {/* Boutons d'action (à droite) */}
-            <div className="flex items-center gap-3 ml-auto">
+            {/* Boutons d'action - Stack sur mobile, flex sur desktop */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 sm:justify-end">
               {/* Bouton Répondre pour les messages */}
               {notification.type === 'new_message' && (
                 <button
                   onClick={handleReplyToMessage}
-                  className="flex items-center gap-2 px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+                  className="flex items-center justify-center gap-2 px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors text-sm w-full sm:w-auto order-first sm:order-none"
                 >
-                  <Reply size={18} />
+                  <Reply size={16} />
                   Répondre
                 </button>
               )}
@@ -253,7 +253,7 @@ const NotificationDetailModal = ({ notification, onClose, onActionComplete }) =>
               {reservation && !isOwner && (
                 <a
                   href={`/terrains/${reservation.terrain?._id}`}
-                  className="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+                  className="flex items-center justify-center px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors text-sm w-full sm:w-auto order-first sm:order-none"
                 >
                   Voir le terrain
                 </a>
@@ -261,7 +261,7 @@ const NotificationDetailModal = ({ notification, onClose, onActionComplete }) =>
               
               <button
                 onClick={onClose}
-                className="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors"
+                className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors text-sm w-full sm:w-auto"
               >
                 Fermer
               </button>

@@ -208,9 +208,17 @@ const ClientDashboardModern = () => {
                     <Plus size={20} />
                   </button>
 
-                  {/* Menu déroulant */}
+                  {/* Overlay mobile pour menu Créer */}
                   {showCreateMenu && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-50 animate-fadeIn">
+                    <div 
+                      className="sm:hidden fixed inset-0 bg-black/30 z-40"
+                      onClick={() => setShowCreateMenu(false)}
+                    />
+                  )}
+
+                  {/* Menu déroulant - Responsive */}
+                  {showCreateMenu && (
+                    <div className="fixed sm:absolute left-2 right-2 sm:left-auto sm:right-0 top-16 sm:top-auto sm:mt-2 w-auto sm:w-56 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-50 animate-fadeIn">
                       <button
                         onClick={() => {
                           setShowCreateMenu(false);
