@@ -671,7 +671,7 @@ const OwnerDashboardModern = () => {
             </div>
 
             {/* COLONNE DROITE - Panneaux fixes épurés Shadcn UI */}
-            <div className="space-y-5">
+            <div className="space-y-5 sticky top-6 self-start">
               {/* Graphique Revenus moderne avec Recharts */}
               <RevenueChart 
                 totalRevenue={stats.totalRevenue}

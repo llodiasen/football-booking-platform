@@ -512,6 +512,19 @@ const ReservationsTable = ({ terrains }) => {
                   <p className="text-sm text-gray-300">{selectedReservation.notes}</p>
                 </div>
               )}
+
+              {/* Motif d'annulation (si annulée) */}
+              {selectedReservation.status === 'cancelled' && selectedReservation.cancellationReason && (
+                <div className="bg-red-900 bg-opacity-20 border border-red-800 rounded-lg p-4">
+                  <p className="text-xs text-red-400 mb-2 font-semibold">⚠️ Motif d'annulation</p>
+                  <p className="text-sm text-red-300">{selectedReservation.cancellationReason}</p>
+                  {selectedReservation.cancelledAt && (
+                    <p className="text-xs text-red-400 mt-2">
+                      Annulée le {new Date(selectedReservation.cancelledAt).toLocaleDateString('fr-FR')} à {new Date(selectedReservation.cancelledAt).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Modal Footer */}
