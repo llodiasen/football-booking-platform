@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Backend Production</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .success { color: #22c55e; font-weight: bold; }
+        .error { color: #ef4444; font-weight: bold; }
+        .loading { color: #3b82f6; }
+        button {
+            background: #15803d;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #166534;
+        }
+        pre {
+            background: #1f2937;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        h1 { color: #15803d; }
+        h2 { color: #374151; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Test Backend Production</h1>
+    <p>Testez si le backend est accessible et fonctionne correctement.</p>
+
+    <div class="test-box">
+        <h2>1️⃣ Health Check</h2>
+        <button onclick="testHealth()">Tester /health</button>
+        <div id="health-result"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>2️⃣ API Root</h2>
+        <button onclick="testRoot()">Tester / (root)</button>
+        <div id="root-result"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>3️⃣ API Terrains</h2>
+        <button onclick="testTerrains()">Tester /api/terrains</button>
+        <div id="terrains-result"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>4️⃣ Test Login</h2>
+        <button onclick="testLogin()">Tester Login amdiallo@gmail.com</button>
+        <div id="login-result"></div>
+    </div>
+
+    <script>
+        const BACKEND_URL = 'https://football-booking-backend.vercel.app';
+
+        async function testHealth() {
+            const resultDiv = document.getElementById('health-result');
+            resultDiv.innerHTML = '<p class="loading">⏳ Test en cours...</p>';
+            
+            try {
+                const response = await fetch(`${BACKEND_URL}/health`);
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✅ Backend accessible !</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ Erreur : ${error.message}</p>
+                    <p>Le backend n'est pas accessible ou ne répond pas.</p>
+                `;
+            }
+        }
+
+        async function testRoot() {
+            const resultDiv = document.getElementById('root-result');
+            resultDiv.innerHTML = '<p class="loading">⏳ Test en cours...</p>';
+            
+            try {
+                const response = await fetch(`${BACKEND_URL}/`);
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✅ Route root accessible !</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ Erreur : ${error.message}</p>
+                `;
+            }
+        }
+
+        async function testTerrains() {
+            const resultDiv = document.getElementById('terrains-result');
+            resultDiv.innerHTML = '<p class="loading">⏳ Test en cours...</p>';
+            
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/terrains`);
+                const data = await response.json();
+                
+                if (data.success && data.data) {
+                    resultDiv.innerHTML = `
+                        <p class="success">✅ API Terrains fonctionne !</p>
+                        <p>Nombre de terrains : ${data.data.length}</p>
+                        <pre>${JSON.stringify(data.data.slice(0, 2), null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <p class="error">⚠️ Réponse inattendue</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ Erreur : ${error.message}</p>
+                `;
+            }
+        }
+
+        async function testLogin() {
+            const resultDiv = document.getElementById('login-result');
+            resultDiv.innerHTML = '<p class="loading">⏳ Test de connexion...</p>';
+            
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'amdiallo@gmail.com',
+                        password: 'password123'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    resultDiv.innerHTML = `
+                        <p class="success">✅ LOGIN RÉUSSI !</p>
+                        <p>Token reçu : ${data.data.token ? 'Oui' : 'Non'}</p>
+                        <p>Utilisateur : ${data.data.user.firstName} ${data.data.user.lastName}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <p class="error">❌ Erreur de login</p>
+                        <p>Status : ${response.status}</p>
+                        <p>Message : ${data.message}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ Erreur réseau : ${error.message}</p>
+                    <p>Le backend n'est pas accessible ou CORS bloqué.</p>
+                `;
+            }
+        }
+
+        // Auto-test au chargement
+        window.onload = () => {
+            console.log('🔍 Page de test chargée');
+            console.log('Backend URL:', BACKEND_URL);
+        };
+    </script>
+
+    <div class="test-box">
+        <h2>📋 Instructions</h2>
+        <ol>
+            <li>Cliquez sur chaque bouton de test</li>
+            <li>Vérifiez les résultats (vert = OK, rouge = Erreur)</li>
+            <li>Si TOUT est vert, le backend fonctionne parfaitement</li>
+            <li>Si rouge, notez l'erreur et contactez le support</li>
+        </ol>
+    </div>
+
+    <div class="test-box">
+        <h2>🔑 Comptes de Test</h2>
+        <ul>
+            <li><strong>Client :</strong> amdiallo@gmail.com / password123</li>
+            <li><strong>Propriétaire :</strong> soonoup93@gmail.com / password123</li>
+            <li><strong>Admin :</strong> admin@football-booking.sn / admin123</li>
+        </ul>
+    </div>
+</body>
+</html>
+

@@ -184,56 +184,28 @@ const ClientDashboardModern = () => {
 
       {/* Main Content - Pas de margin sur mobile */}
       <div className={`flex-1 ${collapsed ? 'md:ml-20' : 'md:ml-64'} transition-all duration-300 overflow-auto`}>
-        {/* Header */}
+        {/* Header - Mobile optimisé */}
         <div className="bg-white border-b border-gray-200 sticky top-0 z-30">
-          <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              {/* Logo et Titre */}
-              <div className="flex items-center gap-3">
-                {/* Bouton Menu Mobile */}
-                <button
-                  onClick={() => setMobileMenuOpen(true)}
-                  className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                >
-                  <Menu size={24} className="text-gray-700" />
-                </button>
+          <div className="px-3 sm:px-6 lg:px-8 py-3 sm:py-4">
+            {/* Version Mobile : Une seule ligne compacte */}
+            <div className="flex items-center justify-between gap-2 md:hidden">
+              {/* Gauche : Menu */}
+              <button
+                onClick={() => setMobileMenuOpen(true)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <Menu size={24} className="text-gray-700" />
+              </button>
 
-                <div className="bg-green-600 text-white px-3 py-1.5 rounded-lg font-bold text-sm sm:text-base">
-                  221
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h1 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 truncate">
-                    {section === 'overview' && 'Tableau de bord'}
-                    {section === 'reservations' && 'Mes Réservations'}
-                    {section === 'favorites' && 'Mes Favoris'}
-                    {section === 'notifications' && 'Notifications'}
-                    {section === 'messages' && 'Messages'}
-                    {section === 'teams' && 'Mes Équipes'}
-                    {section === 'profile' && 'Mon Profil'}
-                    {section === 'settings' && 'Paramètres'}
-                  </h1>
-                </div>
-              </div>
-
-              {/* Actions Header */}
-              <div className="flex items-center gap-2 md:gap-4">
-                {/* Bouton Accueil - Desktop */}
-                <Link
-                  to="/"
-                  className="hidden md:flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                >
-                  <Home size={20} />
-                  <span>Accueil</span>
-                </Link>
-
-                {/* Menu Créer (dropdown) */}
+              {/* Droite : Actions */}
+              <div className="flex items-center gap-2">
+                {/* Bouton Créer */}
                 <div className="relative create-menu-container">
                   <button
                     onClick={() => setShowCreateMenu(!showCreateMenu)}
-                    className="bg-green-600 hover:bg-green-700 text-white px-3 md:px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-1.5 md:gap-2 text-sm md:text-base shadow-sm"
+                    className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg transition-colors"
                   >
-                    <Plus size={16} className="md:w-5 md:h-5" />
-                    <span>Créer</span>
+                    <Plus size={20} />
                   </button>
 
                   {/* Menu déroulant */}
@@ -242,7 +214,6 @@ const ClientDashboardModern = () => {
                       <button
                         onClick={() => {
                           setShowCreateMenu(false);
-                          // TODO: Ouvrir modal de création de match
                           showSuccess('Fonctionnalité "Créer un match" à venir');
                         }}
                         className="w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors flex items-center gap-3"
@@ -288,10 +259,56 @@ const ClientDashboardModern = () => {
                 {/* Notification Dropdown */}
                 <NotificationDropdown />
 
-                {/* Avatar mobile */}
-                <div className="md:hidden w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                  {user?.firstName?.charAt(0).toUpperCase()}
+                {/* Avatar */}
+                <div className="w-9 h-9 bg-green-600 rounded-full flex items-center justify-center font-bold text-white text-sm">
+                  {user?.firstName?.charAt(0).toUpperCase() || 'U'}
                 </div>
+              </div>
+            </div>
+
+            {/* Version Desktop */}
+            <div className="hidden md:flex md:items-center justify-between gap-4">
+              {/* Logo et Titre */}
+              <div className="flex items-center gap-3">
+                <div className="bg-green-600 text-white px-3 py-1.5 rounded-lg font-bold text-sm sm:text-base">
+                  221
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 truncate">
+                    {section === 'overview' && 'Tableau de bord'}
+                    {section === 'reservations' && 'Mes Réservations'}
+                    {section === 'favorites' && 'Mes Favoris'}
+                    {section === 'notifications' && 'Notifications'}
+                    {section === 'messages' && 'Messages'}
+                    {section === 'teams' && 'Mes Équipes'}
+                    {section === 'profile' && 'Mon Profil'}
+                    {section === 'settings' && 'Paramètres'}
+                  </h1>
+                </div>
+              </div>
+
+              {/* Actions Header Desktop */}
+              <div className="flex items-center gap-4">
+                {/* Bouton Accueil */}
+                <Link
+                  to="/"
+                  className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <Home size={20} />
+                  <span>Accueil</span>
+                </Link>
+
+                {/* Bouton Créer avec texte */}
+                <button
+                  onClick={() => setShowCreateMenu(!showCreateMenu)}
+                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+                >
+                  <Plus size={18} />
+                  <span>Créer</span>
+                </button>
+
+                {/* Notification Dropdown */}
+                <NotificationDropdown />
               </div>
             </div>
           </div>
