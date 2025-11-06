@@ -212,17 +212,17 @@ const ClientDashboardModern = () => {
                     <Plus size={20} />
                   </button>
 
-                  {/* Overlay mobile pour menu Créer */}
+                  {/* Menu déroulant - Compact et élégant */}
                   {showCreateMenu && (
-                    <div 
-                      className="sm:hidden fixed inset-0 bg-black/30 z-40"
-                      onClick={() => setShowCreateMenu(false)}
-                    />
-                  )}
-
-                  {/* Menu déroulant - Responsive */}
-                  {showCreateMenu && (
-                    <div className="fixed sm:absolute left-2 right-2 sm:left-auto sm:right-0 top-16 sm:top-auto sm:mt-2 w-auto sm:w-56 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-50 animate-fadeIn">
+                    <>
+                      {/* Overlay ferme au clic */}
+                      <div 
+                        className="fixed inset-0 z-40"
+                        onClick={() => setShowCreateMenu(false)}
+                      />
+                      
+                      {/* Menu aligné à droite, largeur auto */}
+                      <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-200 py-2 z-50 animate-fadeIn">
                       <button
                         onClick={() => {
                           setShowCreateMenu(false);
@@ -264,7 +264,8 @@ const ClientDashboardModern = () => {
                           <p className="text-xs text-gray-500">Trouver un terrain disponible</p>
                         </div>
                       </button>
-                    </div>
+                      </div>
+                    </>
                   )}
                 </div>
 
@@ -280,17 +281,17 @@ const ClientDashboardModern = () => {
                     {user?.firstName?.charAt(0).toUpperCase() || 'U'}
                   </button>
 
-                  {/* Overlay pour fermer */}
+                  {/* Menu profil dropdown - Minimaliste et élégant */}
                   {showProfileMenu && (
-                    <div 
-                      className="sm:hidden fixed inset-0 bg-black/30 z-40"
-                      onClick={() => setShowProfileMenu(false)}
-                    />
-                  )}
-
-                  {/* Menu profil dropdown */}
-                  {showProfileMenu && (
-                    <div className="fixed sm:absolute left-2 right-2 sm:left-auto sm:right-0 top-16 sm:top-auto sm:mt-2 w-auto sm:w-64 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-50 animate-fadeIn">
+                    <>
+                      {/* Overlay subtil - ferme au clic */}
+                      <div 
+                        className="fixed inset-0 z-40"
+                        onClick={() => setShowProfileMenu(false)}
+                      />
+                      
+                      {/* Menu compact aligné à droite */}
+                      <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-2xl shadow-2xl border border-gray-200 py-2 z-50 animate-fadeIn">
                       {/* Profil Info */}
                       <div className="px-4 py-3 border-b border-gray-100">
                         <p className="font-bold text-gray-900">{user?.firstName} {user?.lastName}</p>
@@ -327,7 +328,8 @@ const ClientDashboardModern = () => {
                         <LogOut size={18} className="text-red-600" />
                         <span className="text-sm text-red-600 font-medium">Déconnexion</span>
                       </button>
-                    </div>
+                      </div>
+                    </>
                   )}
                 </div>
               </div>
