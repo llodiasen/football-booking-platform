@@ -38,6 +38,8 @@ const OwnerDashboardModern = () => {
     pendingTerrains: 0,
     totalBookings: 0,
     confirmedBookings: 0,
+    pendingBookings: 0,
+    cancelledBookings: 0,
     totalRevenue: 0,
     monthlyRevenue: 0,
     totalViews: 0,
@@ -74,6 +76,9 @@ const OwnerDashboardModern = () => {
 
       const totalBookings = myReservations.length;
       const confirmedBookings = myReservations.filter(r => r.status === 'confirmed').length;
+      const pendingBookings = myReservations.filter(r => r.status === 'pending').length;
+      const cancelledBookings = myReservations.filter(r => r.status === 'cancelled').length;
+      
       const totalRevenue = myReservations
         .filter(r => r.status === 'confirmed' || r.status === 'completed')
         .reduce((sum, r) => sum + (r.totalPrice || 0), 0);
@@ -99,6 +104,8 @@ const OwnerDashboardModern = () => {
         pendingTerrains,
         totalBookings,
         confirmedBookings,
+        pendingBookings,
+        cancelledBookings,
         totalRevenue,
         monthlyRevenue,
         totalViews,
@@ -671,14 +678,14 @@ const OwnerDashboardModern = () => {
                 monthlyRevenue={stats.monthlyRevenue}
               />
 
-              {/* Statut Terrains - Design épuré */}
+              {/* Statut Réservations - Design épuré */}
               <div className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider">
-                    Statut Terrains
+                    Statut Réservations
                   </h3>
                   <Badge variant="default">
-                    {stats.totalTerrains} total
+                    {stats.totalBookings} total
                   </Badge>
                 </div>
 
@@ -687,14 +694,14 @@ const OwnerDashboardModern = () => {
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-sm font-medium text-gray-700">Approuvés</span>
+                        <span className="text-sm font-medium text-gray-700">Confirmées</span>
                       </div>
-                      <span className="text-sm font-bold text-gray-900">{stats.approvedTerrains}</span>
+                      <span className="text-sm font-bold text-gray-900">{stats.confirmedBookings}</span>
                     </div>
                     <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
                       <div 
                         className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full transition-all duration-700 ease-out"
-                        style={{ width: stats.totalTerrains > 0 ? `${(stats.approvedTerrains / stats.totalTerrains) * 100}%` : '0%' }}
+                        style={{ width: stats.totalBookings > 0 ? `${(stats.confirmedBookings / stats.totalBookings) * 100}%` : '0%' }}
                       ></div>
                     </div>
                   </div>
@@ -705,12 +712,28 @@ const OwnerDashboardModern = () => {
                         <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                         <span className="text-sm font-medium text-gray-700">En attente</span>
                       </div>
-                      <span className="text-sm font-bold text-gray-900">{stats.pendingTerrains}</span>
+                      <span className="text-sm font-bold text-gray-900">{stats.pendingBookings}</span>
                     </div>
                     <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
                       <div 
                         className="bg-gradient-to-r from-yellow-500 to-yellow-600 h-2 rounded-full transition-all duration-700 ease-out"
-                        style={{ width: stats.totalTerrains > 0 ? `${(stats.pendingTerrains / stats.totalTerrains) * 100}%` : '0%' }}
+                        style={{ width: stats.totalBookings > 0 ? `${(stats.pendingBookings / stats.totalBookings) * 100}%` : '0%' }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                        <span className="text-sm font-medium text-gray-700">Annulées</span>
+                      </div>
+                      <span className="text-sm font-bold text-gray-900">{stats.cancelledBookings || 0}</span>
+                    </div>
+                    <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                      <div 
+                        className="bg-gradient-to-r from-red-500 to-red-600 h-2 rounded-full transition-all duration-700 ease-out"
+                        style={{ width: stats.totalBookings > 0 ? `${((stats.cancelledBookings || 0) / stats.totalBookings) * 100}%` : '0%' }}
                       ></div>
                     </div>
                   </div>
