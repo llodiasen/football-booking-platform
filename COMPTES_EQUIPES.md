@@ -54,6 +54,9 @@
 
 ## 🎯 Exemples d'utilisation
 
+### URL Frontend
+**http://localhost:5174/** (port 5174, pas 5173)
+
 ### Test rapide
 ```
 📧 Email: fc-medina@221football.sn
