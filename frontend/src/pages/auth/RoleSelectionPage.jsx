@@ -59,7 +59,12 @@ const RoleSelectionPage = () => {
 
   const handleContinue = () => {
     if (selectedRole) {
-      navigate(`/register/${selectedRole}`);
+      // Sauvegarder le rôle choisi dans localStorage
+      localStorage.setItem('selectedRole', selectedRole);
+      console.log('🎯 Rôle choisi et sauvegardé:', selectedRole);
+      
+      // Rediriger vers la page de login/inscription
+      navigate('/login?from=role-selection');
     }
   };
 

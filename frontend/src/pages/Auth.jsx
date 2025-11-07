@@ -39,7 +39,13 @@ const Auth = () => {
       await login(loginData.email, loginData.password);
       success('Connexion réussie ! Bienvenue 👋');
       
-      if (redirectUrl) {
+      // Vérifier si un rôle a été choisi avant (Flow 1)
+      const selectedRole = localStorage.getItem('selectedRole');
+      
+      if (selectedRole && searchParams.get('from') === 'role-selection') {
+        console.log('🎯 Redirection vers formulaire du rôle:', selectedRole);
+        navigate(`/register/${selectedRole}`);
+      } else if (redirectUrl) {
         navigate(redirectUrl);
       } else {
         navigate('/dashboard');
@@ -75,7 +81,13 @@ const Auth = () => {
       success(result.message || 'Inscription réussie! 🎉');
       
       setTimeout(() => {
-        if (redirectUrl) {
+        // Vérifier si un rôle a été choisi avant (Flow 1)
+        const selectedRole = localStorage.getItem('selectedRole');
+        
+        if (selectedRole && searchParams.get('from') === 'role-selection') {
+          console.log('🎯 Redirection vers formulaire du rôle:', selectedRole);
+          navigate(`/register/${selectedRole}`);
+        } else if (redirectUrl) {
           navigate(redirectUrl);
         } else {
           navigate('/dashboard');
