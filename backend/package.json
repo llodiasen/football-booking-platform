@@ -10,7 +10,8 @@
     "seed:all": "node src/scripts/seedDatabase.js",
     "add-slots": "node src/scripts/addTimeSlots.js",
     "create-accounts": "node src/scripts/createUserAccounts.js",
-    "reset-accounts": "node src/scripts/resetUserAccounts.js"
+    "reset-accounts": "node src/scripts/resetUserAccounts.js",
+    "fix-captains": "node src/scripts/fixCaptainLogin.js"
   },
   "keywords": [
     "football",
