@@ -56,7 +56,10 @@ const Auth = () => {
     setLoginLoading(true);
 
     try {
-      await login(loginData.email, loginData.password);
+      console.log('🔐 Tentative de connexion:', loginData.email);
+      const result = await login(loginData.email, loginData.password);
+      console.log('✅ Résultat login:', result);
+      console.log('🔑 Token sauvegardé:', localStorage.getItem('token'));
       success('Connexion réussie ! Bienvenue 👋');
       
       // Vérifier si un rôle a été choisi avant (Flow 1)

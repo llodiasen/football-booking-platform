@@ -180,6 +180,15 @@ const PlayerDashboard = () => {
                   <p className="text-sm text-gray-600">{user?.firstName} {user?.lastName}</p>
                 </div>
               </div>
+              
+              {/* Bouton Accueil */}
+              <button
+                onClick={() => navigate('/')}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+              >
+                <Home size={18} />
+                <span className="hidden sm:inline">Accueil</span>
+              </button>
             </div>
           </div>
         </header>
