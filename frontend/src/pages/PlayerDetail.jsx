@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
-  ArrowLeft, MapPin, Calendar, Award, TrendingUp, Users, 
-  Mail, Phone, Ruler, Weight, Trophy, Target, Star,
-  Flag, Heart, Shield, Activity
+  ArrowLeft, MapPin, Calendar, Mail, Phone, Flag, 
+  Trophy, Target, Heart, Activity, Star, Share2, 
+  MessageCircle, UserPlus, Shield, Zap, Award
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -35,22 +35,22 @@ const PlayerDetail = () => {
 
   const getPositionIcon = (position) => {
     const icons = {
-      'gardien': '🧤',
-      'défenseur': '🛡️',
-      'milieu': '⚙️',
-      'attaquant': '⚡'
+      'gardien': <Shield className="text-blue-600" size={20} />,
+      'défenseur': <Shield className="text-purple-600" size={20} />,
+      'milieu': <Activity className="text-green-600" size={20} />,
+      'attaquant': <Zap className="text-red-600" size={20} />
     };
-    return icons[position] || '⚽';
+    return icons[position] || <Activity size={20} />;
   };
 
-  const getLevelColor = (level) => {
-    const colors = {
-      'débutant': 'bg-gray-100 text-gray-700 border-gray-300',
-      'intermédiaire': 'bg-blue-100 text-blue-700 border-blue-300',
-      'avancé': 'bg-green-100 text-green-700 border-green-300',
-      'expert': 'bg-purple-100 text-purple-700 border-purple-300'
+  const getLevelBadge = (level) => {
+    const badges = {
+      'débutant': 'bg-gray-100 text-gray-800 border border-gray-300',
+      'intermédiaire': 'bg-blue-100 text-blue-800 border border-blue-300',
+      'avancé': 'bg-green-100 text-green-800 border border-green-300',
+      'expert': 'bg-purple-100 text-purple-800 border border-purple-300'
     };
-    return colors[level] || 'bg-gray-100 text-gray-700 border-gray-300';
+    return badges[level] || badges['débutant'];
   };
 
   const calculateAge = (dateOfBirth) => {
@@ -67,21 +67,20 @@ const PlayerDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600"></div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900"></div>
       </div>
     );
   }
 
   if (!player) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <Users className="mx-auto text-gray-400 mb-4" size={64} />
-          <h3 className="text-xl font-bold text-gray-900 mb-2">Joueur non trouvé</h3>
+          <h3 className="text-2xl font-semibold text-gray-900 mb-4">Joueur non trouvé</h3>
           <button
             onClick={() => navigate('/players')}
-            className="text-green-600 hover:text-green-700 font-medium"
+            className="text-gray-900 hover:underline font-medium"
           >
             ← Retour à la liste
           </button>
@@ -91,250 +90,222 @@ const PlayerDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header avec photo de couverture */}
-      <div className="relative h-80 bg-gradient-to-r from-green-600 to-green-700">
-        <img
-          src={`https://source.unsplash.com/1920x400/?african,football,player,soccer&sig=${player._id}`}
-          alt="Cover"
-          className="w-full h-full object-cover opacity-30"
-          onError={(e) => {
-            e.target.src = `https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=1920&h=400&fit=crop&q=80`;
-          }}
-        />
-        
-        {/* Bouton retour */}
-        <button
-          onClick={() => navigate('/players')}
-          className="absolute top-6 left-6 flex items-center gap-2 bg-white/90 hover:bg-white px-4 py-2 rounded-lg shadow-lg transition-all"
-        >
-          <ArrowLeft size={20} />
-          <span className="font-medium">Retour</span>
-        </button>
+    <div className="min-h-screen bg-white">
+      {/* Header épuré - Style Airbnb */}
+      <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            <button
+              onClick={() => navigate('/players')}
+              className="flex items-center gap-2 text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors"
+            >
+              <ArrowLeft size={20} />
+              <span className="font-medium hidden sm:inline">Joueurs</span>
+            </button>
 
-        {/* Badge disponible */}
-        {player.lookingForTeam && (
-          <div className="absolute top-6 right-6 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg font-bold">
-            ✅ Disponible
+            <div className="flex items-center gap-3">
+              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                <Share2 size={20} className="text-gray-700" />
+              </button>
+              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                <Heart size={20} className="text-gray-700" />
+              </button>
+            </div>
           </div>
-        )}
+        </div>
       </div>
 
-      <div className="container-custom -mt-24 pb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Colonne gauche - Photo et infos principales */}
-          <div className="lg:col-span-1">
-            {/* Photo du joueur */}
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-6">
-              <img
-                src={`https://source.unsplash.com/400x500/?african,football,player,soccer&sig=${player._id}`}
-                alt={`${player.firstName} ${player.lastName}`}
-                className="w-full h-96 object-cover"
-                onError={(e) => {
-                  e.target.src = `https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&h=500&fit=crop&q=80`;
-                }}
-              />
-              <div className="p-6">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  {player.firstName} {player.lastName}
-                </h1>
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-3xl">{getPositionIcon(player.position)}</span>
-                  <div>
-                    <p className="text-lg font-semibold text-gray-700">{player.position}</p>
-                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold border ${getLevelColor(player.level)}`}>
-                      {player.level}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Équipe actuelle */}
-                {player.currentTeam && (
-                  <Link
-                    to={`/teams/${player.currentTeam._id}`}
-                    className="block p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors mb-4"
-                  >
-                    <p className="text-xs text-gray-500 mb-1">Équipe actuelle</p>
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={player.currentTeam.logo}
-                        alt={player.currentTeam.name}
-                        className="w-10 h-10 rounded-full"
-                      />
-                      <p className="font-bold text-gray-900">{player.currentTeam.name}</p>
-                    </div>
-                  </Link>
-                )}
-
-                {/* Bouton contact */}
-                <button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 mb-3">
-                  <Mail size={18} />
-                  Contacter
-                </button>
-
-                {/* Localisation */}
-                <div className="flex items-center gap-2 text-gray-600 mb-2">
-                  <MapPin size={18} />
-                  <span>{player.city}, {player.region}</span>
-                </div>
-
-                {/* Contact */}
-                {player.email && (
-                  <div className="flex items-center gap-2 text-gray-600 mb-2">
-                    <Mail size={18} />
-                    <span className="text-sm">{player.email}</span>
-                  </div>
-                )}
-                {player.phone && (
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Phone size={18} />
-                    <span className="text-sm">{player.phone}</span>
-                  </div>
-                )}
+      {/* Galerie d'images - Style Airbnb Grid */}
+      <div className="max-w-7xl mx-auto px-0 lg:px-8 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 rounded-xl overflow-hidden">
+          {/* Image principale */}
+          <div className="relative h-[400px] lg:h-[500px]">
+            <img
+              src={`https://source.unsplash.com/800x600/?african,football,player,soccer&sig=${player._id}`}
+              alt={`${player.firstName} ${player.lastName}`}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.src = 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&h=600&fit=crop&q=80';
+              }}
+            />
+            {player.lookingForTeam && (
+              <div className="absolute top-4 right-4 bg-white text-gray-900 px-4 py-2 rounded-lg shadow-lg font-semibold text-sm">
+                ✓ Disponible
               </div>
-            </div>
-
-            {/* Caractéristiques physiques */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Caractéristiques</h3>
-              
-              <div className="space-y-3">
-                <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Calendar size={18} />
-                    <span className="text-sm">Âge</span>
-                  </div>
-                  <span className="font-semibold text-gray-900">{calculateAge(player.dateOfBirth)} ans</span>
-                </div>
-
-                <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Ruler size={18} />
-                    <span className="text-sm">Taille</span>
-                  </div>
-                  <span className="font-semibold text-gray-900">{player.height} cm</span>
-                </div>
-
-                <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Weight size={18} />
-                    <span className="text-sm">Poids</span>
-                  </div>
-                  <span className="font-semibold text-gray-900">{player.weight} kg</span>
-                </div>
-
-                <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Flag size={18} />
-                    <span className="text-sm">Pied préféré</span>
-                  </div>
-                  <span className="font-semibold text-gray-900">{player.preferredFoot}</span>
-                </div>
-
-                <div className="flex items-center justify-between py-2">
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Trophy size={18} />
-                    <span className="text-sm">Expérience</span>
-                  </div>
-                  <span className="font-semibold text-gray-900">{player.yearsOfExperience} ans</span>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
 
-          {/* Colonne droite - Stats et bio */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Statistiques principales */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                <TrendingUp className="text-green-600" size={28} />
-                Statistiques
-              </h2>
+          {/* Grille de 4 images secondaires */}
+          <div className="hidden lg:grid grid-cols-2 gap-2">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="relative h-[246px]">
+                <img
+                  src={`https://source.unsplash.com/400x300/?football,player,african,sport&sig=${player._id}-${i}`}
+                  alt="Gallery"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.src = 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&h=300&fit=crop&q=80';
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 border border-blue-200">
-                  <div className="flex items-center gap-2 text-blue-600 mb-2">
-                    <Activity size={20} />
-                    <span className="text-xs font-medium">Matchs</span>
+      {/* Contenu principal - Layout Airbnb */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          
+          {/* Colonne principale - 2/3 */}
+          <div className="lg:col-span-2 space-y-10">
+            
+            {/* En-tête joueur */}
+            <div className="pb-8 border-b border-gray-200">
+              <div className="flex items-start justify-between mb-6">
+                <div>
+                  <h1 className="text-3xl lg:text-4xl font-semibold text-gray-900 mb-3">
+                    {player.firstName} {player.lastName}
+                  </h1>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex items-center gap-2 text-gray-700">
+                      {getPositionIcon(player.position)}
+                      <span className="font-medium">{player.position}</span>
+                    </div>
+                    <span className="text-gray-300">•</span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getLevelBadge(player.level)}`}>
+                      {player.level}
+                    </span>
+                    <span className="text-gray-300">•</span>
+                    <div className="flex items-center gap-1 text-gray-700">
+                      <MapPin size={16} />
+                      <span className="text-sm">{player.city}</span>
+                    </div>
                   </div>
-                  <p className="text-3xl font-bold text-blue-900">{player.stats?.matchesPlayed || 0}</p>
+                </div>
+              </div>
+
+              {/* Équipe actuelle - Encart */}
+              {player.currentTeam && (
+                <Link
+                  to={`/teams/${player.currentTeam._id}`}
+                  className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                >
+                  <img
+                    src={player.currentTeam.logo}
+                    alt={player.currentTeam.name}
+                    className="w-12 h-12 rounded-full"
+                  />
+                  <div>
+                    <p className="text-xs text-gray-500 font-medium">Équipe actuelle</p>
+                    <p className="text-lg font-semibold text-gray-900">{player.currentTeam.name}</p>
+                  </div>
+                </Link>
+              )}
+            </div>
+
+            {/* Caractéristiques - Grille propre */}
+            <div className="pb-8 border-b border-gray-200">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-6">Caractéristiques</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div>
+                  <p className="text-gray-500 text-sm mb-1">Âge</p>
+                  <p className="text-2xl font-semibold text-gray-900">{calculateAge(player.dateOfBirth)}</p>
+                  <p className="text-xs text-gray-500">ans</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-sm mb-1">Taille</p>
+                  <p className="text-2xl font-semibold text-gray-900">{player.height}</p>
+                  <p className="text-xs text-gray-500">cm</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-sm mb-1">Poids</p>
+                  <p className="text-2xl font-semibold text-gray-900">{player.weight}</p>
+                  <p className="text-xs text-gray-500">kg</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-sm mb-1">Pied préféré</p>
+                  <p className="text-lg font-semibold text-gray-900 capitalize">{player.preferredFoot}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Statistiques - Cards modernes */}
+            <div className="pb-8 border-b border-gray-200">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-6">Statistiques</h2>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div className="bg-blue-50 rounded-xl p-5 border border-blue-100">
+                  <Activity className="text-blue-600 mb-2" size={24} />
+                  <p className="text-3xl font-bold text-gray-900">{player.stats?.matchesPlayed || 0}</p>
+                  <p className="text-sm text-gray-600 mt-1">Matchs</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-5 border border-green-200">
-                  <div className="flex items-center gap-2 text-green-600 mb-2">
-                    <Target size={20} />
-                    <span className="text-xs font-medium">Buts</span>
-                  </div>
-                  <p className="text-3xl font-bold text-green-900">{player.stats?.goals || 0}</p>
+                <div className="bg-green-50 rounded-xl p-5 border border-green-100">
+                  <Target className="text-green-600 mb-2" size={24} />
+                  <p className="text-3xl font-bold text-gray-900">{player.stats?.goals || 0}</p>
+                  <p className="text-sm text-gray-600 mt-1">Buts</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-5 border border-purple-200">
-                  <div className="flex items-center gap-2 text-purple-600 mb-2">
-                    <Heart size={20} />
-                    <span className="text-xs font-medium">Passes D.</span>
-                  </div>
-                  <p className="text-3xl font-bold text-purple-900">{player.stats?.assists || 0}</p>
+                <div className="bg-purple-50 rounded-xl p-5 border border-purple-100">
+                  <Heart className="text-purple-600 mb-2" size={24} />
+                  <p className="text-3xl font-bold text-gray-900">{player.stats?.assists || 0}</p>
+                  <p className="text-sm text-gray-600 mt-1">Passes D.</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-5 border border-yellow-200">
-                  <div className="flex items-center gap-2 text-yellow-600 mb-2">
-                    <Star size={20} />
-                    <span className="text-xs font-medium">Moyenne</span>
-                  </div>
-                  <p className="text-3xl font-bold text-yellow-900">
+                <div className="bg-yellow-50 rounded-xl p-5 border border-yellow-100">
+                  <Star className="text-yellow-600 mb-2" size={24} />
+                  <p className="text-3xl font-bold text-gray-900">
                     {player.stats?.matchesPlayed > 0 
                       ? ((player.stats?.goals || 0) / player.stats.matchesPlayed).toFixed(1)
                       : '0.0'
                     }
                   </p>
+                  <p className="text-sm text-gray-600 mt-1">Moyenne</p>
                 </div>
               </div>
 
               {/* Cartons */}
-              <div className="mt-6 grid grid-cols-2 gap-4">
-                <div className="bg-yellow-50 rounded-xl p-4 border border-yellow-200">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-yellow-700">Cartons jaunes</span>
-                    <div className="w-8 h-10 bg-yellow-400 rounded"></div>
+              <div className="flex gap-4">
+                <div className="flex-1 flex items-center gap-3 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+                  <div className="w-6 h-8 bg-yellow-400 rounded"></div>
+                  <div>
+                    <p className="text-sm text-gray-600">Cartons jaunes</p>
+                    <p className="text-2xl font-bold text-gray-900">{player.stats?.yellowCards || 0}</p>
                   </div>
-                  <p className="text-2xl font-bold text-yellow-900 mt-2">{player.stats?.yellowCards || 0}</p>
                 </div>
-
-                <div className="bg-red-50 rounded-xl p-4 border border-red-200">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-red-700">Cartons rouges</span>
-                    <div className="w-8 h-10 bg-red-500 rounded"></div>
+                <div className="flex-1 flex items-center gap-3 p-4 bg-red-50 rounded-xl border border-red-200">
+                  <div className="w-6 h-8 bg-red-500 rounded"></div>
+                  <div>
+                    <p className="text-sm text-gray-600">Cartons rouges</p>
+                    <p className="text-2xl font-bold text-gray-900">{player.stats?.redCards || 0}</p>
                   </div>
-                  <p className="text-2xl font-bold text-red-900 mt-2">{player.stats?.redCards || 0}</p>
                 </div>
               </div>
             </div>
 
             {/* Biographie */}
             {player.bio && (
-              <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">À propos</h2>
-                <p className="text-gray-700 leading-relaxed">{player.bio}</p>
+              <div className="pb-8 border-b border-gray-200">
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">À propos</h2>
+                <p className="text-gray-700 leading-relaxed text-lg">{player.bio}</p>
               </div>
             )}
 
-            {/* Historique des équipes */}
+            {/* Historique */}
             {player.teamsHistory && player.teamsHistory.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-                  <Users className="text-green-600" size={24} />
-                  Historique des équipes
-                </h2>
-                <div className="space-y-3">
+              <div className="pb-8 border-b border-gray-200">
+                <h2 className="text-2xl font-semibold text-gray-900 mb-6">Parcours</h2>
+                <div className="space-y-4">
                   {player.teamsHistory.map((history, index) => (
-                    <div key={index} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+                    <div key={index} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
                       <img
                         src={history.teamId?.logo}
                         alt={history.teamId?.name}
-                        className="w-12 h-12 rounded-full"
+                        className="w-14 h-14 rounded-full"
                       />
                       <div className="flex-1">
-                        <p className="font-semibold text-gray-900">{history.teamId?.name}</p>
+                        <p className="font-semibold text-gray-900 text-lg">{history.teamId?.name}</p>
                         <p className="text-sm text-gray-600">
                           {new Date(history.startDate).getFullYear()} - 
                           {history.endDate ? new Date(history.endDate).getFullYear() : 'Présent'}
@@ -346,20 +317,90 @@ const PlayerDetail = () => {
               </div>
             )}
 
-            {/* Disponibilité */}
-            <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-2xl shadow-lg p-8 text-white">
-              <h2 className="text-2xl font-bold mb-4">
-                {player.lookingForTeam ? '✅ Disponible pour rejoindre une équipe' : '👥 Déjà dans une équipe'}
-              </h2>
-              <p className="text-green-100 mb-6">
-                {player.lookingForTeam 
-                  ? `${player.firstName} est actuellement à la recherche d'une équipe. Contactez-le pour discuter d'une collaboration.`
-                  : `${player.firstName} fait déjà partie d'une équipe mais reste ouvert aux opportunités.`
-                }
-              </p>
-              <button className="bg-white text-green-600 hover:bg-green-50 font-semibold px-6 py-3 rounded-xl transition-colors">
-                Envoyer une invitation
-              </button>
+            {/* Expérience */}
+            <div>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Expérience</h2>
+              <div className="flex items-center gap-2">
+                <Trophy className="text-gray-400" size={24} />
+                <span className="text-lg text-gray-700">{player.yearsOfExperience} ans d'expérience</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar - 1/3 - Sticky comme Airbnb */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-32 space-y-6">
+              
+              {/* Card de réservation - Style Airbnb */}
+              <div className="border border-gray-200 rounded-2xl p-6 shadow-lg">
+                <div className="mb-6">
+                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">Disponibilité</p>
+                  {player.lookingForTeam ? (
+                    <div className="flex items-center gap-2 text-green-600">
+                      <div className="w-3 h-3 bg-green-600 rounded-full"></div>
+                      <span className="font-semibold">Disponible</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 text-gray-400">
+                      <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
+                      <span className="font-semibold">Non disponible</span>
+                    </div>
+                  )}
+                </div>
+
+                <button className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold py-4 rounded-xl transition-all shadow-md hover:shadow-lg mb-3">
+                  Envoyer une invitation
+                </button>
+
+                <button className="w-full border border-gray-900 text-gray-900 hover:bg-gray-50 font-semibold py-4 rounded-xl transition-all flex items-center justify-center gap-2">
+                  <MessageCircle size={20} />
+                  Contacter
+                </button>
+
+                <p className="text-center text-xs text-gray-500 mt-4">
+                  Vous ne serez pas débité
+                </p>
+              </div>
+
+              {/* Contact */}
+              <div className="border border-gray-200 rounded-2xl p-6">
+                <h3 className="font-semibold text-gray-900 mb-4">Informations de contact</h3>
+                <div className="space-y-3">
+                  {player.email && (
+                    <div className="flex items-center gap-3 text-gray-700">
+                      <Mail size={18} className="text-gray-400" />
+                      <span className="text-sm">{player.email}</span>
+                    </div>
+                  )}
+                  {player.phone && (
+                    <div className="flex items-center gap-3 text-gray-700">
+                      <Phone size={18} className="text-gray-400" />
+                      <span className="text-sm">{player.phone}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-3 text-gray-700">
+                    <MapPin size={18} className="text-gray-400" />
+                    <span className="text-sm">{player.city}, {player.region}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-gray-700">
+                    <Flag size={18} className="text-gray-400" />
+                    <span className="text-sm">Sénégal</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Badge vérification */}
+              {player.isVerified && (
+                <div className="border border-gray-200 rounded-2xl p-6 bg-green-50">
+                  <div className="flex items-center gap-3">
+                    <Award className="text-green-600" size={24} />
+                    <div>
+                      <p className="font-semibold text-gray-900">Profil vérifié</p>
+                      <p className="text-xs text-gray-600">Identité confirmée</p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -369,4 +410,3 @@ const PlayerDetail = () => {
 };
 
 export default PlayerDetail;
-
