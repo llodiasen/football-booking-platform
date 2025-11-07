@@ -131,7 +131,7 @@ const seedOwners = async () => {
       firstName: prenom,
       lastName: nom,
       email: `owner${i}@221football.sn`,
-      phone: `+221 77 ${String(i).padStart(3, '0')} ${String(Math.floor(Math.random() * 100)).padStart(2, '0')} ${String(Math.floor(Math.random() * 100)).padStart(2, '0')}`,
+      phone: `+221${77000000 + i * 1000 + Math.floor(Math.random() * 1000)}`,
       password,
       role: 'owner',
       isActive: true,
@@ -142,9 +142,9 @@ const seedOwners = async () => {
     });
   }
 
-  await User.insertMany(owners);
+  const createdOwners = await User.insertMany(owners);
   console.log('✅ 30 propriétaires créés');
-  return owners;
+  return createdOwners;
 };
 
 // 2. SEED TERRAINS (30)
@@ -166,22 +166,26 @@ const seedTerrains = async (owners) => {
         city: 'Dakar',
         region: 'Dakar',
         postalCode: `${11000 + Math.floor(Math.random() * 100)}`,
-        country: 'Sénégal'
+        country: 'Sénégal',
+        coordinates: {
+          type: 'Point',
+          coordinates: [coords.lon, coords.lat]
+        }
       },
-      location: {
-        type: 'Point',
-        coordinates: [coords.lon, coords.lat]
-      },
-      latitude: coords.lat,
-      longitude: coords.lon,
-      size: ['5v5', '7v7', '11v11'][Math.floor(Math.random() * 3)],
-      surface: ['Gazon naturel', 'Gazon synthétique', 'Terre battue'][Math.floor(Math.random() * 3)],
+      size: ['5x5', '7x7', '11x11'][Math.floor(Math.random() * 3)],
+      type: ['synthetique', 'naturel', 'stabilise'][Math.floor(Math.random() * 3)],
       pricePerHour: 10000 + (Math.floor(Math.random() * 4) * 5000), // 10k, 15k, 20k, 25k
       images: [
-        terrainImages[Math.floor(Math.random() * terrainImages.length)] + '?w=800',
-        terrainImages[Math.floor(Math.random() * terrainImages.length)] + '?w=800'
+        {
+          url: terrainImages[Math.floor(Math.random() * terrainImages.length)] + '?w=800',
+          isMain: true
+        },
+        {
+          url: terrainImages[Math.floor(Math.random() * terrainImages.length)] + '?w=800',
+          isMain: false
+        }
       ],
-      amenities: ['Éclairage', 'Vestiaires', 'Parking', 'Toilettes'].slice(0, Math.floor(Math.random() * 4) + 1),
+      amenities: ['eclairage', 'vestiaires', 'parking', 'douches'].slice(0, Math.floor(Math.random() * 4) + 1),
       availability: {
         monday: true,
         tuesday: true,
@@ -226,7 +230,7 @@ const seedTeams = async () => {
         firstName: capitainePrenom,
         lastName: capitaineNom,
         email: `captain.team${i + 1}@221football.sn`,
-        phone: `+221 77 ${String(i + 100).padStart(3, '0')} ${String(Math.floor(Math.random() * 100)).padStart(2, '0')} ${String(Math.floor(Math.random() * 100)).padStart(2, '0')}`,
+        phone: `+221${77100000 + i * 1000 + Math.floor(Math.random() * 1000)}`,
         password
       },
       category: ['amateur', 'semi-pro', 'loisir'][Math.floor(Math.random() * 3)],
@@ -287,7 +291,7 @@ const seedPlayers = async (teams) => {
         firstName: prenom,
         lastName: nom,
         email: `player${String(playerCounter).padStart(3, '0')}@221football.sn`,
-        phone: `+221 77 ${String(playerCounter).padStart(3, '0')} ${String(Math.floor(Math.random() * 100)).padStart(2, '0')} ${String(Math.floor(Math.random() * 100)).padStart(2, '0')}`,
+        phone: `+221${77200000 + playerCounter * 100 + Math.floor(Math.random() * 100)}`,
         password,
         avatar: `https://i.pravatar.cc/150?u=${playerCounter}`,
         position,
