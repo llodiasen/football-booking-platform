@@ -146,7 +146,7 @@ const Navbar = () => {
                           Mes réservations
                         </Link>
                         <Link
-                          to="/profile"
+                          to="/dashboard?section=settings"
                           className="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors"
                           onClick={() => setUserMenuOpen(false)}
                         >
