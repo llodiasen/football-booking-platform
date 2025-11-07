@@ -127,14 +127,24 @@ const Navbar = () => {
                     {isAuthenticated ? (
                       <>
                         <Link
-                          to="/dashboard?section=reservations"
+                          to={
+                            user?.role === 'team' ? '/dashboard/team?section=reservations' :
+                            user?.role === 'player' ? '/dashboard/player?section=reservations' :
+                            user?.role === 'subscriber' ? '/dashboard/subscriber?section=reservations' :
+                            '/dashboard?section=reservations'
+                          }
                           className="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors font-medium"
                           onClick={() => setUserMenuOpen(false)}
                         >
                           Mes réservations
                         </Link>
                         <Link
-                          to="/dashboard?section=settings"
+                          to={
+                            user?.role === 'team' ? '/dashboard/team?section=settings' :
+                            user?.role === 'player' ? '/dashboard/player?section=settings' :
+                            user?.role === 'subscriber' ? '/dashboard/subscriber?section=settings' :
+                            '/dashboard?section=settings'
+                          }
                           className="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 transition-colors"
                           onClick={() => setUserMenuOpen(false)}
                         >
