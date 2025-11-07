@@ -17,6 +17,7 @@ const paymentRoutes = require('./routes/payments');
 const teamRoutes = require('./routes/teams');
 const paytechRoutes = require('./routes/paytech');
 const multiRoleAuthRoutes = require('./routes/multiRoleAuth');
+const playerRoutes = require('./routes/players');
 
 const app = express();
 
@@ -82,6 +83,7 @@ app.use('/api/terrains', terrainRoutes);
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/teams', teamRoutes);
+app.use('/api/players', playerRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/messages', require('./routes/messages'));
 app.use('/api/paytech', paytechRoutes);
