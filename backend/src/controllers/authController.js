@@ -175,9 +175,15 @@ exports.getMe = async (req, res) => {
 
     console.log('✅ Utilisateur trouvé:', user.role || userRole);
     
+    // Ajouter le rôle au user si ce n'est pas déjà présent (pour Team, Player, Subscriber)
+    const userData = user.toObject ? user.toObject() : user;
+    if (!userData.role) {
+      userData.role = userRole;
+    }
+    
     res.json({
       success: true,
-      data: user
+      data: userData
     });
   } catch (error) {
     console.error('❌ Erreur getMe:', error);

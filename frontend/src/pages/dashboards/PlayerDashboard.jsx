@@ -8,6 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import axios from 'axios';
 import MessagesPanel from '../../components/messages/MessagesPanel';
+import SettingsSection from '../../components/dashboard/SettingsSection';
 
 const PlayerDashboard = () => {
   const navigate = useNavigate();
@@ -366,6 +367,9 @@ const PlayerDashboard = () => {
               </div>
             </div>
           )}
+
+          {/* SECTION PARAMÈTRES */}
+          {section === 'settings' && <SettingsSection />}
 
         </main>
       </div>
