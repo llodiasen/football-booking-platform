@@ -25,7 +25,7 @@ router.delete('/:id', protect, deleteTeam);
 router.post('/:id/members', protect, addMember);
 router.delete('/:id/members/:userId', protect, removeMember);
 router.post('/:id/subscribe', protect, subscribe);
-router.post('/invite-player', invitePlayer); // Pas de protect car on vérifie dans le controller
+router.post('/invite-player', invitePlayer); // Route publique pour invitation
 
 module.exports = router;
 

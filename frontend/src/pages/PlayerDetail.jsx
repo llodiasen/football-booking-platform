@@ -402,7 +402,7 @@ const PlayerDetail = () => {
 
                 <button 
                   onClick={handleSendInvite}
-                  disabled={sendingInvite || !player.lookingForTeam}
+                  disabled={sendingInvite}
                   className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold py-4 rounded-xl transition-all shadow-md hover:shadow-lg mb-3 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {sendingInvite ? (
