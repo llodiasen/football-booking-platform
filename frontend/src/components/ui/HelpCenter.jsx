@@ -70,10 +70,10 @@ const HelpCenter = () => {
 
   return (
     <>
-      {/* Bouton Toggle flottant à droite */}
+      {/* Bouton Toggle flottant à GAUCHE */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-3 rounded-full shadow-2xl hover:shadow-green-500/50 transition-all hover:scale-105"
+        className="fixed bottom-6 left-6 z-40 flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-3 rounded-full shadow-2xl hover:shadow-green-500/50 transition-all hover:scale-105"
         style={{ backgroundColor: '#15803d' }}
       >
         <HelpCircle size={20} />
