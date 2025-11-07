@@ -4,9 +4,12 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
 const Auth = () => {
-  const [activeTab, setActiveTab] = useState('login'); // 'login' ou 'register'
   const [searchParams] = useSearchParams();
   const redirectUrl = searchParams.get('redirect');
+  const tabParam = searchParams.get('tab');
+  
+  // Ouvrir l'onglet inscription si tab=register dans l'URL
+  const [activeTab, setActiveTab] = useState(tabParam === 'register' ? 'register' : 'login');
   
   const { login, register } = useAuth();
   const { success, error: showError } = useToast();
