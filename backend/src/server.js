@@ -10,6 +10,7 @@ const connectDB = require('./config/database');
 
 // Import routes
 const authRoutes = require('./routes/auth');
+const socialAuthRoutes = require('./routes/socialAuth');
 const terrainRoutes = require('./routes/terrains');
 const reservationRoutes = require('./routes/reservations');
 const paymentRoutes = require('./routes/payments');
@@ -75,6 +76,7 @@ if (process.env.NODE_ENV === 'development') {
 // Routes
 const notificationRoutes = require('./routes/notifications');
 app.use('/api/auth', authRoutes);
+app.use('/api/auth', socialAuthRoutes); // Routes OAuth sociales (Google, Facebook)
 app.use('/api/multi-auth', multiRoleAuthRoutes); // Routes multi-rôles
 app.use('/api/terrains', terrainRoutes);
 app.use('/api/reservations', reservationRoutes);
