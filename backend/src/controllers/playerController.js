@@ -109,8 +109,5 @@ exports.getPlayer = async (req, res) => {
   }
 };
 
-module.exports = {
-  getAllPlayers,
-  getPlayer
-};
+// Exports déjà faits avec exports.getAllPlayers et exports.getPlayer
 
