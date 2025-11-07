@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Menu, X, User, Search, Globe, Home, Gift, UserPlus, LogIn, HelpCircle } from 'lucide-react';
+import { Menu, X, User, Search, Globe, Home, Gift, UserPlus, LogIn, HelpCircle, MapPin, Users } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import Logo from '../ui/Logo';
 
@@ -63,6 +63,31 @@ const Navbar = () => {
                 <Menu size={20} />
                 <span className="hidden md:inline font-medium">Menu</span>
               </button>
+            </div>
+
+            {/* Center - Menu Explorer */}
+            <div className="hidden lg:flex items-center gap-2">
+              <Link
+                to="/search"
+                className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <MapPin size={18} className="text-gray-600" />
+                <span className="text-sm font-medium text-gray-700">Terrains</span>
+              </Link>
+              <Link
+                to="/teams"
+                className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <Users size={18} className="text-gray-600" />
+                <span className="text-sm font-medium text-gray-700">Équipes</span>
+              </Link>
+              <Link
+                to="/players"
+                className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <User size={18} className="text-gray-600" />
+                <span className="text-sm font-medium text-gray-700">Joueurs</span>
+              </Link>
             </div>
 
             {/* Right Side */}
