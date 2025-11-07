@@ -8,7 +8,8 @@
     "dev": "nodemon src/server.js",
     "seed": "node src/scripts/seedTerrains.js",
     "seed:all": "node src/scripts/seedDatabase.js",
-    "add-slots": "node src/scripts/addTimeSlots.js"
+    "add-slots": "node src/scripts/addTimeSlots.js",
+    "create-accounts": "node src/scripts/createUserAccounts.js"
   },
   "keywords": [
     "football",
