@@ -24,6 +24,8 @@ const RegisterTeamPage = () => {
     region: '',
     address: '',
     postalCode: '',
+    latitude: '',
+    longitude: '',
     foundedYear: new Date().getFullYear(),
     // Capitaine (sera pré-rempli avec les données du user connecté)
     captain: {
@@ -208,7 +210,9 @@ const RegisterTeamPage = () => {
             city: city,
             region: region,
             address: address || prev.address,
-            postalCode: postalCode || prev.postalCode
+            postalCode: postalCode || prev.postalCode,
+            latitude: latitude.toString(),
+            longitude: longitude.toString()
           }));
 
           showSuccess('✅ Position détectée avec succès !');
@@ -555,6 +559,47 @@ const RegisterTeamPage = () => {
                   placeholder="11000"
                 />
               </div>
+
+              {/* Coordonnées GPS */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Latitude
+                </label>
+                <input
+                  type="text"
+                  name="latitude"
+                  value={formData.latitude}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
+                  placeholder="14.6928"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Longitude
+                </label>
+                <input
+                  type="text"
+                  name="longitude"
+                  value={formData.longitude}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
+                  placeholder="-17.4467"
+                  readOnly
+                />
+              </div>
+
+              {formData.latitude && formData.longitude && (
+                <div className="md:col-span-2">
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                    <p className="text-sm text-green-800">
+                      📍 Position GPS enregistrée : {formData.latitude}, {formData.longitude}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

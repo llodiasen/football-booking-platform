@@ -16,10 +16,13 @@ exports.registerTeam = async (req, res) => {
       captain,
       category,
       matchType,
+      homeTerrain,
       city,
       region,
       address,
       postalCode,
+      latitude,
+      longitude,
       foundedYear
     } = req.body;
 
@@ -47,10 +50,13 @@ exports.registerTeam = async (req, res) => {
       },
       category,
       matchType,
+      homeTerrain,
       city,
       region,
       address,
       postalCode,
+      latitude: latitude ? parseFloat(latitude) : undefined,
+      longitude: longitude ? parseFloat(longitude) : undefined,
       foundedYear
     });
 

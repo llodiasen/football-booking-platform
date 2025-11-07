@@ -59,6 +59,10 @@ const teamSchema = new mongoose.Schema({
     enum: ['11v11', '7v7', '5v5'],
     default: '11v11'
   },
+  homeTerrain: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Terrain'
+  },
   city: {
     type: String,
     required: [true, 'La ville est requise']
@@ -72,6 +76,12 @@ const teamSchema = new mongoose.Schema({
   },
   postalCode: {
     type: String
+  },
+  latitude: {
+    type: Number
+  },
+  longitude: {
+    type: Number
   },
   foundedYear: {
     type: Number,
