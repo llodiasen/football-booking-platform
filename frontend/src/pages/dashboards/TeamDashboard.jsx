@@ -8,6 +8,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import AddMemberModal from '../../components/team/AddMemberModal';
+import MessagesPanel from '../../components/messages/MessagesPanel';
 
 const TeamDashboard = () => {
   const navigate = useNavigate();
@@ -552,15 +553,7 @@ const TeamDashboard = () => {
           )}
 
           {/* SECTION MESSAGES */}
-          {section === 'messages' && (
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Messagerie</h3>
-              <div className="text-center py-12 text-gray-500">
-                <MessageCircle className="mx-auto mb-4" size={64} />
-                <p>Fonctionnalité de messagerie à venir</p>
-              </div>
-            </div>
-          )}
+          {section === 'messages' && <MessagesPanel />}
 
           {/* SECTION SETTINGS */}
           {section === 'settings' && (

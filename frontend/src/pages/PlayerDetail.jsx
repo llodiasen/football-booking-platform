@@ -143,8 +143,18 @@ const PlayerDetail = () => {
       return;
     }
 
+    // Redirection intelligente selon le rôle vers la messagerie
+    let dashboardPath = '/dashboard';
+    if (user?.role === 'team') {
+      dashboardPath = '/dashboard/team';
+    } else if (user?.role === 'player') {
+      dashboardPath = '/dashboard/player';
+    } else if (user?.role === 'subscriber') {
+      dashboardPath = '/dashboard/subscriber';
+    }
+
     // Rediriger vers la messagerie avec ce joueur
-    navigate(`/dashboard?section=messages&conversationWith=${player._id}`);
+    navigate(`${dashboardPath}?section=messages&conversationWith=${player._id}`);
   };
 
   if (loading) {

@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { 
   User, Trophy, Activity, Calendar, Settings, LogOut,
-  Users, MapPin, Award, Home, Search, Plus, Menu, X
+  Users, MapPin, Award, Home, Search, Plus, Menu, X, MessageCircle
 } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import axios from 'axios';
+import MessagesPanel from '../../components/messages/MessagesPanel';
 
 const PlayerDashboard = () => {
   const navigate = useNavigate();
@@ -62,6 +63,7 @@ const PlayerDashboard = () => {
     { id: 'teams', label: 'Équipes', icon: Users },
     { id: 'matches', label: 'Mes Matchs', icon: Trophy },
     { id: 'stats', label: 'Statistiques', icon: Activity },
+    { id: 'messages', label: 'Messages', icon: MessageCircle },
     { id: 'settings', label: 'Paramètres', icon: Settings }
   ];
 
@@ -337,6 +339,9 @@ const PlayerDashboard = () => {
               </div>
             </div>
           )}
+
+          {/* SECTION MESSAGES */}
+          {section === 'messages' && <MessagesPanel />}
 
           {/* SECTION STATS */}
           {section === 'stats' && (
