@@ -501,31 +501,14 @@ const RegisterTeamPage = () => {
               </button>
             </div>
 
-            {/* Message explicatif */}
-            <div className="mb-4 bg-blue-50 border border-blue-200 rounded-xl p-4">
-              <p className="text-sm text-blue-900 mb-2">
-                <strong>🔒 Pourquoi votre localisation ?</strong>
+            {/* Message explicatif smart */}
+            <div className="mb-4 bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-xl p-4">
+              <p className="text-sm font-medium text-gray-900 mb-2">
+                📍 Trouvez des terrains et adversaires près de chez vous
               </p>
-              <ul className="text-xs text-blue-800 space-y-1.5 ml-4">
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-0.5">•</span>
-                  <span>Vous proposer des <strong>terrains proches</strong> de chez vous</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-0.5">•</span>
-                  <span>Trouver des <strong>adversaires dans votre région</strong></span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-0.5">•</span>
-                  <span>Recevoir des <strong>notifications pour les matchs locaux</strong></span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-0.5">•</span>
-                  <span>Organiser des <strong>tournois dans votre ville</strong></span>
-                </li>
-              </ul>
-              <p className="text-xs text-blue-700 mt-3 italic">
-                🔐 Vos données sont sécurisées et ne seront jamais partagées sans votre consentement.
+              <p className="text-xs text-gray-600">
+                Votre position nous aide à vous connecter avec votre communauté locale. 
+                <span className="text-blue-600 font-medium"> Données 100% sécurisées.</span>
               </p>
             </div>
             
