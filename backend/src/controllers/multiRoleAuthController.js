@@ -26,18 +26,26 @@ exports.registerTeam = async (req, res) => {
       foundedYear
     } = req.body;
 
-    // Vérifier si l'email existe déjà
+    // Vérifier si l'email existe déjà dans Team
     const existingTeam = await Team.findOne({ 'captain.email': captain.email });
     if (existingTeam) {
       return res.status(400).json({
         success: false,
-        message: 'Un compte avec cet email existe déjà'
+        message: 'Une équipe avec cet email existe déjà'
       });
     }
 
-    // Hasher le mot de passe
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(captain.password, salt);
+    // Hasher le mot de passe (sauf si c'est un user existant du Flow 1)
+    let hashedPassword;
+    if (captain.password === 'existing-user') {
+      // L'utilisateur existe déjà (Flow 1), utiliser un mot de passe fictif
+      // Dans ce cas, le capitaine ne se connectera pas avec ce compte Team,
+      // mais avec son compte User existant
+      hashedPassword = await bcrypt.hash('temp-' + Date.now(), 10);
+    } else {
+      const salt = await bcrypt.genSalt(10);
+      hashedPassword = await bcrypt.hash(captain.password, salt);
+    }
 
     // Créer l'équipe
     const newTeam = await Team.create({

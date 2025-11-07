@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Star, Share2, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const StickyBookingBar = ({ terrain, onShareClick, onFavoriteClick, isFavorite }) => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -17,7 +19,16 @@ const StickyBookingBar = ({ terrain, onShareClick, onFavoriteClick, isFavorite }
   }, []);
 
   const handleReserve = () => {
-    navigate(`/booking/${terrain._id}`);
+    // Vérifier si l'utilisateur est connecté (même logique que BookingCard)
+    const token = localStorage.getItem('token');
+    const bookingUrl = `/booking/${terrain._id}?type=single`;
+    
+    if (!token) {
+      // Rediriger vers login avec URL de retour
+      navigate(`/login?redirect=${encodeURIComponent(bookingUrl)}`);
+    } else {
+      navigate(bookingUrl);
+    }
   };
 
   const averageRating = terrain.rating?.average || 0;

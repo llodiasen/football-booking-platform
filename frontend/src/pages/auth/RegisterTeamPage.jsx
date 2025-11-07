@@ -246,22 +246,26 @@ const RegisterTeamPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validation
-    if (formData.captain.password !== formData.captain.confirmPassword) {
-      showError('Les mots de passe ne correspondent pas');
-      return;
-    }
-
-    if (formData.captain.password.length < 6) {
-      showError('Le mot de passe doit contenir au moins 6 caractères');
-      return;
-    }
-
     setLoading(true);
     try {
+      // Si l'utilisateur est déjà connecté, ne pas envoyer le mot de passe
+      // Le capitaine = l'utilisateur connecté
+      const dataToSend = {
+        ...formData,
+        captain: {
+          firstName: user?.firstName || formData.captain.firstName,
+          lastName: user?.lastName || formData.captain.lastName,
+          email: user?.email || formData.captain.email,
+          phone: user?.phone || formData.captain.phone,
+          password: user ? 'existing-user' : formData.captain.password // Mot de passe fictif si user existe
+        }
+      };
+
+      console.log('📤 Envoi données équipe:', dataToSend);
+
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/multi-auth/register/team`,
-        formData
+        dataToSend
       );
 
       if (response.data.success) {
