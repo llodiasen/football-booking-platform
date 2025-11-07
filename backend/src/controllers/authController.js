@@ -126,9 +126,13 @@ exports.login = async (req, res) => {
           firstName: user.firstName,
           lastName: user.lastName,
           phone: user.phone,
-          role: user.role,
+          role: user.role, // Pour compatibilité
+          roles: user.roles || [user.role], // 🆕 Rôles multiples
+          primaryRole: user.primaryRole || user.role, // 🆕 Rôle principal
           avatar: user.avatar,
-          ownerProfile: user.ownerProfile
+          ownerProfile: user.ownerProfile,
+          teamProfile: user.teamProfile, // 🆕
+          playerProfile: user.playerProfile // 🆕
         },
         token
       }
@@ -179,6 +183,14 @@ exports.getMe = async (req, res) => {
     const userData = user.toObject ? user.toObject() : user;
     if (!userData.role) {
       userData.role = userRole;
+    }
+    
+    // 🆕 Ajouter les rôles multiples si disponibles
+    if (!userData.roles) {
+      userData.roles = user.roles || [userRole];
+    }
+    if (!userData.primaryRole) {
+      userData.primaryRole = user.primaryRole || userRole;
     }
     
     res.json({

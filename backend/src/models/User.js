@@ -31,6 +31,19 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
+  // 🆕 Rôles multiples (un utilisateur peut avoir plusieurs rôles)
+  roles: {
+    type: [String],
+    enum: ['admin', 'owner', 'client', 'team', 'team-captain', 'player', 'subscriber'],
+    default: ['client']
+  },
+  // Rôle principal (pour compatibilité avec l'ancien code)
+  primaryRole: {
+    type: String,
+    enum: ['admin', 'owner', 'client', 'team', 'player', 'subscriber'],
+    default: 'client'
+  },
+  // 🗑️ DEPRECATED - Garder pour compatibilité, utiliser 'primaryRole' à la place
   role: {
     type: String,
     enum: ['admin', 'owner', 'client', 'team', 'player', 'subscriber'],
@@ -164,6 +177,38 @@ userSchema.methods.toPublicJSON = function() {
   const obj = this.toObject();
   delete obj.password;
   return obj;
+};
+
+// 🆕 Méthodes pour gérer les rôles multiples
+userSchema.methods.hasRole = function(role) {
+  return this.roles && this.roles.includes(role);
+};
+
+userSchema.methods.addRole = function(role) {
+  if (!this.roles) {
+    this.roles = [];
+  }
+  if (!this.roles.includes(role)) {
+    this.roles.push(role);
+  }
+};
+
+userSchema.methods.removeRole = function(role) {
+  if (this.roles) {
+    this.roles = this.roles.filter(r => r !== role);
+  }
+};
+
+userSchema.methods.isTeamCaptain = function() {
+  return this.hasRole('team-captain') || this.hasRole('team');
+};
+
+userSchema.methods.isPlayer = function() {
+  return this.hasRole('player');
+};
+
+userSchema.methods.isOwner = function() {
+  return this.hasRole('owner');
 };
 
 module.exports = mongoose.model('User', userSchema);

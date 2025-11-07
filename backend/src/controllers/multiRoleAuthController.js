@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const Team = require('../models/Team');
 const Player = require('../models/Player');
 const Subscriber = require('../models/Subscriber');
+const User = require('../models/User');
 
 // @desc    Inscription en tant qu'ÉQUIPE
 // @route   POST /api/auth/register/team
@@ -68,11 +69,47 @@ exports.registerTeam = async (req, res) => {
       foundedYear
     });
 
-    // Générer le token JWT
+    // 🆕 CRÉER ou METTRE À JOUR le compte User associé (SYSTÈME MULTI-RÔLES)
+    let user = await User.findOne({ email: captain.email });
+    
+    if (user) {
+      // L'utilisateur existe déjà (Flow 1) → Ajouter les rôles team
+      user.addRole('team');
+      user.addRole('team-captain');
+      user.primaryRole = 'team'; // Définir comme rôle principal
+      user.role = 'team'; // Pour compatibilité
+      user.teamProfile = {
+        teamId: newTeam._id,
+        teamName: newTeam.name
+      };
+      await user.save({ validateBeforeSave: false });
+      console.log(`✅ Compte User existant: rôles 'team' + 'team-captain' ajoutés à ${user.email}`);
+      console.log(`   Rôles actuels: ${user.roles.join(', ')}`);
+    } else {
+      // Créer un nouveau compte User (Flow 2)
+      user = await User.create({
+        firstName: captain.firstName,
+        lastName: captain.lastName,
+        email: captain.email,
+        phone: captain.phone,
+        password: captain.password, // Sera hashé par le pre-save hook
+        roles: ['team', 'team-captain'], // Rôles multiples
+        primaryRole: 'team',
+        role: 'team', // Pour compatibilité
+        isActive: true,
+        teamProfile: {
+          teamId: newTeam._id,
+          teamName: newTeam.name
+        }
+      });
+      console.log(`✅ Nouveau compte User créé avec roles=['team', 'team-captain']: ${user.email}`);
+    }
+
+    // Générer le token JWT (utiliser l'ID du User, pas du Team)
     const token = jwt.sign(
       { 
-        id: newTeam._id, 
-        email: newTeam.captain.email,
+        id: user._id, 
+        email: user.email,
         role: 'team' 
       },
       process.env.JWT_SECRET,
@@ -84,6 +121,13 @@ exports.registerTeam = async (req, res) => {
       message: 'Équipe créée avec succès',
       data: {
         team: newTeam,
+        user: {
+          id: user._id,
+          email: user.email,
+          role: user.role,
+          firstName: user.firstName,
+          lastName: user.lastName
+        },
         token
       }
     });
