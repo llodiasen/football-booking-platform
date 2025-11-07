@@ -7,6 +7,7 @@ import {
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import AddMemberModal from '../../components/team/AddMemberModal';
 
 const TeamDashboard = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const TeamDashboard = () => {
   const [members, setMembers] = useState([]);
   const [inviteCode] = useState(user?._id?.substring(0, 8).toUpperCase() || 'TEAM1234');
   const [copied, setCopied] = useState(false);
+  const [showAddMemberModal, setShowAddMemberModal] = useState(false);
 
   const menuItems = [
     { id: 'overview', label: 'Vue d\'ensemble', icon: Home },
@@ -76,6 +78,16 @@ const TeamDashboard = () => {
     setCopied(true);
     showSuccess('Code d\'invitation copié !');
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleAddMember = (memberData) => {
+    // Ajouter le membre à la liste locale
+    setMembers(prev => [...prev, {
+      ...memberData,
+      id: Date.now(),
+      joinedAt: new Date()
+    }]);
+    setStats(prev => ({ ...prev, totalMembers: prev.totalMembers + 1 }));
   };
 
   return (
@@ -326,23 +338,71 @@ const TeamDashboard = () => {
                   <h3 className="text-xl font-bold text-gray-900">
                     Membres de l'équipe ({stats.totalMembers})
                   </h3>
-                  <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                  <button 
+                    onClick={() => setShowAddMemberModal(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                  >
                     <UserPlus size={18} />
-                    Inviter
+                    Ajouter un membre
                   </button>
                 </div>
 
-                {/* Placeholder membres */}
-                <div className="text-center py-12 text-gray-500">
-                  <Users className="mx-auto mb-4" size={64} />
-                  <p className="text-lg font-medium mb-2">Aucun membre pour le moment</p>
-                  <p className="text-sm mb-6">Invitez des joueurs à rejoindre votre équipe</p>
-                  <button className="px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors">
-                    Inviter des joueurs
-                  </button>
-                </div>
+                {/* Liste des membres */}
+                {members.length === 0 ? (
+                  <div className="text-center py-12 text-gray-500">
+                    <Users className="mx-auto mb-4" size={64} />
+                    <p className="text-lg font-medium mb-2">Aucun membre pour le moment</p>
+                    <p className="text-sm mb-6">Commencez par ajouter des joueurs à votre équipe</p>
+                    <button 
+                      onClick={() => setShowAddMemberModal(true)}
+                      className="px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+                    >
+                      Ajouter le premier membre
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {members.map((member) => (
+                      <div 
+                        key={member.id}
+                        className="flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                            {member.firstName?.charAt(0)}{member.lastName?.charAt(0)}
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-gray-900">{member.firstName} {member.lastName}</h4>
+                            <p className="text-sm text-gray-600">
+                              {member.position === 'gardien' && '🧤 Gardien'}
+                              {member.position === 'défenseur' && '🛡️ Défenseur'}
+                              {member.position === 'milieu' && '⚙️ Milieu'}
+                              {member.position === 'attaquant' && '⚡ Attaquant'}
+                              {' • '}
+                              <span className="text-gray-500">{member.role}</span>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">
+                            Actif
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
+          )}
+
+          {/* Modal Ajouter Membre */}
+          {showAddMemberModal && (
+            <AddMemberModal
+              onClose={() => setShowAddMemberModal(false)}
+              onSuccess={handleAddMember}
+              teamId={user?._id}
+            />
           )}
 
           {/* SECTION MATCHS */}
