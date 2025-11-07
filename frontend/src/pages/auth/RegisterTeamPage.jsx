@@ -485,7 +485,7 @@ const RegisterTeamPage = () => {
 
           {/* Localisation */}
           <div className="pt-6 border-t border-gray-200">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-2">
               <h2 className="text-xl font-bold text-gray-900">
                 <MapPin className="inline mr-2" size={24} />
                 Localisation
@@ -499,6 +499,34 @@ const RegisterTeamPage = () => {
                 <Navigation size={16} className={loadingLocation ? 'animate-spin' : ''} />
                 {loadingLocation ? 'Chargement...' : 'Utiliser ma position'}
               </button>
+            </div>
+
+            {/* Message explicatif */}
+            <div className="mb-4 bg-blue-50 border border-blue-200 rounded-xl p-4">
+              <p className="text-sm text-blue-900 mb-2">
+                <strong>🔒 Pourquoi votre localisation ?</strong>
+              </p>
+              <ul className="text-xs text-blue-800 space-y-1.5 ml-4">
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-0.5">•</span>
+                  <span>Vous proposer des <strong>terrains proches</strong> de chez vous</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-0.5">•</span>
+                  <span>Trouver des <strong>adversaires dans votre région</strong></span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-0.5">•</span>
+                  <span>Recevoir des <strong>notifications pour les matchs locaux</strong></span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 mt-0.5">•</span>
+                  <span>Organiser des <strong>tournois dans votre ville</strong></span>
+                </li>
+              </ul>
+              <p className="text-xs text-blue-700 mt-3 italic">
+                🔐 Vos données sont sécurisées et ne seront jamais partagées sans votre consentement.
+              </p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
