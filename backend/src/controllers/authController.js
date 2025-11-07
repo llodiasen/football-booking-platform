@@ -152,46 +152,27 @@ exports.login = async (req, res) => {
 // @access  Private
 exports.getMe = async (req, res) => {
   try {
-    let user = null;
     const userId = req.user.id;
     const userRole = req.user.role;
 
     console.log('🔍 getMe appelé pour:', { userId, userRole });
 
-    // Chercher selon le rôle dans le JWT
-    if (userRole === 'team') {
-      user = await Team.findById(userId);
-    } else if (userRole === 'player') {
-      user = await Player.findById(userId);
-    } else if (userRole === 'subscriber') {
-      user = await Subscriber.findById(userId);
-    } else {
-      // Rôles classiques (client, owner, admin)
-      user = await User.findById(userId).select('-password');
-    }
+    // 🔧 FIX: Toujours chercher dans User collection
+    // Le JWT contient l'ID du User, pas du Team/Player/Subscriber
+    const user = await User.findById(userId).select('-password');
 
     if (!user) {
-      return res.status(404).json({
+      console.log('❌ Utilisateur non trouvé avec ID:', userId);
+      return res.status(401).json({
         success: false,
         message: 'Utilisateur non trouvé'
       });
     }
 
-    console.log('✅ Utilisateur trouvé:', user.role || userRole);
+    console.log('✅ Utilisateur trouvé:', user.email, 'Role:', user.role);
     
-    // Ajouter le rôle au user si ce n'est pas déjà présent (pour Team, Player, Subscriber)
-    const userData = user.toObject ? user.toObject() : user;
-    if (!userData.role) {
-      userData.role = userRole;
-    }
-    
-    // 🆕 Ajouter les rôles multiples si disponibles
-    if (!userData.roles) {
-      userData.roles = user.roles || [userRole];
-    }
-    if (!userData.primaryRole) {
-      userData.primaryRole = user.primaryRole || userRole;
-    }
+    // Retourner les données du user
+    const userData = user.toObject();
     
     res.json({
       success: true,
