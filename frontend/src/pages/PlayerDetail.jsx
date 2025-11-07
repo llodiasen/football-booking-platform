@@ -87,6 +87,11 @@ const PlayerDetail = () => {
       return;
     }
 
+    // Debug: Afficher les infos user
+    console.log('👤 User connecté:', user);
+    console.log('🎯 Rôle:', user?.role);
+    console.log('🆔 ID:', user?._id);
+
     // 2. Vérifier si l'utilisateur a un profil d'équipe
     if (user?.role !== 'team') {
       // L'utilisateur doit créer une équipe d'abord
