@@ -19,6 +19,7 @@ import MyReservations from './pages/MyReservations';
 import Teams from './pages/Teams';
 import TeamDetail from './pages/TeamDetail';
 import Players from './pages/Players';
+import PlayerDetail from './pages/PlayerDetail';
 import CreateTerrain from './pages/CreateTerrain';
 import BookingModern from './pages/BookingModern';
 import PaymentSuccess from './pages/PaymentSuccess';
@@ -180,6 +181,7 @@ function App() {
               <Route path="/teams" element={<Teams />} />
               <Route path="/teams/:id" element={<TeamDetail />} />
               <Route path="/players" element={<Players />} />
+              <Route path="/players/:id" element={<PlayerDetail />} />
 
               {/* Routes protégées */}
               <Route 

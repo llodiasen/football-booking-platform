@@ -196,9 +196,12 @@ const Players = () => {
                 {/* Avatar */}
                 <div className="relative">
                   <img
-                    src={player.avatar || `https://i.pravatar.cc/300?u=${player._id}`}
+                    src={`https://source.unsplash.com/400x300/?african,football,player,soccer&sig=${player._id}`}
                     alt={`${player.firstName} ${player.lastName}`}
                     className="w-full h-48 object-cover"
+                    onError={(e) => {
+                      e.target.src = `https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&h=300&fit=crop&q=80`;
+                    }}
                   />
                   {player.lookingForTeam && (
                     <div className="absolute top-3 right-3 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full">
