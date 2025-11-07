@@ -4,9 +4,9 @@ const Player = require('../models/Player');
 const Subscriber = require('../models/Subscriber');
 const jwt = require('jsonwebtoken');
 
-// Générer JWT Token
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+// Générer JWT Token avec rôle
+const generateToken = (id, role) => {
+  return jwt.sign({ id, role }, process.env.JWT_SECRET, {
     expiresIn: '30d'
   });
 };
@@ -49,8 +49,8 @@ exports.register = async (req, res) => {
     // Créer l'utilisateur
     const user = await User.create(userData);
 
-    // Générer le token
-    const token = generateToken(user._id);
+    // Générer le token avec rôle
+    const token = generateToken(user._id, user.role);
 
     res.status(201).json({
       success: true,
@@ -113,8 +113,8 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Générer le token
-    const token = generateToken(user._id);
+    // Générer le token avec rôle
+    const token = generateToken(user._id, user.role);
 
     res.json({
       success: true,
