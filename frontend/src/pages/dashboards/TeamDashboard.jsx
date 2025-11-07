@@ -1,17 +1,25 @@
 import { useState, useEffect } from 'react';
-import { Users, Calendar, TrendingUp, Award, Settings, LogOut } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { 
+  Users, Calendar, TrendingUp, Award, Settings, LogOut, 
+  UserPlus, MapPin, Trophy, MessageCircle, Home, Plus,
+  Menu, X
+} from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const TeamDashboard = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const [searchParams] = useSearchParams();
+  const section = searchParams.get('section') || 'overview';
+  
   const [stats, setStats] = useState({
     totalMembers: 0,
     matchesPlayed: 0,
     wins: 0,
     upcomingReservations: 0
   });
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     // Simuler le chargement des stats (à remplacer par de vraies API calls)
@@ -22,6 +30,16 @@ const TeamDashboard = () => {
       upcomingReservations: 3
     });
   }, []);
+
+  const menuItems = [
+    { id: 'overview', label: 'Vue d\'ensemble', icon: Home },
+    { id: 'members', label: 'Membres', icon: Users },
+    { id: 'matches', label: 'Matchs', icon: Trophy },
+    { id: 'reservations', label: 'Réservations', icon: Calendar },
+    { id: 'stats', label: 'Statistiques', icon: TrendingUp },
+    { id: 'messages', label: 'Messages', icon: MessageCircle },
+    { id: 'settings', label: 'Paramètres', icon: Settings }
+  ];
 
   const statCards = [
     {
@@ -59,47 +77,122 @@ const TeamDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div className="flex h-screen bg-gray-50">
+      {/* Sidebar Mobile Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`fixed md:static inset-y-0 left-0 z-50 w-64 bg-gray-900 text-white transform transition-transform duration-300 ${
+        sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+      }`}>
+        {/* Header Sidebar */}
+        <div className="p-6 border-b border-gray-800">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
-                <Users className="text-white" size={24} />
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
+                <Users className="text-white" size={20} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Dashboard Équipe</h1>
-                <p className="text-sm text-gray-600">{user?.name || 'Mon Équipe'}</p>
+                <h2 className="font-bold text-sm">{user?.name || 'Mon Équipe'}</h2>
+                <p className="text-xs text-gray-400">Dashboard</p>
               </div>
             </div>
-            
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => navigate('/settings')}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <Settings size={20} className="text-gray-600" />
-              </button>
-              <button
-                onClick={() => {
-                  logout();
-                  navigate('/');
-                }}
-                className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors"
-              >
-                <LogOut size={18} />
-                <span className="hidden sm:inline">Déconnexion</span>
-              </button>
-            </div>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="md:hidden p-2 hover:bg-gray-800 rounded-lg"
+            >
+              <X size={20} />
+            </button>
           </div>
         </div>
-      </header>
 
-      {/* Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Navigation */}
+        <nav className="p-4 space-y-1">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = section === item.id;
+            
+            return (
+              <button
+                key={item.id}
+                onClick={() => {
+                  navigate(`/dashboard/team?section=${item.id}`);
+                  setSidebarOpen(false);
+                }}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                  isActive
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                }`}
+              >
+                <Icon size={20} />
+                <span className="font-medium text-sm">{item.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Footer Sidebar */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-800">
+          <button
+            onClick={() => {
+              logout();
+              navigate('/');
+            }}
+            className="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-900/20 rounded-lg transition-all"
+          >
+            <LogOut size={20} />
+            <span className="font-medium text-sm">Déconnexion</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <div className="flex-1 overflow-auto">
+        {/* Header */}
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
+          <div className="px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  className="md:hidden p-2 hover:bg-gray-100 rounded-lg"
+                >
+                  <Menu size={24} />
+                </button>
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900">
+                    {menuItems.find(m => m.id === section)?.label || 'Dashboard'}
+                  </h1>
+                  <p className="text-sm text-gray-600">{user?.name || 'Mon Équipe'}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <button
+                  className="hidden sm:flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                >
+                  <Plus size={18} />
+                  <span>Actions rapides</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Content */}
+        <main className="px-4 sm:px-6 lg:px-8 py-8">
+          
+          {/* VUE D'ENSEMBLE */}
+          {section === 'overview' && (
+            <>
+              {/* Stats Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {statCards.map((stat, index) => {
             const Icon = stat.icon;
             return (
