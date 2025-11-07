@@ -6,6 +6,7 @@ import {
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import axios from 'axios';
 
 const PlayerDashboard = () => {
   const navigate = useNavigate();
@@ -22,6 +23,39 @@ const PlayerDashboard = () => {
   });
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [joinCode, setJoinCode] = useState('');
+  const [teams, setTeams] = useState([]);
+  const [searchTeam, setSearchTeam] = useState('');
+  const [loadingTeams, setLoadingTeams] = useState(false);
+
+  // Charger les équipes disponibles
+  useEffect(() => {
+    if (section === 'teams') {
+      loadTeams();
+    }
+  }, [section]);
+
+  const loadTeams = async () => {
+    setLoadingTeams(true);
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const response = await axios.get(`${apiUrl}/teams`);
+      
+      if (response.data.success) {
+        setTeams(response.data.data || []);
+        console.log('✅ Équipes chargées:', response.data.data.length);
+      }
+    } catch (error) {
+      console.error('Erreur chargement équipes:', error);
+    } finally {
+      setLoadingTeams(false);
+    }
+  };
+
+  // Filtrer les équipes par recherche
+  const filteredTeams = teams.filter(team =>
+    team.name?.toLowerCase().includes(searchTeam.toLowerCase()) ||
+    team.city?.toLowerCase().includes(searchTeam.toLowerCase())
+  );
 
   const menuItems = [
     { id: 'overview', label: 'Vue d\'ensemble', icon: Home },
@@ -220,19 +254,65 @@ const PlayerDashboard = () => {
 
               {/* Recherche d'équipes */}
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Équipes disponibles</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                  Équipes disponibles ({filteredTeams.length})
+                </h3>
                 <div className="relative mb-6">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                   <input
                     type="text"
-                    placeholder="Rechercher une équipe..."
+                    value={searchTeam}
+                    onChange={(e) => setSearchTeam(e.target.value)}
+                    placeholder="Rechercher une équipe par nom ou ville..."
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>
-                <div className="text-center py-12 text-gray-500">
-                  <Users className="mx-auto mb-4" size={64} />
-                  <p>Aucune équipe trouvée</p>
-                </div>
+
+                {loadingTeams ? (
+                  <div className="text-center py-12">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
+                  </div>
+                ) : filteredTeams.length === 0 ? (
+                  <div className="text-center py-12 text-gray-500">
+                    <Users className="mx-auto mb-4" size={64} />
+                    <p className="text-lg font-medium mb-2">Aucune équipe trouvée</p>
+                    <p className="text-sm">Essayez de modifier votre recherche</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {filteredTeams.map((team) => (
+                      <div
+                        key={team._id}
+                        className="flex items-center gap-4 p-4 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 transition-all cursor-pointer"
+                        onClick={() => navigate(`/teams/${team._id}`)}
+                      >
+                        <img
+                          src={team.logo}
+                          alt={team.name}
+                          className="w-16 h-16 rounded-full"
+                        />
+                        <div className="flex-1">
+                          <h4 className="font-bold text-gray-900">{team.name}</h4>
+                          <p className="text-sm text-gray-600 flex items-center gap-1">
+                            <MapPin size={14} />
+                            {team.city}
+                          </p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
+                              {team.category || 'Amateur'}
+                            </span>
+                            <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                              {team.matchType || '11v11'}
+                            </span>
+                          </div>
+                        </div>
+                        <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors">
+                          Voir
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           )}
