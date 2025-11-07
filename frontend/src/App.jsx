@@ -176,6 +176,7 @@ function App() {
               <Route path="/register/player" element={<RegisterPlayerPage />} />
               <Route path="/register/subscriber" element={<RegisterSubscriberPage />} />
               
+              <Route path="/search" element={<Search />} />
               <Route path="/terrains" element={<Search />} />
               <Route path="/terrains/:id" element={<TerrainDetails />} />
               <Route path="/teams" element={<Teams />} />

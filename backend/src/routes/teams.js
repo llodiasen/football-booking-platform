@@ -8,7 +8,8 @@ const {
   deleteTeam,
   addMember,
   removeMember,
-  subscribe
+  subscribe,
+  invitePlayer
 } = require('../controllers/teamController');
 const { protect } = require('../middleware/auth');
 const { validateTeam, handleValidationErrors } = require('../middleware/validation');
@@ -24,6 +25,7 @@ router.delete('/:id', protect, deleteTeam);
 router.post('/:id/members', protect, addMember);
 router.delete('/:id/members/:userId', protect, removeMember);
 router.post('/:id/subscribe', protect, subscribe);
+router.post('/invite-player', invitePlayer); // Pas de protect car on vérifie dans le controller
 
 module.exports = router;
 

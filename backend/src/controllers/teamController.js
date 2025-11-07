@@ -1,6 +1,8 @@
 const Team = require('../models/Team');
 const User = require('../models/User');
 const Terrain = require('../models/Terrain');
+const Player = require('../models/Player');
+const notificationService = require('../services/notificationService');
 
 // @route   GET /api/teams
 // @desc    Get all teams
@@ -401,6 +403,59 @@ exports.subscribe = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Erreur lors de la souscription',
+      error: error.message
+    });
+  }
+};
+
+// @route   POST /api/teams/invite-player
+// @desc    Inviter un joueur à rejoindre l'équipe
+// @access  Private (Team captain only)
+exports.invitePlayer = async (req, res) => {
+  try {
+    const { playerId, playerEmail, teamId } = req.body;
+
+    // Vérifier que le joueur existe
+    const player = await Player.findById(playerId);
+    if (!player) {
+      return res.status(404).json({
+        success: false,
+        message: 'Joueur non trouvé'
+      });
+    }
+
+    // Vérifier que l'équipe existe
+    const team = await Team.findById(teamId);
+    if (!team) {
+      return res.status(404).json({
+        success: false,
+        message: 'Équipe non trouvée'
+      });
+    }
+
+    // Créer une notification pour le joueur
+    await notificationService.createNotification({
+      recipientId: playerId,
+      type: 'team_invitation',
+      title: `🎉 Invitation d'équipe`,
+      message: `${team.name} vous invite à rejoindre leur équipe !`,
+      link: `/dashboard/player?section=invitations`,
+      relatedEntity: {
+        id: teamId,
+        type: 'Team'
+      }
+    });
+
+    res.json({
+      success: true,
+      message: 'Invitation envoyée avec succès'
+    });
+
+  } catch (error) {
+    console.error('Erreur invitePlayer:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Erreur lors de l\'envoi de l\'invitation',
       error: error.message
     });
   }

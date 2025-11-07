@@ -6,12 +6,18 @@ import {
   MessageCircle, UserPlus, Shield, Zap, Award
 } from 'lucide-react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 
 const PlayerDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
+  const { success: showSuccess, error: showError } = useToast();
   const [player, setPlayer] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sendingInvite, setSendingInvite] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   useEffect(() => {
     loadPlayer();
@@ -63,6 +69,52 @@ const PlayerDetail = () => {
       age--;
     }
     return age;
+  };
+
+  // Gérer l'envoi d'invitation
+  const handleSendInvite = async () => {
+    if (!isAuthenticated) {
+      showError('Vous devez être connecté pour envoyer une invitation');
+      navigate(`/login?redirect=/players/${id}`);
+      return;
+    }
+
+    // Vérifier que l'utilisateur est un capitaine d'équipe
+    if (user?.role !== 'team') {
+      showError('Seuls les capitaines d\'équipe peuvent envoyer des invitations');
+      return;
+    }
+
+    setSendingInvite(true);
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const response = await axios.post(`${apiUrl}/teams/invite-player`, {
+        playerId: player._id,
+        playerEmail: player.email,
+        teamId: user._id // Si user.role === 'team', user._id est l'ID de l'équipe
+      });
+
+      if (response.data.success) {
+        showSuccess(`✅ Invitation envoyée à ${player.firstName} ${player.lastName} !`);
+      }
+    } catch (error) {
+      console.error('Erreur envoi invitation:', error);
+      showError(error.response?.data?.message || 'Erreur lors de l\'envoi de l\'invitation');
+    } finally {
+      setSendingInvite(false);
+    }
+  };
+
+  // Gérer le contact (redirection vers messages)
+  const handleContact = () => {
+    if (!isAuthenticated) {
+      showError('Vous devez être connecté pour contacter ce joueur');
+      navigate(`/login?redirect=/players/${id}`);
+      return;
+    }
+
+    // Rediriger vers la messagerie avec ce joueur
+    navigate(`/dashboard?section=messages&conversationWith=${player._id}`);
   };
 
   if (loading) {
@@ -348,11 +400,28 @@ const PlayerDetail = () => {
                   )}
                 </div>
 
-                <button className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold py-4 rounded-xl transition-all shadow-md hover:shadow-lg mb-3">
-                  Envoyer une invitation
+                <button 
+                  onClick={handleSendInvite}
+                  disabled={sendingInvite || !player.lookingForTeam}
+                  className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold py-4 rounded-xl transition-all shadow-md hover:shadow-lg mb-3 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {sendingInvite ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      <span>Envoi en cours...</span>
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus size={20} />
+                      <span>Envoyer une invitation</span>
+                    </>
+                  )}
                 </button>
 
-                <button className="w-full border border-gray-900 text-gray-900 hover:bg-gray-50 font-semibold py-4 rounded-xl transition-all flex items-center justify-center gap-2">
+                <button 
+                  onClick={handleContact}
+                  className="w-full border border-gray-900 text-gray-900 hover:bg-gray-50 font-semibold py-4 rounded-xl transition-all flex items-center justify-center gap-2"
+                >
                   <MessageCircle size={20} />
                   Contacter
                 </button>
