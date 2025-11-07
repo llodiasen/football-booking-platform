@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, ArrowLeft, Upload, Mail, Phone, Lock, MapPin, Calendar } from 'lucide-react';
+import { Users, ArrowLeft, Upload, Mail, Phone, Lock, MapPin, Calendar, Navigation } from 'lucide-react';
 import axios from 'axios';
 import { useToast } from '../../context/ToastContext';
 import { useAuth } from '../../context/AuthContext';
@@ -36,6 +36,7 @@ const RegisterTeamPage = () => {
   });
 
   const [logoPreview, setLogoPreview] = useState(null);
+  const [loadingLocation, setLoadingLocation] = useState(false);
 
   // Pré-remplir les infos du capitaine avec les données de l'utilisateur connecté
   useEffect(() => {
@@ -134,6 +135,72 @@ const RegisterTeamPage = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  // Géolocalisation automatique
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      showError('La géolocalisation n\'est pas supportée par votre navigateur');
+      return;
+    }
+
+    setLoadingLocation(true);
+    showSuccess('📍 Récupération de votre position...');
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log('📍 Position:', { latitude, longitude });
+
+        try {
+          // Utiliser l'API de reverse geocoding (Nominatim - OpenStreetMap)
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=fr`
+          );
+          const data = await response.json();
+
+          console.log('🗺️ Données de localisation:', data);
+
+          // Extraire ville et région
+          const city = data.address.city || data.address.town || data.address.village || data.address.county || '';
+          const region = data.address.state || data.address.region || '';
+          const address = `${data.address.road || ''} ${data.address.house_number || ''}`.trim();
+          const postalCode = data.address.postcode || '';
+
+          setFormData(prev => ({
+            ...prev,
+            city: city,
+            region: region,
+            address: address || prev.address,
+            postalCode: postalCode || prev.postalCode
+          }));
+
+          showSuccess('✅ Position détectée avec succès !');
+        } catch (error) {
+          console.error('Erreur géolocalisation:', error);
+          showError('Impossible de récupérer l\'adresse exacte');
+        } finally {
+          setLoadingLocation(false);
+        }
+      },
+      (error) => {
+        console.error('Erreur géolocalisation:', error);
+        setLoadingLocation(false);
+        
+        if (error.code === error.PERMISSION_DENIED) {
+          showError('Vous devez autoriser l\'accès à votre position');
+        } else if (error.code === error.POSITION_UNAVAILABLE) {
+          showError('Position indisponible');
+        } else {
+          showError('Erreur lors de la géolocalisation');
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -336,10 +403,21 @@ const RegisterTeamPage = () => {
 
           {/* Localisation */}
           <div className="pt-6 border-t border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
-              <MapPin className="inline mr-2" size={24} />
-              Localisation
-            </h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-gray-900">
+                <MapPin className="inline mr-2" size={24} />
+                Localisation
+              </h2>
+              <button
+                type="button"
+                onClick={handleGetLocation}
+                disabled={loadingLocation}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Navigation size={16} className={loadingLocation ? 'animate-spin' : ''} />
+                {loadingLocation ? 'Chargement...' : 'Utiliser ma position'}
+              </button>
+            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
