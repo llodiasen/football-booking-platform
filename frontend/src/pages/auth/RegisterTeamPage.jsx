@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, ArrowLeft, Upload, Mail, Phone, Lock, MapPin, Calendar, Navigation } from 'lucide-react';
+import { Users, ArrowLeft, Upload, Mail, Phone, Lock, MapPin, Calendar, Navigation, Search, X } from 'lucide-react';
 import axios from 'axios';
 import { useToast } from '../../context/ToastContext';
 import { useAuth } from '../../context/AuthContext';
@@ -42,6 +42,8 @@ const RegisterTeamPage = () => {
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [availableTerrains, setAvailableTerrains] = useState([]);
   const [loadingTerrains, setLoadingTerrains] = useState(false);
+  const [terrainSearch, setTerrainSearch] = useState('');
+  const [showTerrainDropdown, setShowTerrainDropdown] = useState(false);
 
   // Pré-remplir les infos du capitaine avec les données de l'utilisateur connecté
   useEffect(() => {
@@ -470,30 +472,114 @@ const RegisterTeamPage = () => {
                 />
               </div>
 
-              {/* Terrain de domicile */}
-              <div className="md:col-span-2">
+              {/* Terrain de domicile - Autocomplétion */}
+              <div className="md:col-span-2 relative">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   🏟️ Terrain de domicile (optionnel)
                 </label>
+                
                 {loadingTerrains ? (
-                  <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-xl">
+                  <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-xl border border-gray-300">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
                     <span className="text-sm text-gray-600">Chargement des terrains...</span>
                   </div>
                 ) : availableTerrains.length > 0 ? (
-                  <select
-                    name="homeTerrain"
-                    value={formData.homeTerrain}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="">Aucun terrain sélectionné</option>
-                    {availableTerrains.map((terrain) => (
-                      <option key={terrain._id} value={terrain._id}>
-                        {terrain.name} - {terrain.address?.city} ({terrain.pricePerHour} FCFA/h)
-                      </option>
-                    ))}
-                  </select>
+                  <>
+                    {/* Input de recherche avec autocomplete */}
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={terrainSearch}
+                        onChange={(e) => {
+                          setTerrainSearch(e.target.value);
+                          setShowTerrainDropdown(true);
+                        }}
+                        onFocus={() => setShowTerrainDropdown(true)}
+                        placeholder="Rechercher un terrain (ex: Stade Médina, Terrain Yoff...)"
+                        className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                      <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                    </div>
+
+                    {/* Dropdown d'autocomplétion */}
+                    {showTerrainDropdown && terrainSearch && (
+                      <>
+                        {/* Overlay pour fermer */}
+                        <div 
+                          className="fixed inset-0 z-10" 
+                          onClick={() => setShowTerrainDropdown(false)}
+                        />
+                        
+                        {/* Liste des suggestions */}
+                        <div className="absolute z-20 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl max-h-80 overflow-y-auto">
+                          {availableTerrains
+                            .filter(terrain => 
+                              terrain.name.toLowerCase().includes(terrainSearch.toLowerCase()) ||
+                              terrain.address?.city?.toLowerCase().includes(terrainSearch.toLowerCase())
+                            )
+                            .slice(0, 10)
+                            .map((terrain) => (
+                              <button
+                                key={terrain._id}
+                                type="button"
+                                onClick={() => {
+                                  setFormData(prev => ({ ...prev, homeTerrain: terrain._id }));
+                                  setTerrainSearch(`${terrain.name} - ${terrain.address?.city}`);
+                                  setShowTerrainDropdown(false);
+                                }}
+                                className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-0"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <MapPin className="text-blue-600" size={18} />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <p className="font-semibold text-gray-900 truncate">{terrain.name}</p>
+                                    <p className="text-sm text-gray-600">
+                                      📍 {terrain.address?.city} • {terrain.pricePerHour?.toLocaleString()} FCFA/h
+                                    </p>
+                                  </div>
+                                </div>
+                              </button>
+                            ))}
+                          
+                          {availableTerrains.filter(t => 
+                            t.name.toLowerCase().includes(terrainSearch.toLowerCase()) ||
+                            t.address?.city?.toLowerCase().includes(terrainSearch.toLowerCase())
+                          ).length === 0 && (
+                            <div className="px-4 py-8 text-center text-gray-500">
+                              <Search className="mx-auto mb-2" size={32} />
+                              <p className="text-sm">Aucun terrain trouvé pour "{terrainSearch}"</p>
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
+
+                    {/* Terrain sélectionné */}
+                    {formData.homeTerrain && !showTerrainDropdown && (
+                      <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-xl flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+                            <MapPin className="text-white" size={16} />
+                          </div>
+                          <span className="text-sm font-medium text-green-900">
+                            {availableTerrains.find(t => t._id === formData.homeTerrain)?.name || terrainSearch}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData(prev => ({ ...prev, homeTerrain: '' }));
+                            setTerrainSearch('');
+                          }}
+                          className="text-red-600 hover:text-red-700 p-1"
+                        >
+                          <X size={18} />
+                        </button>
+                      </div>
+                    )}
+                  </>
                 ) : formData.city ? (
                   <div className="px-4 py-3 bg-yellow-50 border border-yellow-200 rounded-xl">
                     <p className="text-sm text-yellow-800">
