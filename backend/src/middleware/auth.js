@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Team = require('../models/Team');
+const Player = require('../models/Player');
+const Subscriber = require('../models/Subscriber');
 
 // Middleware pour protéger les routes
 exports.protect = async (req, res, next) => {
@@ -22,18 +25,41 @@ exports.protect = async (req, res, next) => {
       // Vérifier le token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       
-      // Charger l'utilisateur sans le mot de passe
-      req.user = await User.findById(decoded.id).select('-password');
+      console.log('🔐 Token décodé:', { id: decoded.id, role: decoded.role });
       
-      if (!req.user) {
+      // Charger l'utilisateur selon le rôle (support multi-rôles)
+      let user = null;
+      
+      if (decoded.role === 'team') {
+        user = await Team.findById(decoded.id);
+      } else if (decoded.role === 'player') {
+        user = await Player.findById(decoded.id);
+      } else if (decoded.role === 'subscriber') {
+        user = await Subscriber.findById(decoded.id);
+      } else {
+        // Rôles classiques (client, owner, admin)
+        user = await User.findById(decoded.id).select('-password');
+      }
+      
+      if (!user) {
+        console.log('❌ Utilisateur non trouvé pour:', decoded);
         return res.status(401).json({
           success: false,
           message: 'Utilisateur non trouvé'
         });
       }
 
-      // Vérifier si l'utilisateur est actif
-      if (!req.user.isActive) {
+      console.log('✅ Utilisateur authentifié:', user.role || decoded.role);
+      
+      // Ajouter les infos du token décodé à req.user
+      req.user = { 
+        ...user.toObject(), 
+        id: decoded.id,
+        role: decoded.role || user.role 
+      };
+
+      // Vérifier si l'utilisateur est actif (si le champ existe)
+      if (user.isActive !== undefined && !user.isActive) {
         return res.status(401).json({
           success: false,
           message: 'Compte désactivé'
