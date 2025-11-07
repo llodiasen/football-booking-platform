@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, User, Heart, ArrowRight, Check } from 'lucide-react';
+import { Users, User, Heart, MapPin, ArrowRight, Check } from 'lucide-react';
 
 const RoleSelectionPage = () => {
   const navigate = useNavigate();
@@ -54,6 +54,22 @@ const RoleSelectionPage = () => {
       bgColor: 'bg-purple-50',
       hoverColor: 'hover:border-purple-500',
       iconColor: 'text-purple-600'
+    },
+    {
+      id: 'owner',
+      title: 'Propriétaire',
+      icon: MapPin,
+      description: 'Proposez vos terrains à la location',
+      features: [
+        'Gérer vos terrains',
+        'Recevoir des réservations',
+        'Suivre vos revenus',
+        'Statistiques détaillées'
+      ],
+      color: 'from-orange-500 to-orange-600',
+      bgColor: 'bg-orange-50',
+      hoverColor: 'hover:border-orange-500',
+      iconColor: 'text-orange-600'
     }
   ];
 
@@ -85,7 +101,7 @@ const RoleSelectionPage = () => {
         </div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-8">
           {roles.map((role) => {
             const Icon = role.icon;
             const isSelected = selectedRole === role.id;

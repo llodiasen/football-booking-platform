@@ -29,7 +29,6 @@ const Auth = () => {
     email: '',
     phone: '',
     password: '',
-    role: 'client',
     businessName: ''
   });
   const [registerLoading, setRegisterLoading] = useState(false);
@@ -46,8 +45,16 @@ const Auth = () => {
       const selectedRole = localStorage.getItem('selectedRole');
       
       if (selectedRole && searchParams.get('from') === 'role-selection') {
-        console.log('🎯 Redirection vers formulaire du rôle:', selectedRole);
-        navigate(`/register/${selectedRole}`);
+        console.log('🎯 Rôle choisi:', selectedRole);
+        
+        // Si propriétaire ou client → aller au dashboard directement
+        if (selectedRole === 'owner' || selectedRole === 'client') {
+          localStorage.removeItem('selectedRole'); // Nettoyer
+          navigate('/dashboard');
+        } else {
+          // Team, Player, Subscriber → formulaire complémentaire
+          navigate(`/register/${selectedRole}`);
+        }
       } else if (redirectUrl) {
         navigate(redirectUrl);
       } else {
@@ -65,16 +72,21 @@ const Auth = () => {
     setRegisterLoading(true);
 
     try {
+      // Déterminer le rôle : soit depuis localStorage (flow multi-rôles), soit 'client' par défaut
+      const selectedRole = localStorage.getItem('selectedRole');
+      const role = selectedRole === 'owner' ? 'owner' : 'client';
+      
       const dataToSend = {
         firstName: registerData.firstName,
         lastName: registerData.lastName,
         email: registerData.email,
         phone: registerData.phone,
         password: registerData.password,
-        role: registerData.role
+        role: role
       };
 
-      if (registerData.role === 'owner' && registerData.businessName) {
+      // Si propriétaire et nom d'entreprise fourni
+      if (role === 'owner' && registerData.businessName) {
         dataToSend.ownerProfile = {
           businessName: registerData.businessName
         };
@@ -88,8 +100,16 @@ const Auth = () => {
         const selectedRole = localStorage.getItem('selectedRole');
         
         if (selectedRole && searchParams.get('from') === 'role-selection') {
-          console.log('🎯 Redirection vers formulaire du rôle:', selectedRole);
-          navigate(`/register/${selectedRole}`);
+          console.log('🎯 Rôle choisi:', selectedRole);
+          
+          // Si propriétaire ou client → aller au dashboard directement
+          if (selectedRole === 'owner' || selectedRole === 'client') {
+            localStorage.removeItem('selectedRole'); // Nettoyer
+            navigate('/dashboard');
+          } else {
+            // Team, Player, Subscriber → formulaire complémentaire
+            navigate(`/register/${selectedRole}`);
+          }
         } else if (redirectUrl) {
           navigate(redirectUrl);
         } else {
@@ -373,26 +393,8 @@ const Auth = () => {
                     <p className="text-xs text-gray-500">Minimum 6 caractères</p>
                   </div>
 
-                  {/* Type de compte */}
-                  <div className="space-y-2">
-                    <label htmlFor="role" className="text-sm font-medium text-gray-900">
-                      Type de compte
-                    </label>
-                    <select
-                      id="role"
-                      name="role"
-                      value={registerData.role}
-                      onChange={(e) => setRegisterData({ ...registerData, [e.target.name]: e.target.value })}
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all text-sm"
-                    >
-                      <option value="client">🎮 Client / Joueur</option>
-                      <option value="owner">🏟️ Propriétaire de terrain</option>
-                      <option value="team">⚽ Capitaine d'équipe</option>
-                    </select>
-                  </div>
-
-                  {/* Nom entreprise */}
-                  {registerData.role === 'owner' && (
+                  {/* Nom entreprise - Uniquement si rôle owner */}
+                  {localStorage.getItem('selectedRole') === 'owner' && (
                     <div className="space-y-2">
                       <label htmlFor="businessName" className="text-sm font-medium text-gray-900">
                         Nom de l'entreprise
