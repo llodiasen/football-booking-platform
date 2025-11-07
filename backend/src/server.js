@@ -15,6 +15,7 @@ const reservationRoutes = require('./routes/reservations');
 const paymentRoutes = require('./routes/payments');
 const teamRoutes = require('./routes/teams');
 const paytechRoutes = require('./routes/paytech');
+const multiRoleAuthRoutes = require('./routes/multiRoleAuth');
 
 const app = express();
 
@@ -74,6 +75,7 @@ if (process.env.NODE_ENV === 'development') {
 // Routes
 const notificationRoutes = require('./routes/notifications');
 app.use('/api/auth', authRoutes);
+app.use('/api/multi-auth', multiRoleAuthRoutes); // Routes multi-rôles
 app.use('/api/terrains', terrainRoutes);
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/payments', paymentRoutes);
@@ -100,6 +102,7 @@ app.get('/', (req, res) => {
     status: 'Backend is running',
     endpoints: {
       auth: '/api/auth',
+      multiAuth: '/api/multi-auth',
       terrains: '/api/terrains',
       reservations: '/api/reservations',
       payments: '/api/payments',

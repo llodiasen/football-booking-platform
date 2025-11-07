@@ -27,6 +27,15 @@ import PaymentCancel from './pages/PaymentCancel';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminReservations from './pages/admin/AdminReservations';
 
+// Multi-Role Pages
+import RoleSelectionPage from './pages/auth/RoleSelectionPage';
+import RegisterTeamPage from './pages/auth/RegisterTeamPage';
+import RegisterPlayerPage from './pages/auth/RegisterPlayerPage';
+import RegisterSubscriberPage from './pages/auth/RegisterSubscriberPage';
+import TeamDashboard from './pages/dashboards/TeamDashboard';
+import PlayerDashboard from './pages/dashboards/PlayerDashboard';
+import SubscriberDashboard from './pages/dashboards/SubscriberDashboard';
+
 // Composant de route protégée
 const PrivateRoute = ({ children, roles }) => {
   const { isAuthenticated, loading, user } = useAuth();
@@ -57,7 +66,10 @@ function App() {
   const location = useLocation();
   const { user } = useAuth();
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const isDashboardRoute = location.pathname === '/dashboard';
+  const isDashboardRoute = location.pathname === '/dashboard' || 
+                           location.pathname.startsWith('/dashboard/team') ||
+                           location.pathname.startsWith('/dashboard/player') ||
+                           location.pathname.startsWith('/dashboard/subscriber');
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -92,6 +104,30 @@ function App() {
               </PrivateRoute>
             } 
           />
+          <Route 
+            path="/dashboard/team" 
+            element={
+              <PrivateRoute roles={['team']}>
+                <TeamDashboard />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/dashboard/player" 
+            element={
+              <PrivateRoute roles={['player']}>
+                <PlayerDashboard />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/dashboard/subscriber" 
+            element={
+              <PrivateRoute roles={['subscriber']}>
+                <SubscriberDashboard />
+              </PrivateRoute>
+            } 
+          />
         </Routes>
       ) : (
         /* Routes normales avec Navbar/Footer */
@@ -104,6 +140,13 @@ function App() {
               <Route path="/auth" element={<Auth />} />
               <Route path="/login" element={<Auth />} />
               <Route path="/register" element={<Auth />} />
+              
+              {/* Multi-Role Registration */}
+              <Route path="/role-selection" element={<RoleSelectionPage />} />
+              <Route path="/register/team" element={<RegisterTeamPage />} />
+              <Route path="/register/player" element={<RegisterPlayerPage />} />
+              <Route path="/register/subscriber" element={<RegisterSubscriberPage />} />
+              
               <Route path="/terrains" element={<Search />} />
               <Route path="/terrains/:id" element={<TerrainDetails />} />
               <Route path="/teams" element={<Teams />} />
