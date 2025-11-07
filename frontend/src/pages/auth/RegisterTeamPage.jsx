@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { Users, ArrowLeft, Upload, Mail, Phone, Lock, MapPin, Calendar } from 'lucide-react';
 import axios from 'axios';
 import { useToast } from '../../context/ToastContext';
+import { useAuth } from '../../context/AuthContext';
 
 const RegisterTeamPage = () => {
   const navigate = useNavigate();
   const { success: showSuccess, error: showError } = useToast();
+  const { loginWithToken } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -68,11 +70,11 @@ const RegisterTeamPage = () => {
       );
 
       if (response.data.success) {
-        // Sauvegarder le token
-        localStorage.setItem('token', response.data.data.token);
-        localStorage.setItem('userRole', 'team');
+        // Connecter automatiquement l'utilisateur
+        const { token, team } = response.data.data;
+        loginWithToken(token, team);
         
-        showSuccess('Équipe créée avec succès !');
+        showSuccess('Équipe créée avec succès ! Bienvenue !');
         navigate('/dashboard/team');
       }
     } catch (error) {

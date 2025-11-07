@@ -94,6 +94,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Connexion avec token existant (après inscription multi-rôles)
+  const loginWithToken = (token, userData) => {
+    localStorage.setItem('token', token);
+    setToken(token);
+    setUser(userData);
+  };
+
   const value = {
     user,
     loading,
@@ -102,11 +109,14 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateProfile,
     changePassword,
+    loginWithToken,
     isAuthenticated: !!user,
     isAdmin: user?.role === 'admin',
     isOwner: user?.role === 'owner',
     isClient: user?.role === 'client',
-    isTeam: user?.role === 'team'
+    isTeam: user?.role === 'team',
+    isPlayer: user?.role === 'player',
+    isSubscriber: user?.role === 'subscriber'
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { Heart, ArrowLeft, Mail, Phone, Lock, MapPin } from 'lucide-react';
 import axios from 'axios';
 import { useToast } from '../../context/ToastContext';
+import { useAuth } from '../../context/AuthContext';
 
 const RegisterSubscriberPage = () => {
   const navigate = useNavigate();
   const { success: showSuccess, error: showError } = useToast();
+  const { loginWithToken } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -83,10 +85,11 @@ const RegisterSubscriberPage = () => {
       );
 
       if (response.data.success) {
-        localStorage.setItem('token', response.data.data.token);
-        localStorage.setItem('userRole', 'subscriber');
+        // Connecter automatiquement l'utilisateur
+        const { token, subscriber } = response.data.data;
+        loginWithToken(token, subscriber);
         
-        showSuccess('Inscription réussie !');
+        showSuccess('Inscription réussie ! Bienvenue !');
         navigate('/dashboard/subscriber');
       }
     } catch (error) {

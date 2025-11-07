@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { User, ArrowLeft, Mail, Phone, Lock, MapPin, Calendar, Activity } from 'lucide-react';
 import axios from 'axios';
 import { useToast } from '../../context/ToastContext';
+import { useAuth } from '../../context/AuthContext';
 
 const RegisterPlayerPage = () => {
   const navigate = useNavigate();
   const { success: showSuccess, error: showError } = useToast();
+  const { loginWithToken } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -61,10 +63,11 @@ const RegisterPlayerPage = () => {
       );
 
       if (response.data.success) {
-        localStorage.setItem('token', response.data.data.token);
-        localStorage.setItem('userRole', 'player');
+        // Connecter automatiquement l'utilisateur
+        const { token, player } = response.data.data;
+        loginWithToken(token, player);
         
-        showSuccess('Inscription réussie !');
+        showSuccess('Inscription réussie ! Bienvenue !');
         navigate('/dashboard/player');
       }
     } catch (error) {
