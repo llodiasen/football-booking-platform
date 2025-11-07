@@ -19,6 +19,7 @@ const RegisterTeamPage = () => {
     description: '',
     category: 'amateur',
     matchType: '11v11', // 11 vs 11, 7 vs 7, 5 vs 5
+    homeTerrain: '', // Terrain de domicile
     city: '',
     region: '',
     address: '',
@@ -37,6 +38,8 @@ const RegisterTeamPage = () => {
 
   const [logoPreview, setLogoPreview] = useState(null);
   const [loadingLocation, setLoadingLocation] = useState(false);
+  const [availableTerrains, setAvailableTerrains] = useState([]);
+  const [loadingTerrains, setLoadingTerrains] = useState(false);
 
   // Pré-remplir les infos du capitaine avec les données de l'utilisateur connecté
   useEffect(() => {
@@ -79,6 +82,35 @@ const RegisterTeamPage = () => {
     }
   }, [user]);
 
+  // Charger la liste des terrains disponibles
+  useEffect(() => {
+    const loadTerrains = async () => {
+      if (!formData.city) return; // Attendre que la ville soit remplie
+      
+      setLoadingTerrains(true);
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+        const response = await axios.get(`${apiUrl}/terrains`, {
+          params: {
+            city: formData.city,
+            limit: 50
+          }
+        });
+        
+        if (response.data.success) {
+          setAvailableTerrains(response.data.data || []);
+          console.log('✅ Terrains chargés:', response.data.data.length);
+        }
+      } catch (error) {
+        console.error('Erreur chargement terrains:', error);
+      } finally {
+        setLoadingTerrains(false);
+      }
+    };
+
+    loadTerrains();
+  }, [formData.city]);
+
   // Sauvegarder le brouillon à chaque modification
   useEffect(() => {
     if (formData.name || formData.description || formData.city || formData.region) {
@@ -86,8 +118,12 @@ const RegisterTeamPage = () => {
         name: formData.name,
         description: formData.description,
         category: formData.category,
+        matchType: formData.matchType,
+        homeTerrain: formData.homeTerrain,
         city: formData.city,
         region: formData.region,
+        address: formData.address,
+        postalCode: formData.postalCode,
         foundedYear: formData.foundedYear
       };
       localStorage.setItem('teamFormDraft', JSON.stringify(draft));
@@ -397,6 +433,48 @@ const RegisterTeamPage = () => {
                   max={new Date().getFullYear()}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
+              </div>
+
+              {/* Terrain de domicile */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  🏟️ Terrain de domicile (optionnel)
+                </label>
+                {loadingTerrains ? (
+                  <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-xl">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                    <span className="text-sm text-gray-600">Chargement des terrains...</span>
+                  </div>
+                ) : availableTerrains.length > 0 ? (
+                  <select
+                    name="homeTerrain"
+                    value={formData.homeTerrain}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="">Aucun terrain sélectionné</option>
+                    {availableTerrains.map((terrain) => (
+                      <option key={terrain._id} value={terrain._id}>
+                        {terrain.name} - {terrain.address?.city} ({terrain.pricePerHour} FCFA/h)
+                      </option>
+                    ))}
+                  </select>
+                ) : formData.city ? (
+                  <div className="px-4 py-3 bg-yellow-50 border border-yellow-200 rounded-xl">
+                    <p className="text-sm text-yellow-800">
+                      Aucun terrain trouvé dans votre ville. Vous pourrez en choisir un plus tard.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl">
+                    <p className="text-sm text-gray-600">
+                      Remplissez d'abord la ville pour voir les terrains disponibles
+                    </p>
+                  </div>
+                )}
+                <p className="text-xs text-gray-500 mt-1">
+                  Choisissez votre terrain habituel. Vous recevrez des notifications pour les disponibilités.
+                </p>
               </div>
             </div>
           </div>
