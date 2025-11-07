@@ -41,14 +41,14 @@ const RoleSelectionPage = () => {
     },
     {
       id: 'subscriber',
-      title: 'Abonné',
+      title: 'Entreprise / Abonné',
       icon: Heart,
-      description: 'Suivez vos équipes et matchs favoris',
+      description: 'Abonnement mensuel pour matchs réguliers',
       features: [
-        'Suivre des équipes',
-        'Assister aux matchs',
-        'Recevoir des notifications',
-        'Accès premium'
+        'Réservations récurrentes',
+        'Matchs hebdomadaires',
+        'Facturation mensuelle',
+        'Gestion d\'équipe entreprise'
       ],
       color: 'from-purple-500 to-purple-600',
       bgColor: 'bg-purple-50',

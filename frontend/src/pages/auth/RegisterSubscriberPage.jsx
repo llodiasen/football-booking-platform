@@ -26,11 +26,11 @@ const RegisterSubscriberPage = () => {
   });
 
   const availableInterests = [
-    { id: 'football', label: 'Football', icon: '⚽' },
-    { id: 'tournois', label: 'Tournois', icon: '🏆' },
-    { id: 'équipes', label: 'Équipes', icon: '👥' },
-    { id: 'terrains', label: 'Terrains', icon: '🏟️' },
-    { id: 'événements', label: 'Événements', icon: '📅' }
+    { id: 'hebdomadaire', label: 'Hebdomadaire', icon: '📅' },
+    { id: 'bimensuel', label: 'Bimensuel', icon: '🗓️' },
+    { id: 'mensuel', label: 'Mensuel', icon: '📆' },
+    { id: 'trimestriel', label: 'Trimestriel', icon: '🗃️' },
+    { id: 'annuel', label: 'Annuel', icon: '📊' }
   ];
 
   const handleChange = (e) => {
@@ -116,10 +116,10 @@ const RegisterSubscriberPage = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Inscription Abonné
+                Inscription Entreprise / Abonné
               </h1>
               <p className="text-gray-600">
-                Suivez vos équipes et matchs favoris
+                Abonnement mensuel pour matchs réguliers
               </p>
             </div>
           </div>
@@ -299,13 +299,13 @@ const RegisterSubscriberPage = () => {
             </div>
           </div>
 
-          {/* Intérêts */}
+          {/* Fréquence d'abonnement */}
           <div className="pt-6 border-t border-gray-200">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
-              Vos intérêts
+              Fréquence d'abonnement souhaitée
             </h2>
             <p className="text-sm text-gray-600 mb-4">
-              Sélectionnez les sujets qui vous intéressent
+              À quelle fréquence souhaitez-vous réserver des terrains ?
             </p>
             
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">

@@ -25,23 +25,23 @@ const SubscriberDashboard = () => {
 
   const statCards = [
     {
-      title: 'Équipes favorites',
+      title: 'Réservations mensuelles',
       value: stats.favoriteTeams,
-      icon: Heart,
+      icon: Calendar,
       color: 'from-purple-500 to-purple-600',
       bgColor: 'bg-purple-50',
       iconColor: 'text-purple-600'
     },
     {
-      title: 'Événements assistés',
+      title: 'Matchs joués',
       value: stats.eventsAttended,
-      icon: Star,
+      icon: Activity,
       color: 'from-yellow-500 to-yellow-600',
       bgColor: 'bg-yellow-50',
       iconColor: 'text-yellow-600'
     },
     {
-      title: 'Événements à venir',
+      title: 'Prochains matchs',
       value: stats.upcomingEvents,
       icon: Calendar,
       color: 'from-blue-500 to-blue-600',
@@ -50,7 +50,7 @@ const SubscriberDashboard = () => {
     },
     {
       title: 'Abonnement',
-      value: stats.subscriptionType === 'free' ? 'Gratuit' : 'Premium',
+      value: stats.subscriptionType === 'free' ? 'Mensuel' : 'Annuel',
       icon: Bell,
       color: 'from-green-500 to-green-600',
       bgColor: 'bg-green-50',
@@ -69,7 +69,7 @@ const SubscriberDashboard = () => {
                 <Heart className="text-white" size={24} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Dashboard Abonné</h1>
+                <h1 className="text-2xl font-bold text-gray-900">Dashboard Entreprise</h1>
                 <p className="text-sm text-gray-600">{user?.firstName} {user?.lastName}</p>
               </div>
             </div>
@@ -122,39 +122,39 @@ const SubscriberDashboard = () => {
         {/* Welcome Card */}
         <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-3xl p-8 text-white mb-8">
           <h2 className="text-3xl font-bold mb-3">
-            💜 Bienvenue dans votre espace abonné !
+            🏢 Bienvenue dans votre espace entreprise !
           </h2>
           <p className="text-purple-100 text-lg mb-6">
-            Suivez vos équipes favorites, assistez aux matchs et ne manquez aucun événement.
+            Gérez vos abonnements, réservez vos créneaux hebdomadaires et organisez vos matchs d'entreprise.
           </p>
           <div className="flex flex-wrap gap-4">
             <button
-              onClick={() => navigate('/teams')}
+              onClick={() => navigate('/search')}
               className="bg-white text-purple-600 px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
             >
-              Découvrir les équipes
+              Réserver un terrain
             </button>
             <button
-              onClick={() => navigate('/events')}
+              onClick={() => navigate('/subscription')}
               className="bg-purple-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-400 transition-all"
             >
-              Voir les événements
+              Gérer mon abonnement
             </button>
           </div>
         </div>
 
-        {/* Premium Upgrade Card */}
+        {/* Upgrade Abonnement */}
         {stats.subscriptionType === 'free' && (
           <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-3xl p-8 text-white mb-8">
             <div className="flex items-center gap-3 mb-4">
               <Star className="text-white" size={32} />
-              <h3 className="text-2xl font-bold">Passez à Premium</h3>
+              <h3 className="text-2xl font-bold">Passez à l'Abonnement Annuel</h3>
             </div>
             <p className="text-yellow-50 mb-6">
-              Débloquez des fonctionnalités exclusives : notifications prioritaires, réservations VIP, statistiques avancées...
+              Économisez jusqu'à 20% avec un abonnement annuel : créneaux garantis, priorité de réservation, facturation simplifiée...
             </p>
             <button className="bg-white text-orange-600 px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all">
-              Découvrir Premium
+              Découvrir l'offre annuelle
             </button>
           </div>
         )}
@@ -163,30 +163,30 @@ const SubscriberDashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <h3 className="text-lg font-bold text-gray-900 mb-4">
-              Mes favoris
+              Gestion rapide
             </h3>
             <div className="space-y-3">
               <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors">
-                ⭐ Équipes favorites
+                📅 Mes réservations récurrentes
               </button>
               <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors">
-                🏟️ Terrains favoris
+                🏟️ Terrains habituels
               </button>
               <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors">
-                👥 Joueurs suivis
+                👥 Mon équipe entreprise
               </button>
             </div>
           </div>
 
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <h3 className="text-lg font-bold text-gray-900 mb-4">
-              Prochains événements
+              Prochains matchs planifiés
             </h3>
             <div className="text-center py-8 text-gray-500">
               <Calendar className="mx-auto mb-3" size={48} />
-              <p>Aucun événement à venir</p>
+              <p>Aucun match planifié</p>
               <button className="mt-4 text-purple-600 hover:text-purple-700 font-medium">
-                Parcourir les événements
+                Planifier un match
               </button>
             </div>
           </div>

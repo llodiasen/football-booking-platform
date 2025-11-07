@@ -66,40 +66,69 @@ const subscriberSchema = new mongoose.Schema({
     }
   },
   
-  // Abonnements et intérêts
-  interests: [{
+  // Fréquence d'abonnement et type d'entreprise
+  companyName: {
     type: String,
-    enum: ['football', 'tournois', 'équipes', 'terrains', 'événements']
+    trim: true
+  },
+  subscriptionFrequency: [{
+    type: String,
+    enum: ['hebdomadaire', 'bimensuel', 'mensuel', 'trimestriel', 'annuel']
   }],
-  favoriteTeams: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Team'
-  }],
+  // Terrains habituels pour réservations récurrentes
   favoriteTerrains: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Terrain'
   }],
-  followedPlayers: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Player'
-  }],
   
-  // Abonnement premium (optionnel)
-  subscription: {
-    type: {
+  // Réservations récurrentes (hebdomadaires, mensuelles...)
+  recurringReservations: [{
+    terrain: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Terrain'
+    },
+    dayOfWeek: {
       type: String,
-      enum: ['free', 'basic', 'premium', 'vip'],
-      default: 'free'
+      enum: ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
+    },
+    startTime: String,
+    endTime: String,
+    frequency: {
+      type: String,
+      enum: ['hebdomadaire', 'bimensuel', 'mensuel']
     },
     startDate: Date,
     endDate: Date,
     isActive: {
       type: Boolean,
-      default: false
+      default: true
+    }
+  }],
+  
+  // Abonnement entreprise
+  subscription: {
+    type: {
+      type: String,
+      enum: ['mensuel', 'trimestriel', 'semestriel', 'annuel'],
+      default: 'mensuel'
+    },
+    startDate: Date,
+    endDate: Date,
+    isActive: {
+      type: Boolean,
+      default: true
     },
     autoRenew: {
       type: Boolean,
-      default: false
+      default: true
+    },
+    monthlyReservationsIncluded: {
+      type: Number,
+      default: 4 // 4 réservations par mois (1 par semaine)
+    },
+    pricePerMonth: {
+      type: Number,
+      default: 0
     }
   },
   
