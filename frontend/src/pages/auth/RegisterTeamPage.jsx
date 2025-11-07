@@ -70,11 +70,20 @@ const RegisterTeamPage = () => {
       );
 
       if (response.data.success) {
+        console.log('✅ Inscription réussie, données reçues:', response.data.data);
+        
         // Connecter automatiquement l'utilisateur
         const { token, team } = response.data.data;
+        console.log('🔑 Token:', token);
+        console.log('👥 Team:', team);
+        console.log('🎯 Role de l\'équipe:', team?.role);
+        
         loginWithToken(token, team);
+        console.log('✅ loginWithToken appelé');
         
         showSuccess('Équipe créée avec succès ! Bienvenue !');
+        
+        console.log('🚀 Navigation vers /dashboard/team...');
         navigate('/dashboard/team');
       }
     } catch (error) {

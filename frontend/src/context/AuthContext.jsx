@@ -96,9 +96,13 @@ export const AuthProvider = ({ children }) => {
 
   // Connexion avec token existant (après inscription multi-rôles)
   const loginWithToken = (token, userData) => {
+    console.log('🔐 loginWithToken appelé avec:', { token: token?.substring(0, 20) + '...', userData });
     localStorage.setItem('token', token);
+    console.log('✅ Token sauvegardé dans localStorage');
     setToken(token);
+    console.log('✅ setToken appelé');
     setUser(userData);
+    console.log('✅ setUser appelé avec:', userData);
   };
 
   const value = {

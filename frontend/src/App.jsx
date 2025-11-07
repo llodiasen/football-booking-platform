@@ -41,7 +41,16 @@ const PrivateRoute = ({ children, roles }) => {
   const { isAuthenticated, loading, user } = useAuth();
   const hasToken = !!localStorage.getItem('token');
 
+  console.log('🛡️ PrivateRoute check:', { 
+    isAuthenticated, 
+    loading, 
+    hasToken, 
+    userRole: user?.role,
+    requiredRoles: roles 
+  });
+
   if (loading) {
+    console.log('⏳ Loading state...');
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -54,11 +63,13 @@ const PrivateRoute = ({ children, roles }) => {
 
   // Vérifier le token en plus de isAuthenticated pour gérer le cas juste après inscription
   if (!isAuthenticated && !hasToken) {
+    console.log('❌ Pas authentifié et pas de token → redirect /login');
     return <Navigate to="/login" replace />;
   }
 
   // Si on a un token mais pas encore de user, on attend
   if (hasToken && !user) {
+    console.log('⏳ Token présent mais user pas encore chargé...');
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -70,9 +81,11 @@ const PrivateRoute = ({ children, roles }) => {
   }
 
   if (roles && user && !roles.includes(user?.role)) {
+    console.log(`❌ Role ${user.role} non autorisé. Requis: ${roles.join(', ')} → redirect /`);
     return <Navigate to="/" replace />;
   }
 
+  console.log('✅ PrivateRoute OK, affichage du contenu');
   return children;
 };
 
