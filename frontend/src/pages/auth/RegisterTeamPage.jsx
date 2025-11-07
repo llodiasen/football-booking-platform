@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, ArrowLeft, Upload, Mail, Phone, Lock, MapPin, Calendar } from 'lucide-react';
 import axios from 'axios';
@@ -8,19 +8,23 @@ import { useAuth } from '../../context/AuthContext';
 const RegisterTeamPage = () => {
   const navigate = useNavigate();
   const { success: showSuccess, error: showError } = useToast();
-  const { loginWithToken } = useAuth();
+  const { loginWithToken, user } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     // Équipe
     name: '',
     logo: '',
+    logoFile: null,
     description: '',
     category: 'amateur',
+    matchType: '11v11', // 11 vs 11, 7 vs 7, 5 vs 5
     city: '',
     region: '',
+    address: '',
+    postalCode: '',
     foundedYear: new Date().getFullYear(),
-    // Capitaine
+    // Capitaine (sera pré-rempli avec les données du user connecté)
     captain: {
       firstName: '',
       lastName: '',
@@ -30,6 +34,65 @@ const RegisterTeamPage = () => {
       confirmPassword: ''
     }
   });
+
+  const [logoPreview, setLogoPreview] = useState(null);
+
+  // Pré-remplir les infos du capitaine avec les données de l'utilisateur connecté
+  useEffect(() => {
+    if (user) {
+      // Vérifier si un brouillon existe dans localStorage
+      const savedDraft = localStorage.getItem('teamFormDraft');
+      
+      if (savedDraft) {
+        try {
+          const draft = JSON.parse(savedDraft);
+          console.log('📝 Brouillon trouvé, restauration...');
+          setFormData({
+            ...draft,
+            captain: {
+              firstName: user.firstName || '',
+              lastName: user.lastName || '',
+              email: user.email || '',
+              phone: user.phone || '',
+              password: 'already-set',
+              confirmPassword: 'already-set'
+            }
+          });
+        } catch (e) {
+          console.error('Erreur lecture brouillon:', e);
+        }
+      } else {
+        // Pas de brouillon, pré-remplir normalement
+        setFormData(prev => ({
+          ...prev,
+          captain: {
+            firstName: user.firstName || '',
+            lastName: user.lastName || '',
+            email: user.email || '',
+            phone: user.phone || '',
+            password: 'already-set',
+            confirmPassword: 'already-set'
+          }
+        }));
+      }
+    }
+  }, [user]);
+
+  // Sauvegarder le brouillon à chaque modification
+  useEffect(() => {
+    if (formData.name || formData.description || formData.city || formData.region) {
+      const draft = {
+        name: formData.name,
+        description: formData.description,
+        category: formData.category,
+        city: formData.city,
+        region: formData.region,
+        foundedYear: formData.foundedYear
+      };
+      localStorage.setItem('teamFormDraft', JSON.stringify(draft));
+      console.log('💾 Brouillon sauvegardé');
+    }
+  }, [formData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,6 +108,31 @@ const RegisterTeamPage = () => {
       }));
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleLogoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Vérifier la taille (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        showError('L\'image ne doit pas dépasser 5MB');
+        return;
+      }
+
+      // Vérifier le type
+      if (!file.type.startsWith('image/')) {
+        showError('Le fichier doit être une image');
+        return;
+      }
+
+      // Créer une preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoPreview(reader.result);
+        setFormData(prev => ({ ...prev, logo: reader.result, logoFile: file }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -71,6 +159,11 @@ const RegisterTeamPage = () => {
 
       if (response.data.success) {
         console.log('✅ Inscription réussie, données reçues:', response.data.data);
+        
+        // Nettoyer le brouillon et le rôle sélectionné
+        localStorage.removeItem('teamFormDraft');
+        localStorage.removeItem('selectedRole');
+        console.log('🧹 Brouillon et selectedRole nettoyés');
         
         // Connecter automatiquement l'utilisateur
         const { token, team } = response.data.data;
@@ -146,6 +239,37 @@ const RegisterTeamPage = () => {
                 />
               </div>
 
+              {/* Upload Logo */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Logo de l'équipe
+                </label>
+                <div className="flex items-center gap-4">
+                  {logoPreview && (
+                    <img 
+                      src={logoPreview} 
+                      alt="Logo preview" 
+                      className="w-20 h-20 rounded-xl object-cover border-2 border-blue-200"
+                    />
+                  )}
+                  <label className="flex-1 cursor-pointer">
+                    <div className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 transition-all">
+                      <Upload size={20} className="text-gray-500" />
+                      <span className="text-sm text-gray-600">
+                        {logoPreview ? 'Changer le logo' : 'Télécharger le logo'}
+                      </span>
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleLogoUpload}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Format: JPG, PNG. Max 5MB.</p>
+              </div>
+
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Description
@@ -179,6 +303,22 @@ const RegisterTeamPage = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Type de match *
+                </label>
+                <select
+                  name="matchType"
+                  value={formData.matchType}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="11v11">⚽ Football 11 vs 11</option>
+                  <option value="7v7">⚽ Football 7 vs 7</option>
+                  <option value="5v5">⚽ Futsal 5 vs 5</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Année de création
                 </label>
                 <input
@@ -191,7 +331,17 @@ const RegisterTeamPage = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
+            </div>
+          </div>
 
+          {/* Localisation */}
+          <div className="pt-6 border-t border-gray-200">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              <MapPin className="inline mr-2" size={24} />
+              Localisation
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Ville *
@@ -221,109 +371,109 @@ const RegisterTeamPage = () => {
                   placeholder="Dakar"
                 />
               </div>
-            </div>
-          </div>
 
-          {/* Informations Capitaine */}
-          <div className="pt-6 border-t border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
-              Informations du capitaine
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Prénom *
+                  Adresse
                 </label>
                 <input
                   type="text"
-                  name="captain.firstName"
-                  value={formData.captain.firstName}
+                  name="address"
+                  value={formData.address}
                   onChange={handleChange}
-                  required
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Moussa"
+                  placeholder="123 Rue de la Liberté"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Nom *
+                  Code postal
                 </label>
                 <input
                   type="text"
-                  name="captain.lastName"
-                  value={formData.captain.lastName}
+                  name="postalCode"
+                  value={formData.postalCode}
                   onChange={handleChange}
-                  required
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Diallo"
+                  placeholder="11000"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Informations Capitaine - Pré-remplies et désactivées */}
+          <div className="pt-6 border-t border-gray-200">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-gray-900">
+                Informations du capitaine
+              </h2>
+              <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">
+                ✅ Déjà remplies
+              </span>
+            </div>
+            <p className="text-sm text-gray-600 mb-4">
+              Ces informations proviennent de votre compte. Vous êtes le capitaine de l'équipe.
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Prénom
+                </label>
+                <input
+                  type="text"
+                  value={formData.captain.firstName}
+                  disabled
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nom
+                </label>
+                <input
+                  type="text"
+                  value={formData.captain.lastName}
+                  disabled
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   <Mail className="inline mr-2" size={16} />
-                  Email *
+                  Email
                 </label>
                 <input
                   type="email"
-                  name="captain.email"
                   value={formData.captain.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="capitaine@example.com"
+                  disabled
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   <Phone className="inline mr-2" size={16} />
-                  Téléphone *
+                  Téléphone
                 </label>
                 <input
                   type="tel"
-                  name="captain.phone"
                   value={formData.captain.phone}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="+221 77 123 45 67"
+                  disabled
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <Lock className="inline mr-2" size={16} />
-                  Mot de passe *
-                </label>
-                <input
-                  type="password"
-                  name="captain.password"
-                  value={formData.captain.password}
-                  onChange={handleChange}
-                  required
-                  minLength={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="••••••••"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Confirmer le mot de passe *
-                </label>
-                <input
-                  type="password"
-                  name="captain.confirmPassword"
-                  value={formData.captain.confirmPassword}
-                  onChange={handleChange}
-                  required
-                  minLength={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="••••••••"
-                />
+              <div className="md:col-span-2">
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                  <p className="text-sm text-blue-800">
+                    <Lock className="inline mr-2" size={16} />
+                    Votre mot de passe est déjà défini lors de la création de votre compte.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

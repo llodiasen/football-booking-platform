@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, ArrowLeft, Mail, Phone, Lock, MapPin, Calendar, Activity } from 'lucide-react';
 import axios from 'axios';
@@ -8,7 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 const RegisterPlayerPage = () => {
   const navigate = useNavigate();
   const { success: showSuccess, error: showError } = useToast();
-  const { loginWithToken } = useAuth();
+  const { loginWithToken, user } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -30,6 +30,61 @@ const RegisterPlayerPage = () => {
     lookingForTeam: false,
     bio: ''
   });
+
+  // Pré-remplir avec les données du user + restaurer brouillon
+  useEffect(() => {
+    if (user) {
+      const savedDraft = localStorage.getItem('playerFormDraft');
+      
+      if (savedDraft) {
+        try {
+          const draft = JSON.parse(savedDraft);
+          console.log('📝 Brouillon joueur trouvé');
+          setFormData({
+            ...draft,
+            firstName: user.firstName || '',
+            lastName: user.lastName || '',
+            email: user.email || '',
+            phone: user.phone || '',
+            password: 'already-set',
+            confirmPassword: 'already-set'
+          });
+        } catch (e) {
+          console.error('Erreur lecture brouillon:', e);
+        }
+      } else {
+        setFormData(prev => ({
+          ...prev,
+          firstName: user.firstName || '',
+          lastName: user.lastName || '',
+          email: user.email || '',
+          phone: user.phone || '',
+          password: 'already-set',
+          confirmPassword: 'already-set'
+        }));
+      }
+    }
+  }, [user]);
+
+  // Sauvegarder brouillon
+  useEffect(() => {
+    if (formData.position || formData.city || formData.dateOfBirth) {
+      const draft = {
+        position: formData.position,
+        preferredFoot: formData.preferredFoot,
+        dateOfBirth: formData.dateOfBirth,
+        height: formData.height,
+        weight: formData.weight,
+        city: formData.city,
+        region: formData.region,
+        level: formData.level,
+        yearsOfExperience: formData.yearsOfExperience,
+        lookingForTeam: formData.lookingForTeam,
+        bio: formData.bio
+      };
+      localStorage.setItem('playerFormDraft', JSON.stringify(draft));
+    }
+  }, [formData]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -63,6 +118,10 @@ const RegisterPlayerPage = () => {
       );
 
       if (response.data.success) {
+        // Nettoyer brouillon et rôle
+        localStorage.removeItem('playerFormDraft');
+        localStorage.removeItem('selectedRole');
+        
         // Connecter automatiquement l'utilisateur
         const { token, player } = response.data.data;
         loginWithToken(token, player);

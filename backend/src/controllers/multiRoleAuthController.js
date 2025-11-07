@@ -15,8 +15,11 @@ exports.registerTeam = async (req, res) => {
       description,
       captain,
       category,
+      matchType,
       city,
       region,
+      address,
+      postalCode,
       foundedYear
     } = req.body;
 
@@ -43,8 +46,11 @@ exports.registerTeam = async (req, res) => {
         password: hashedPassword
       },
       category,
+      matchType,
       city,
       region,
+      address,
+      postalCode,
       foundedYear
     });
 

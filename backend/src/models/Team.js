@@ -54,6 +54,11 @@ const teamSchema = new mongoose.Schema({
     enum: ['amateur', 'semi-pro', 'professionnel', 'loisir'],
     default: 'amateur'
   },
+  matchType: {
+    type: String,
+    enum: ['11v11', '7v7', '5v5'],
+    default: '11v11'
+  },
   city: {
     type: String,
     required: [true, 'La ville est requise']
@@ -61,6 +66,12 @@ const teamSchema = new mongoose.Schema({
   region: {
     type: String,
     required: [true, 'La région est requise']
+  },
+  address: {
+    type: String
+  },
+  postalCode: {
+    type: String
   },
   foundedYear: {
     type: Number,

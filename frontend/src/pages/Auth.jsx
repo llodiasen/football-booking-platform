@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -11,9 +11,27 @@ const Auth = () => {
   // Ouvrir l'onglet inscription si tab=register dans l'URL
   const [activeTab, setActiveTab] = useState(tabParam === 'register' ? 'register' : 'login');
   
-  const { login, register } = useAuth();
+  const { login, register, user, isAuthenticated } = useAuth();
   const { success, error: showError } = useToast();
   const navigate = useNavigate();
+
+  // Si l'utilisateur est connecté et vient de role-selection, rediriger vers le formulaire
+  useEffect(() => {
+    if (isAuthenticated && user && searchParams.get('from') === 'role-selection') {
+      const selectedRole = localStorage.getItem('selectedRole');
+      
+      if (selectedRole) {
+        console.log('🔄 Utilisateur déjà connecté, redirection vers formulaire:', selectedRole);
+        
+        if (selectedRole === 'owner' || selectedRole === 'client') {
+          localStorage.removeItem('selectedRole');
+          navigate('/dashboard');
+        } else {
+          navigate(`/register/${selectedRole}`);
+        }
+      }
+    }
+  }, [isAuthenticated, user, searchParams, navigate]);
 
   // État Login
   const [loginData, setLoginData] = useState({
