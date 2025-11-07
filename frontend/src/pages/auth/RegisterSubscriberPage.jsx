@@ -78,7 +78,7 @@ const RegisterSubscriberPage = () => {
       const { confirmPassword, ...dataToSend } = formData;
       
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/multi-auth/register/subscriber`,
+        `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/multi-auth/register/subscriber`,
         dataToSend
       );
 
