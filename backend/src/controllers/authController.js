@@ -1,4 +1,7 @@
 const User = require('../models/User');
+const Team = require('../models/Team');
+const Player = require('../models/Player');
+const Subscriber = require('../models/Subscriber');
 const jwt = require('jsonwebtoken');
 
 // Générer JWT Token
@@ -141,18 +144,43 @@ exports.login = async (req, res) => {
 };
 
 // @route   GET /api/auth/me
-// @desc    Get current user
+// @desc    Get current user (support multi-rôles)
 // @access  Private
 exports.getMe = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
+    let user = null;
+    const userId = req.user.id;
+    const userRole = req.user.role;
+
+    console.log('🔍 getMe appelé pour:', { userId, userRole });
+
+    // Chercher selon le rôle dans le JWT
+    if (userRole === 'team') {
+      user = await Team.findById(userId);
+    } else if (userRole === 'player') {
+      user = await Player.findById(userId);
+    } else if (userRole === 'subscriber') {
+      user = await Subscriber.findById(userId);
+    } else {
+      // Rôles classiques (client, owner, admin)
+      user = await User.findById(userId).select('-password');
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Utilisateur non trouvé'
+      });
+    }
+
+    console.log('✅ Utilisateur trouvé:', user.role || userRole);
     
     res.json({
       success: true,
       data: user
     });
   } catch (error) {
-    console.error('Erreur getMe:', error);
+    console.error('❌ Erreur getMe:', error);
     res.status(500).json({
       success: false,
       message: 'Erreur lors de la récupération du profil',
