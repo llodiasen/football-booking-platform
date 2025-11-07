@@ -217,12 +217,17 @@ const Players = () => {
                   </h3>
 
                   {/* Position et niveau */}
-                  <div className="flex items-center gap-2 mb-3">
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
                     <span className="text-2xl">{getPositionIcon(player.position)}</span>
                     <span className="font-medium text-gray-700">{player.position}</span>
                     <span className={`text-xs px-2 py-1 rounded-full ${getLevelColor(player.level)}`}>
                       {player.level}
                     </span>
+                    {player.lookingForTeam && (
+                      <span className="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700 border border-blue-300 font-semibold flex items-center gap-1">
+                        🔍 Recherche équipe
+                      </span>
+                    )}
                   </div>
 
                   {/* Localisation */}
