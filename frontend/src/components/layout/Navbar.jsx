@@ -51,18 +51,6 @@ const Navbar = () => {
               <Link to="/" className="hover:opacity-80 transition-opacity">
                 <Logo />
               </Link>
-
-              {/* Separator */}
-              <div className="hidden md:block w-px h-8 bg-gray-200"></div>
-
-              {/* Menu Button */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="flex items-center gap-2 text-gray-700 hover:text-green-600 transition-colors"
-              >
-                <Menu size={20} />
-                <span className="hidden md:inline font-medium">Menu</span>
-              </button>
             </div>
 
             {/* Center - Menu Explorer */}

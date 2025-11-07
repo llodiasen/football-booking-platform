@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, ArrowLeft, Mail, Phone, Lock, MapPin, Calendar, Activity } from 'lucide-react';
+import { User, ArrowLeft, Mail, Phone, Lock, MapPin, Calendar, Activity, Navigation } from 'lucide-react';
 import axios from 'axios';
 import { useToast } from '../../context/ToastContext';
 import { useAuth } from '../../context/AuthContext';
@@ -25,11 +25,17 @@ const RegisterPlayerPage = () => {
     weight: '',
     city: '',
     region: '',
+    address: '',
+    postalCode: '',
+    latitude: null,
+    longitude: null,
     level: 'intermédiaire',
     yearsOfExperience: 0,
     lookingForTeam: false,
     bio: ''
   });
+
+  const [loadingLocation, setLoadingLocation] = useState(false);
 
   // Pré-remplir avec les données du user + restaurer brouillon
   useEffect(() => {
@@ -92,6 +98,74 @@ const RegisterPlayerPage = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+  };
+
+  // Géolocalisation automatique
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      showError('La géolocalisation n\'est pas supportée par votre navigateur');
+      return;
+    }
+
+    setLoadingLocation(true);
+    showSuccess('📍 Récupération de votre position...');
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log('📍 Position:', { latitude, longitude });
+
+        try {
+          // Utiliser l'API de reverse geocoding (Nominatim - OpenStreetMap)
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=fr`
+          );
+          const data = await response.json();
+
+          console.log('🗺️ Données de localisation:', data);
+
+          // Extraire ville et région
+          const city = data.address.city || data.address.town || data.address.village || data.address.county || '';
+          const region = data.address.state || data.address.region || '';
+          const address = `${data.address.road || ''} ${data.address.house_number || ''}`.trim();
+          const postalCode = data.address.postcode || '';
+
+          setFormData(prev => ({
+            ...prev,
+            city: city,
+            region: region,
+            address: address || prev.address,
+            postalCode: postalCode || prev.postalCode,
+            latitude: latitude.toString(),
+            longitude: longitude.toString()
+          }));
+
+          showSuccess('✅ Position détectée avec succès !');
+        } catch (error) {
+          console.error('Erreur géolocalisation:', error);
+          showError('Impossible de récupérer l\'adresse exacte');
+        } finally {
+          setLoadingLocation(false);
+        }
+      },
+      (error) => {
+        console.error('Erreur géolocalisation:', error);
+        setLoadingLocation(false);
+        
+        if (error.code === error.PERMISSION_DENIED) {
+          showError('Vous devez autoriser l\'accès à votre position');
+        } else if (error.code === error.POSITION_UNAVAILABLE) {
+          showError('Position indisponible');
+        } else {
+          showError('Erreur lors de la géolocalisation');
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -184,9 +258,11 @@ const RegisterPlayerPage = () => {
                   value={formData.firstName}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  disabled={!!user}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="Ibrahima"
                 />
+                {user && <p className="text-xs text-gray-500 mt-1">✓ Pré-rempli depuis votre compte</p>}
               </div>
 
               <div>
@@ -199,9 +275,11 @@ const RegisterPlayerPage = () => {
                   value={formData.lastName}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  disabled={!!user}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="Sy"
                 />
+                {user && <p className="text-xs text-gray-500 mt-1">✓ Pré-rempli depuis votre compte</p>}
               </div>
 
               <div>
@@ -215,9 +293,11 @@ const RegisterPlayerPage = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  disabled={!!user}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="email@example.com"
                 />
+                {user && <p className="text-xs text-gray-500 mt-1">✓ Pré-rempli depuis votre compte</p>}
               </div>
 
               <div>
@@ -231,9 +311,11 @@ const RegisterPlayerPage = () => {
                   value={formData.phone}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  disabled={!!user}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="+221 77 123 45 67"
                 />
+                {user && <p className="text-xs text-gray-500 mt-1">✓ Pré-rempli depuis votre compte</p>}
               </div>
 
               <div>
@@ -262,10 +344,12 @@ const RegisterPlayerPage = () => {
                   value={formData.password}
                   onChange={handleChange}
                   required
+                  disabled={!!user}
                   minLength={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="••••••••"
                 />
+                {user && <p className="text-xs text-gray-500 mt-1">✓ Utilise votre mot de passe actuel</p>}
               </div>
 
               <div className="md:col-span-2">
@@ -278,10 +362,12 @@ const RegisterPlayerPage = () => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   required
+                  disabled={!!user}
                   minLength={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="••••••••"
                 />
+                {user && <p className="text-xs text-gray-500 mt-1">✓ Utilise votre mot de passe actuel</p>}
               </div>
             </div>
           </div>
@@ -391,35 +477,122 @@ const RegisterPlayerPage = () => {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <MapPin className="inline mr-2" size={16} />
-                  Ville *
-                </label>
-                <input
-                  type="text"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  placeholder="Dakar"
-                />
-              </div>
+              {/* Section Localisation */}
+              <div className="md:col-span-2 pt-4 border-t border-gray-200">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                    <MapPin size={20} className="text-green-600" />
+                    Localisation
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={handleGetLocation}
+                    disabled={loadingLocation}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+                  >
+                    <Navigation size={16} className={loadingLocation ? 'animate-spin' : ''} />
+                    {loadingLocation ? 'Chargement...' : 'Localiser ma position'}
+                  </button>
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Région *
-                </label>
-                <input
-                  type="text"
-                  name="region"
-                  value={formData.region}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  placeholder="Dakar"
-                />
+                {/* Message explicatif */}
+                <div className="mb-4 bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-xl p-4">
+                  <p className="text-sm font-medium text-gray-900 mb-1">
+                    📍 Trouvez des terrains et équipes près de chez vous
+                  </p>
+                  <p className="text-xs text-gray-600">
+                    Votre position nous aide à vous connecter avec votre communauté locale.
+                    <span className="text-blue-600 font-medium"> Données 100% sécurisées.</span>
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Ville *
+                    </label>
+                    <input
+                      type="text"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      placeholder="Dakar"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Région *
+                    </label>
+                    <input
+                      type="text"
+                      name="region"
+                      value={formData.region}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      placeholder="Dakar"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Adresse
+                    </label>
+                    <input
+                      type="text"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      placeholder="Rue 10, Médina"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Code postal
+                    </label>
+                    <input
+                      type="text"
+                      name="postalCode"
+                      value={formData.postalCode}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      placeholder="11000"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Latitude
+                    </label>
+                    <input
+                      type="text"
+                      name="latitude"
+                      value={formData.latitude || ''}
+                      readOnly
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 cursor-not-allowed text-gray-600"
+                      placeholder="Auto"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Longitude
+                    </label>
+                    <input
+                      type="text"
+                      name="longitude"
+                      value={formData.longitude || ''}
+                      readOnly
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 cursor-not-allowed text-gray-600"
+                      placeholder="Auto"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="md:col-span-2">
