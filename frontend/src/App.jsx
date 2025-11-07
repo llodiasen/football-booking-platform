@@ -39,6 +39,7 @@ import SubscriberDashboard from './pages/dashboards/SubscriberDashboard';
 // Composant de route protégée
 const PrivateRoute = ({ children, roles }) => {
   const { isAuthenticated, loading, user } = useAuth();
+  const hasToken = !!localStorage.getItem('token');
 
   if (loading) {
     return (
@@ -51,11 +52,24 @@ const PrivateRoute = ({ children, roles }) => {
     );
   }
 
-  if (!isAuthenticated) {
+  // Vérifier le token en plus de isAuthenticated pour gérer le cas juste après inscription
+  if (!isAuthenticated && !hasToken) {
     return <Navigate to="/login" replace />;
   }
 
-  if (roles && !roles.includes(user?.role)) {
+  // Si on a un token mais pas encore de user, on attend
+  if (hasToken && !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (roles && user && !roles.includes(user?.role)) {
     return <Navigate to="/" replace />;
   }
 
