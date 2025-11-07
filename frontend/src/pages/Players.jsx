@@ -252,13 +252,13 @@ const Players = () => {
                     </div>
                   </div>
 
-                  {/* Équipe actuelle */}
+                  {/* Équipe actuelle - Badge */}
                   {player.currentTeam && (
-                    <div className="mt-3 pt-3 border-t border-gray-100">
-                      <p className="text-xs text-gray-500">Équipe actuelle</p>
-                      <p className="font-medium text-gray-900 text-sm">
+                    <div className="mt-3">
+                      <span className="inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-full bg-purple-100 text-purple-700 border border-purple-300 font-semibold">
+                        <Users size={14} />
                         {player.currentTeam.name || 'Équipe inconnue'}
-                      </p>
+                      </span>
                     </div>
                   )}
                 </div>
