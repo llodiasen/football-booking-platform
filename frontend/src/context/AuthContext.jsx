@@ -20,10 +20,16 @@ export const AuthProvider = ({ children }) => {
   // Charger les informations de l'utilisateur
   const loadUser = async () => {
     try {
+      console.log('🔍 loadUser: Tentative de chargement du profil...');
+      console.log('🔑 Token présent:', !!token);
       const response = await authAPI.getMe();
+      console.log('✅ loadUser: Profil chargé avec succès:', response.data.data);
       setUser(response.data.data);
     } catch (error) {
-      console.error('Error loading user:', error);
+      console.error('❌ Error loading user:', error);
+      console.error('❌ Error response:', error.response?.data);
+      console.error('❌ Error status:', error.response?.status);
+      console.log('🚪 Déconnexion forcée...');
       logout();
     } finally {
       setLoading(false);
@@ -33,15 +39,26 @@ export const AuthProvider = ({ children }) => {
   // Connexion
   const login = async (email, password) => {
     try {
+      console.log('🔐 login: Tentative de connexion avec:', email);
       const response = await authAPI.login({ email, password });
       const { user, token } = response.data.data;
+      
+      console.log('✅ login: Connexion réussie !');
+      console.log('👤 User:', user);
+      console.log('🔑 Token:', token?.substring(0, 30) + '...');
+      console.log('🎭 Role:', user.role);
+      console.log('🎭 Roles:', user.roles);
+      console.log('🎯 Primary:', user.primaryRole);
       
       localStorage.setItem('token', token);
       setToken(token);
       setUser(user);
       
+      console.log('💾 Token sauvegardé dans localStorage');
+      
       return { success: true, user };
     } catch (error) {
+      console.error('❌ login error:', error);
       const message = error.response?.data?.message || 'Erreur de connexion';
       throw new Error(message);
     }
