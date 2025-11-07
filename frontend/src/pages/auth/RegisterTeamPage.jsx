@@ -287,6 +287,33 @@ const RegisterTeamPage = () => {
         
         showSuccess('Équipe créée avec succès ! Bienvenue !');
         
+        // Vérifier s'il y a une action en attente (invitation de joueur)
+        const pendingAction = localStorage.getItem('pendingAction');
+        if (pendingAction) {
+          try {
+            const action = JSON.parse(pendingAction);
+            if (action.type === 'invite_player' && action.returnUrl) {
+              // Nettoyer l'action
+              localStorage.removeItem('pendingAction');
+              
+              // Message informatif
+              setTimeout(() => {
+                showSuccess(`Vous pouvez maintenant inviter ${action.playerName} !`);
+              }, 1500);
+              
+              // Rediriger vers la page du joueur
+              console.log(`🔄 Redirection vers ${action.returnUrl} pour inviter ${action.playerName}`);
+              setTimeout(() => {
+                navigate(action.returnUrl);
+              }, 2000);
+              return;
+            }
+          } catch (error) {
+            console.error('Erreur parsing pendingAction:', error);
+          }
+        }
+        
+        // Redirection normale vers le dashboard d'équipe
         console.log('🚀 Navigation vers /dashboard/team...');
         navigate('/dashboard/team');
       }

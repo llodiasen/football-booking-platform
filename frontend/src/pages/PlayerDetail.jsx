@@ -73,18 +73,40 @@ const PlayerDetail = () => {
 
   // Gérer l'envoi d'invitation
   const handleSendInvite = async () => {
+    // 1. Vérifier si l'utilisateur est connecté
     if (!isAuthenticated) {
       showError('Vous devez être connecté pour envoyer une invitation');
+      // Sauvegarder l'action à effectuer après connexion
+      localStorage.setItem('pendingAction', JSON.stringify({
+        type: 'invite_player',
+        playerId: player._id,
+        playerName: `${player.firstName} ${player.lastName}`,
+        returnUrl: `/players/${id}`
+      }));
       navigate(`/login?redirect=/players/${id}`);
       return;
     }
 
-    // Vérifier que l'utilisateur est un capitaine d'équipe
+    // 2. Vérifier si l'utilisateur a un profil d'équipe
     if (user?.role !== 'team') {
-      showError('Seuls les capitaines d\'équipe peuvent envoyer des invitations');
+      // L'utilisateur doit créer une équipe d'abord
+      showError('Vous devez créer une équipe pour inviter des joueurs');
+      
+      // Sauvegarder l'action à effectuer après création d'équipe
+      localStorage.setItem('pendingAction', JSON.stringify({
+        type: 'invite_player',
+        playerId: player._id,
+        playerName: `${player.firstName} ${player.lastName}`,
+        returnUrl: `/players/${id}`
+      }));
+
+      // Rediriger vers la sélection de rôle puis création d'équipe
+      localStorage.setItem('selectedRole', 'team');
+      navigate('/register/team');
       return;
     }
 
+    // 3. L'utilisateur est capitaine, envoyer l'invitation
     setSendingInvite(true);
     try {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -96,6 +118,9 @@ const PlayerDetail = () => {
 
       if (response.data.success) {
         showSuccess(`✅ Invitation envoyée à ${player.firstName} ${player.lastName} !`);
+        
+        // Nettoyer l'action en attente
+        localStorage.removeItem('pendingAction');
       }
     } catch (error) {
       console.error('Erreur envoi invitation:', error);
