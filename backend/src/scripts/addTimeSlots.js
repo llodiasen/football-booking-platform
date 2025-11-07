@@ -53,30 +53,44 @@ const addTimeSlotsToTerrains = async () => {
         $set: {
           'openingHours.monday': { 
             closed: false,
+            open: '08:00',
+            close: '23:00',
             slots: timeSlots
           },
           'openingHours.tuesday': { 
             closed: false,
+            open: '08:00',
+            close: '23:00',
             slots: timeSlots
           },
           'openingHours.wednesday': { 
             closed: false,
+            open: '08:00',
+            close: '23:00',
             slots: timeSlots
           },
           'openingHours.thursday': { 
             closed: false,
+            open: '08:00',
+            close: '23:00',
             slots: timeSlots
           },
           'openingHours.friday': { 
             closed: false,
+            open: '08:00',
+            close: '23:00',
             slots: timeSlots
           },
           'openingHours.saturday': { 
             closed: false,
+            open: '08:00',
+            close: '23:00',
             slots: timeSlots
           },
           'openingHours.sunday': { 
             closed: false,
+            open: '08:00',
+            close: '23:00',
             slots: timeSlots
           }
         }
