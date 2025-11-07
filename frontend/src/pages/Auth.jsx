@@ -60,6 +60,7 @@ const Auth = () => {
       const result = await login(loginData.email, loginData.password);
       console.log('✅ Résultat login:', result);
       console.log('🔑 Token sauvegardé:', localStorage.getItem('token'));
+      console.log('👤 User rôle:', result?.user?.role);
       success('Connexion réussie ! Bienvenue 👋');
       
       // Vérifier si un rôle a été choisi avant (Flow 1)
@@ -79,7 +80,17 @@ const Auth = () => {
       } else if (redirectUrl) {
         navigate(redirectUrl);
       } else {
-        navigate('/dashboard');
+        // Redirection intelligente selon le rôle
+        const userRole = result?.user?.role;
+        if (userRole === 'team') {
+          navigate('/dashboard/team');
+        } else if (userRole === 'player') {
+          navigate('/dashboard/player');
+        } else if (userRole === 'subscriber') {
+          navigate('/dashboard/subscriber');
+        } else {
+          navigate('/dashboard'); // owner, client, admin
+        }
       }
     } catch (err) {
       showError(err.message || 'Erreur de connexion');
