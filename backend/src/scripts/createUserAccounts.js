@@ -13,9 +13,8 @@ const createUserAccounts = async () => {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ MongoDB connecté\n');
 
-    // Hasher le mot de passe commun
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('password123', salt);
+    // Mot de passe en clair (sera hashé par le pre-save hook du modèle User)
+    const plainPassword = 'password123';
 
     // =====================================================
     // 1. CRÉER DES COMPTES USER POUR LES 30 CAPITAINES
@@ -36,7 +35,7 @@ const createUserAccounts = async () => {
           lastName: team.captain.lastName,
           email: team.captain.email,
           phone: team.captain.phone,
-          password: hashedPassword,
+          password: plainPassword, // Mot de passe en clair (hashé par pre-save hook)
           role: 'team', // IMPORTANT: role 'team' pour les capitaines
           isActive: true,
           teamProfile: {
@@ -73,7 +72,7 @@ const createUserAccounts = async () => {
           lastName: player.lastName,
           email: player.email,
           phone: player.phone,
-          password: hashedPassword,
+          password: plainPassword, // Mot de passe en clair (hashé par pre-save hook)
           role: 'player', // IMPORTANT: role 'player' pour les joueurs
           isActive: true,
           playerProfile: {

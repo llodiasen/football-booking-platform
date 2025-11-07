@@ -9,7 +9,8 @@
     "seed": "node src/scripts/seedTerrains.js",
     "seed:all": "node src/scripts/seedDatabase.js",
     "add-slots": "node src/scripts/addTimeSlots.js",
-    "create-accounts": "node src/scripts/createUserAccounts.js"
+    "create-accounts": "node src/scripts/createUserAccounts.js",
+    "reset-accounts": "node src/scripts/resetUserAccounts.js"
   },
   "keywords": [
     "football",
