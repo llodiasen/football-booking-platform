@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['admin', 'owner', 'client', 'team'],
+    enum: ['admin', 'owner', 'client', 'team', 'player', 'subscriber'],
     default: 'client'
   },
   avatar: {
@@ -97,6 +97,27 @@ const userSchema = new mongoose.Schema({
         default: null
       }
     }
+  },
+  // Profil spécifique pour les équipes (capitaines)
+  teamProfile: {
+    teamId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Team'
+    },
+    teamName: String
+  },
+  // Profil spécifique pour les joueurs
+  playerProfile: {
+    playerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Player'
+    },
+    position: String,
+    currentTeam: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Team'
+    },
+    currentTeamName: String
   },
   createdAt: {
     type: Date,
