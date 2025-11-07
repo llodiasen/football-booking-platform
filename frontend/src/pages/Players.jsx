@@ -216,7 +216,7 @@ const Players = () => {
                     {player.firstName} {player.lastName}
                   </h3>
 
-                  {/* Position et niveau */}
+                  {/* Position, niveau et équipe */}
                   <div className="flex flex-wrap items-center gap-2 mb-3">
                     <span className="text-2xl">{getPositionIcon(player.position)}</span>
                     <span className="font-medium text-gray-700">{player.position}</span>
@@ -226,6 +226,11 @@ const Players = () => {
                     {player.lookingForTeam && (
                       <span className="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700 border border-blue-300 font-semibold flex items-center gap-1">
                         🔍 Recherche équipe
+                      </span>
+                    )}
+                    {player.currentTeam && (
+                      <span className="text-xs px-2 py-1 rounded-full bg-purple-100 text-purple-700 border border-purple-300 font-semibold flex items-center gap-1">
+                        👥 {player.currentTeam.name}
                       </span>
                     )}
                   </div>
@@ -251,16 +256,6 @@ const Players = () => {
                       <p className="font-bold text-blue-600">{player.stats?.assists || 0}</p>
                     </div>
                   </div>
-
-                  {/* Équipe actuelle */}
-                  {player.currentTeam && (
-                    <div className="mt-3 pt-3 border-t border-gray-100">
-                      <p className="text-xs text-gray-500">Équipe actuelle</p>
-                      <p className="font-medium text-gray-900 text-sm">
-                        {player.currentTeam.name || 'Équipe inconnue'}
-                      </p>
-                    </div>
-                  )}
                 </div>
               </div>
             ))}
