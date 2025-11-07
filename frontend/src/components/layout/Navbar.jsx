@@ -67,13 +67,13 @@ const Navbar = () => {
 
             {/* Right Side */}
             <div className="flex items-center gap-6">
-              {/* Louer mon terrain */}
+              {/* Nous rejoindre */}
               <Link 
-                to="/register?role=owner"
+                to="/role-selection"
                 className="hidden md:flex items-center gap-2 text-sm font-semibold bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded-full transition-all shadow-sm hover:shadow-md"
                 style={{ backgroundColor: '#15803d' }}
               >
-                Louer mon terrain
+                Nous rejoindre
               </Link>
 
               {/* Sélecteur de langue avec drapeaux */}
@@ -157,19 +157,19 @@ const Navbar = () => {
                       </>
                     ) : (
                       <>
-                        {/* Louer mon terrain (mis en avant) */}
+                        {/* Nous rejoindre (mis en avant) */}
                         <Link
-                          to="/register?role=owner"
+                          to="/role-selection"
                           className="block px-4 py-3 hover:bg-gray-50 transition-colors"
                           onClick={() => setUserMenuOpen(false)}
                         >
                           <div className="flex items-start gap-3">
                             <div className="flex-1">
                               <div className="font-semibold text-gray-900 mb-1">
-                                Louer mon terrain
+                                Nous rejoindre
                               </div>
                               <div className="text-xs text-gray-600">
-                                Ajoutez votre terrain et gagnez des revenus supplémentaires, c'est facile.
+                                Rejoignez-nous en tant qu'équipe, joueur, entreprise ou propriétaire.
                               </div>
                             </div>
                             <Home size={20} className="text-gray-600 mt-1 flex-shrink-0" />
