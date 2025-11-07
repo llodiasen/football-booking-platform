@@ -183,6 +183,23 @@ owner30@221football.sn → password123
 
 ## 🔑 **COMPTES DE TEST - CONNEXION**
 
+### 📊 **TABLEAU RÉCAPITULATIF - 10 CAPITAINES**
+
+| # | Email | Mot de passe | Équipe | Ville | Joueurs |
+|---|-------|--------------|--------|-------|---------|
+| 1 | captain.team1@221football.sn | password123 | FC Médina | Médina | 15 (001-015) |
+| 2 | captain.team2@221football.sn | password123 | AS Pikine | Pikine | 15 (016-030) |
+| 3 | captain.team3@221football.sn | password123 | FC Guédiawaye | Guédiawaye | 15 (031-045) |
+| 4 | captain.team4@221football.sn | password123 | Union de Yoff | Yoff | 15 (046-060) |
+| 5 | captain.team5@221football.sn | password123 | Espoir Liberté 6 | Liberté 6 | 15 (061-075) |
+| 6 | captain.team6@221football.sn | password123 | ASC Ouakam | Ouakam | 15 (076-090) |
+| 7 | captain.team7@221football.sn | password123 | Les Étoiles de Ngor | Ngor | 15 (091-105) |
+| 8 | captain.team8@221football.sn | password123 | FC Parcelles | Parcelles | 15 (106-120) |
+| 9 | captain.team9@221football.sn | password123 | Almadies FC | Almadies | 15 (121-135) |
+| 10 | captain.team10@221football.sn | password123 | Mermoz United | Mermoz | 15 (136-150) |
+
+---
+
 ### **Propriétaire de terrain** :
 ```
 Email : owner1@221football.sn
@@ -190,12 +207,106 @@ Mot de passe : password123
 Dashboard : /dashboard (Owner)
 ```
 
-### **Équipe (Capitaine)** :
+### **Capitaines d'équipe (10 comptes)** :
+
+#### **Capitaine 1 - FC Médina**
 ```
 Email : captain.team1@221football.sn
 Mot de passe : password123
 Dashboard : /dashboard/team
 Équipe : FC Médina
+Ville : Médina, Dakar
+Membres : 15 joueurs (player001 à player015)
+```
+
+#### **Capitaine 2 - AS Pikine**
+```
+Email : captain.team2@221football.sn
+Mot de passe : password123
+Dashboard : /dashboard/team
+Équipe : AS Pikine
+Ville : Pikine, Dakar
+Membres : 15 joueurs (player016 à player030)
+```
+
+#### **Capitaine 3 - FC Guédiawaye**
+```
+Email : captain.team3@221football.sn
+Mot de passe : password123
+Dashboard : /dashboard/team
+Équipe : FC Guédiawaye
+Ville : Guédiawaye, Dakar
+Membres : 15 joueurs (player031 à player045)
+```
+
+#### **Capitaine 4 - Union de Yoff**
+```
+Email : captain.team4@221football.sn
+Mot de passe : password123
+Dashboard : /dashboard/team
+Équipe : Union de Yoff
+Ville : Yoff, Dakar
+Membres : 15 joueurs (player046 à player060)
+```
+
+#### **Capitaine 5 - Espoir Liberté 6**
+```
+Email : captain.team5@221football.sn
+Mot de passe : password123
+Dashboard : /dashboard/team
+Équipe : Espoir Liberté 6
+Ville : Liberté 6, Dakar
+Membres : 15 joueurs (player061 à player075)
+```
+
+#### **Capitaine 6 - ASC Ouakam**
+```
+Email : captain.team6@221football.sn
+Mot de passe : password123
+Dashboard : /dashboard/team
+Équipe : ASC Ouakam
+Ville : Ouakam, Dakar
+Membres : 15 joueurs (player076 à player090)
+```
+
+#### **Capitaine 7 - Les Étoiles de Ngor**
+```
+Email : captain.team7@221football.sn
+Mot de passe : password123
+Dashboard : /dashboard/team
+Équipe : Les Étoiles de Ngor
+Ville : Ngor, Dakar
+Membres : 15 joueurs (player091 à player105)
+```
+
+#### **Capitaine 8 - FC Parcelles**
+```
+Email : captain.team8@221football.sn
+Mot de passe : password123
+Dashboard : /dashboard/team
+Équipe : FC Parcelles
+Ville : Parcelles Assainies, Dakar
+Membres : 15 joueurs (player106 à player120)
+```
+
+#### **Capitaine 9 - Almadies FC**
+```
+Email : captain.team9@221football.sn
+Mot de passe : password123
+Dashboard : /dashboard/team
+Équipe : Almadies FC
+Ville : Almadies, Dakar
+Membres : 15 joueurs (player121 à player135)
+```
+
+#### **Capitaine 10 - Mermoz United**
+```
+Email : captain.team10@221football.sn
+Mot de passe : password123
+Dashboard : /dashboard/team
+Équipe : Mermoz United
+Ville : Mermoz, Dakar
+Membres : 15 joueurs (player136 à player150)
 ```
 
 ### **Joueur** :
